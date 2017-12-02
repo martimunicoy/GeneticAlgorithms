@@ -22,8 +22,8 @@ const float DENOM_POWER = 1;
 
 // Define Structures
 Genes
-{
-    char column[8];
+{   //maybe it could be unsigned char
+    char column[8]; 
 };
 
 Individual
