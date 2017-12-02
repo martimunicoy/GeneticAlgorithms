@@ -34,7 +34,8 @@ Individual
     bool chosen;
 };
 
-RouletteCompartments
+RouletteCompartments //it would be RouletteCompartment (in singular?) since individual is here the adres of memory
+//of only one individual
 {
     float delimiter;
     Individual *individual;
@@ -42,24 +43,31 @@ RouletteCompartments
 
 //Functions
 Genes _random_genes(int n_queens)
-{
+{   
+    //Improvement: modify the function so that there are not repeated columns?
     Genes genes;
     unsigned char random;
     int i;
     for (i = 0; i < 8; ++i){
         arc4random_buf(&random, sizeof random);
-        genes.column[i] = random / 256. * n_queens;
+        genes.column[i] = random / 256. * n_queens; //we can change 256 by sizeof(random) ?
     }
     return genes;
 }
 
 int sum_down(int n)
-{
+{    
+    /*
+    Returns the value of the sum 1+2+3+...+n
+    */
     return n*(n+1)/2;
 }
 
 float random_number(float max)
-{
+{   
+    /*
+    Returns a random float number between 0 and max
+    */
     float random;
     random = (arc4random_uniform(UINT16_MAX))/ ((float)(UINT16_MAX)) * max;
     return random;
@@ -68,12 +76,21 @@ float random_number(float max)
 //char random_int()
 
 int initiate(Individual *Population, int id, int n_pop, int n_queens)
-{
-    int i;
-    for (i = 0; i < n_pop; i++)
-    {
+{   
+    /*
+      Population: array of individuals  (pointer to the first individual)
+      ?id: last individual id not already used (id = id_lastused + 1)??
+      n_pop: number of individuals of the Population 
+      n_queens: number of queens (dimension of the chess table)
+    */
+
+    int sum_down = sum_down(n_queens);
+
+    for (int i = 0; int i < n_pop; i++)
+    {   //Choosing random genes for the i-th individual
         Genes genes = _random_genes(n_queens);
-        Individual individual = {id, genes, sum_down(n_queens), false};
+        //Initialisation of the i-th individual
+        Individual individual = {id, genes, sum_down, false};
         Population[i] = individual;
         ++id;
     }
@@ -131,7 +148,10 @@ void check_random_uniformity2()
 }
 
 void express_genes(Individual individual)
-{
+{   /*
+    Print the fenotype of the individual, which is a particular
+    chessboard (8x8) configuration of 8 queens.
+    */
     int i, j, column;
     for(i = 7; i >= 0; --i){
         printf("%d ", i + 1);
@@ -147,6 +167,14 @@ void express_genes(Individual individual)
 }
 
 char * sort(char array[8]){
+    /*
+    Improvements:
+       - Do the algorithm for a N dimensional array (general)
+       - This algorithm is o(n^2), use a more efficient one.
+       - I think there is no need to copy the input array,
+         instead do a void type function which modifies the input array
+         since it is passed by reference (vale fals, he vist per a què s'utilitzava).
+    */
     int i, j, t;
     static char sorted_array[8];
     for(i = 0; i < 8; ++i)
@@ -165,6 +193,10 @@ char * sort(char array[8]){
 }
 
 int count_repetitions(char array[8]){
+    /*
+    !!!!! Això només mira repeticions entre i, i+1.??
+    THIS ASSUMES THAT THE INPUT array is sorted in ASCENDENT order!
+    */
     int i, current;
     int count = 0;
     char previous = array[0];
@@ -179,14 +211,20 @@ int count_repetitions(char array[8]){
 }
 
 unsigned char absolute(char value)
-{
+{   /*
+    Returns the absolute value of a char
+    */
     if(value < 0)
         return -value;
     return value;
 }
 
 bool diagonal(unsigned char column1, unsigned char row1, unsigned char column2, unsigned char row2)
-{
+{   
+    /*
+    Given the position (col, row) of two queens, returns wheter they meet in a diagonal or not.
+    It works due to pitagoras theorem, and since we work with a squared chessboard.
+    */
     unsigned char diff1, diff2;
     diff1 = absolute(column1 - column2);
     diff2 = absolute(row1 - row2);
@@ -196,23 +234,42 @@ bool diagonal(unsigned char column1, unsigned char row1, unsigned char column2, 
 }
 
 void evaluate(Individual *Population, int n_pop, int n_queens)
-{
+{    
+    /*
+     The smaller the scorer of an individual, the better (?)     
+    */
+
+     /*
+     Improvements: 
+
+     - I would do an additional function to perform the loop in j and k
+     that, given a the an individual, returns the number of pairs of queens that meet in a diagonal. 
+     Use the notation like diagonal_meets(Individual individual){ col1,row1,col2,row2; }
+     then do scorer += diagonal_meets(Population[i]);
+
+     - Not allow that an individual has repeated columns in different rows, so that
+     in this function the scorer+= sum_down() is not needed
+      */
     int i, j, k, column;
     unsigned char scorer;
     char *sorted_cols = (char *) malloc(sizeof(char) * 8);
-    short *slopes = (short *) malloc(sizeof(short) * 8);
+    short *slopes = (short *) malloc(sizeof(short) * 8); //unused
+    int sum_down = sum_down(n_queens);
     for(i = 0; i < n_pop; ++i)
     {
-        if(Population[i].scorer != sum_down(n_queens))
+        if(Population[i].scorer != sum_down) //!!!!scorer is unsigned char [0,255], sum_down is int
             continue;
         else
         {
             scorer = 0;
             sorted_cols = sort(Population[i].genes.column);
+            /*!!!!Dont understand yet, whi sum_down( of the repetitions)*/
             scorer += sum_down(count_repetitions(sorted_cols));
+            /*j is the row of the i-th individual*/
             for(j = 0; j < 7; ++j)
             {
                 column = Population[i].genes.column[j];
+                //start from j+1 to not compare to itself and not to repeat a pair of individuals
                 for(k = j + 1; k < 8; ++k)
                     if(diagonal(column, j, Population[i].genes.column[k], k))
                         ++scorer;
@@ -240,10 +297,11 @@ float initiate_roulette(Individual *Population, RouletteCompartments *genetic_ro
             competitor = &Population[i];
             if(!competitor->chosen)
                 sum += 1 / pow((competitor->scorer + FRACT_WEIGTH), DENOM_POWER);
-            genetic_roulette[i].delimiter = sum;
+            genetic_roulette[i].delimiter = sum;           
             genetic_roulette[i].individual = competitor;
         }
     }
+
     if(fitness == unfit)
     {
         for(i = 0; i < n_pop; ++i)
@@ -279,7 +337,10 @@ void view_selection(RouletteCompartments *genetic_roulette, int n_pop, float ran
 }
 
 Individual select(Individual *Population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, bool fitness)
-{
+{   
+    /*
+     Given a Population of individuals, initiates a roulette and returns the selected individual
+    */
     float max_delimiter, random;
 
     max_delimiter = initiate_roulette(Population, genetic_roulette, n_pop, n_queens, fitness);
@@ -306,12 +367,16 @@ Individual select(Individual *Population, RouletteCompartments *genetic_roulette
 void reset_selection(Individual *Population, int n_pop)
 {
     int i;
+    /*!!! To check: is the input array Population modified outside the function?*/
     for(i = 0; i < n_pop; ++i)
         Population[i].chosen = false;
 }
 
 Individual crossover(Individual parent1, Individual parent2, int id, int n_queens)
-{
+{   
+    /*
+     random_bool chooses randomly a 0 (parent1) or a 1 (parent 2)
+    */
     int i;
     Genes genes;
 
@@ -329,7 +394,10 @@ Individual crossover(Individual parent1, Individual parent2, int id, int n_queen
 }
 
 Individual crossover2(Individual parent1, Individual parent2, int id, int n_queens)
-{
+{   
+    /*
+     Only valid for n_queens odd 
+    */
     int i;
     Genes genes;
     Individual *p1 = &parent1;
@@ -345,7 +413,7 @@ Individual crossover2(Individual parent1, Individual parent2, int id, int n_quee
         genes.column[i] = p1->genes.column[i];
 
     for(i = n_queens/2; i < n_queens; ++i)
-        genes.column[i] = p1->genes.column[i];
+        genes.column[i] = p1->genes.column[i]; //!!!! I think it must be p2->genes.column[i]
 
     Individual child = {id, genes, sum_down(n_queens), false};
 
@@ -356,6 +424,7 @@ Individual mutation(Individual mutant, int n_queens, float p_mut)
 {
     float random = random_number(1);
     unsigned char alteration, column;
+    /* !!! quite strange */
 
     if(random < p_mut)
     {
