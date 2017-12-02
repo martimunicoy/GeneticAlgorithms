@@ -451,3 +451,12 @@ void view_population(Individual *Population, int n_pop, int n_queens, int n_gen)
     }
 }
 
+Individual * find_best(Individual *Population, int n_pop){
+    Individual *best = NULL;    
+    for(int i=0; i<n_pop;i++){
+        if(Population[i].scorer == 0) {
+            best = &Population[i];
+            break; }       
+    }
+    return best;
+}
