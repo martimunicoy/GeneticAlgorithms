@@ -56,6 +56,48 @@ Genes _random_genes(int n_queens)
     return genes;
 }
 
+/* Arrange the N elements of ARRAY in random order.
+   Only effective if N is much smaller than RAND_MAX;
+   if this may not be the case, use a better random
+   number generator. 
+   Source: https://stackoverflow.com/questions/6127503/shuffle-array-in-c
+   size_t is a type guaranteed to hold any array index
+   */
+void shuffle(char * array, size_t n)
+{
+    if (n > 1) 
+    {
+        size_t i;
+        for (i = 0; i < n - 1; i++) 
+        {
+          size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
+          char t = array[j];
+          array[j] = array[i];
+          array[i] = t;
+        }
+    }
+}
+
+
+Genes _random_genes_different(int n_queens)
+{   
+    Genes genes;
+    char genes_col[] = {0,1,2,3,4,5,6,7};
+    shuffle(genes_col, n_queens);
+    /*unsigned char random;
+    int i;
+    for (i = 0; i < 8; ++i){
+        arc4random_buf(&random, sizeof random);
+        genes.column[i] = random / 256. * n_queens; //we can change 256 by sizeof(random) ?
+    }*/
+    for(int i = 0; i< n_queens;i++){
+        genes.column[i] = genes_col[i];
+    }
+
+    return genes;
+}
+
+
 int sum_down(int n)
 {    
     /*
