@@ -140,6 +140,28 @@ int initiate(Individual *Population, int id, int n_pop, int n_queens)
     return id;
 }
 
+int initiate_different(Individual *Population, int id, int n_pop, int n_queens)
+{   
+    /*
+      Population: array of individuals  (pointer to the first individual)
+      ?id: last individual id not already used (id = id_lastused + 1)??
+      n_pop: number of individuals of the Population 
+      n_queens: number of queens (dimension of the chess table)
+    */
+
+    int sumdown = sum_down(n_queens);
+
+    for (int i = 0; i < n_pop; i++)
+    {   //Choosing random genes for the i-th individual
+        Genes genes = _random_genes_different(n_queens);
+        //Initialisation of the i-th individual
+        Individual individual = {id, genes, sumdown, false};
+        Population[i] = individual;
+        ++id;
+    }
+    return id;
+}
+
 void check_random_uniformity(float max)
 {
     float num;

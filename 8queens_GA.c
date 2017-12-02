@@ -43,7 +43,7 @@ int main(){
     best.scorer = sum_down(N_QUEENS);
 
     // Initialize population and genetic roulette
-    id = initiate(Population, id, N_POPULATION, N_QUEENS);
+    id = initiate_different(Population, id, N_POPULATION, N_QUEENS);
     view_population(Population, N_POPULATION, N_QUEENS, n_gen);
 
     // Initiate Genetic Algorithm
