@@ -1,17 +1,18 @@
 // Include Libraries
 #include <stdio.h>
-#include <stdlib.h>
+#include <bsd/stdlib.h>
+
 #include <math.h>
 #include <stdbool.h>
 #include <limits.h>
 
 // Definitions
-#define fit 1;
-#define unfit 0;
-#define Individual struct Individual;
-#define Genes struct Genes;
-#define RouletteCompartments struct RouletteCompartments;
-#define random_bool arc4random_uniform(2);
+#define fit 1
+#define unfit 0
+//#define Individual struct Individual;
+//#define Genes struct Genes;
+//#define RouletteCompartments struct RouletteCompartments;
+#define random_bool arc4random_uniform(2)
 
 // Constants
 // Smallest probability for the worst individual to survive
@@ -21,25 +22,25 @@ const float FRACT_WEIGTH = 0.01;
 const float DENOM_POWER = 1;
 
 // Define Structures
-Genes
+typedef struct
 {   //maybe it could be unsigned char
     char column[8]; 
-};
+} Genes;
 
-Individual
+typedef struct
 {
     int id;
     Genes genes;
     unsigned char scorer;
     bool chosen;
-};
+} Individual;
 
-RouletteCompartments //it would be RouletteCompartment (in singular?) since individual is here the adres of memory
+typedef struct //it would be RouletteCompartment (in singular?) since individual is here the adres of memory
 //of only one individual
 {
     float delimiter;
     Individual *individual;
-};
+} RouletteCompartments;
 
 //Functions
 Genes _random_genes(int n_queens)
@@ -84,13 +85,13 @@ int initiate(Individual *Population, int id, int n_pop, int n_queens)
       n_queens: number of queens (dimension of the chess table)
     */
 
-    int sum_down = sum_down(n_queens);
+    int sumdown = sum_down(n_queens);
 
-    for (int i = 0; int i < n_pop; i++)
+    for (int i = 0; i < n_pop; i++)
     {   //Choosing random genes for the i-th individual
         Genes genes = _random_genes(n_queens);
         //Initialisation of the i-th individual
-        Individual individual = {id, genes, sum_down, false};
+        Individual individual = {id, genes, sumdown, false};
         Population[i] = individual;
         ++id;
     }
@@ -254,10 +255,10 @@ void evaluate(Individual *Population, int n_pop, int n_queens)
     unsigned char scorer;
     char *sorted_cols = (char *) malloc(sizeof(char) * 8);
     short *slopes = (short *) malloc(sizeof(short) * 8); //unused
-    int sum_down = sum_down(n_queens);
+    int sumdown = sum_down(n_queens);
     for(i = 0; i < n_pop; ++i)
     {
-        if(Population[i].scorer != sum_down) //!!!!scorer is unsigned char [0,255], sum_down is int
+        if(Population[i].scorer != sumdown) //!!!!scorer is unsigned char [0,255], sum_down is int
             continue;
         else
         {
@@ -336,7 +337,7 @@ void view_selection(RouletteCompartments *genetic_roulette, int n_pop, float ran
     printf("Random: %f\tSelected: %d (Scorer %d)\n", random, selection, genetic_roulette[selection].individual->scorer);
 }
 
-Individual select(Individual *Population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, bool fitness)
+Individual _select(Individual *Population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, bool fitness)
 {   
     /*
      Given a Population of individuals, initiates a roulette and returns the selected individual
