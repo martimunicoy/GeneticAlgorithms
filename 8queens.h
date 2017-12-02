@@ -6,12 +6,12 @@
 #include <limits.h>
 
 // Definitions
-#define fit 1
-#define unfit 0
-#define Individual struct Individual
-#define Genes struct Genes
-#define RouletteCompartments struct RouletteCompartments
-#define random_bool arc4random_uniform(2)
+#define fit 1;
+#define unfit 0;
+#define Individual struct Individual;
+#define Genes struct Genes;
+#define RouletteCompartments struct RouletteCompartments;
+#define random_bool arc4random_uniform(2);
 
 // Constants
 // Smallest probability for the worst individual to survive
