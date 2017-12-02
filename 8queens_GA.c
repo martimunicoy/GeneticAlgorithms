@@ -2,11 +2,11 @@
 #include "8queens.h"
 
 // Definitions
-#define fit 1
+/*#define fit 1
 #define unfit 0
 #define Individual struct Individual
 #define Genes struct Genes
-#define RouletteCompartments struct RouletteCompartments
+#define RouletteCompartments struct RouletteCompartments*/
 
 // Constants
 // Number of queens (DON'T CHANGE! (YET))
@@ -15,12 +15,14 @@ const int N_QUEENS = 8;
 const int N_POPULATION = 100;
 // Number of generations
 const int N_GENERATIONS = 100;
-// Number of deaths per generation
-const int N_DEATHS = N_POPULATION * 0.5;
 // Probability of mutation
 const float P_MUTATION = 0.4;
 
 int main(){
+
+    // Number of deaths per generation
+    const int N_DEATHS = (int) (N_POPULATION * 0.5);
+
     // Initialize variables
     int id = 1;
     int n_gen = 1;
@@ -52,8 +54,8 @@ int main(){
         reset_selection(Population, N_POPULATION);
         for(j = 0; j < N_DEATHS; ++j)
         {
-            parent1 = select(Population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
-            parent2 = select(Population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
+            parent1 = _select(Population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
+            parent2 = _select(Population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
             child = mutation(crossover(parent1, parent2, ++id, N_QUEENS), N_QUEENS, P_MUTATION);
             NextPopulation[j] = child;
         }
@@ -61,7 +63,7 @@ int main(){
         reset_selection(Population, N_POPULATION);
         for(j=N_DEATHS; j < N_POPULATION; ++j)
         {
-            survivor = select(Population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
+            survivor = _select(Population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
             NextPopulation[j] = survivor;
         }
 
