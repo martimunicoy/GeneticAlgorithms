@@ -16,7 +16,7 @@ const int N_POPULATION = 100;
 // Number of generations
 const int N_GENERATIONS = 100;
 // Probability of mutation
-const float P_MUTATION = 0.4;
+const float P_MUTATION = 0.01;
 
 int main(){
 
@@ -40,7 +40,7 @@ int main(){
     Individual *T;
 
     // Initialize best individual
-    best.scorer = sum_down(N_QUEENS);
+    best.scorer = sum_down(N_QUEENS);//???????????
 
     // Initialize population and genetic roulette
     id = initiate_different(Population, id, N_POPULATION, N_QUEENS);
@@ -56,7 +56,8 @@ int main(){
         {
             parent1 = _select(Population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
             parent2 = _select(Population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
-            child = mutation(crossover(parent1, parent2, ++id, N_QUEENS), N_QUEENS, P_MUTATION);
+            //ìmprovement: likelyhood of crossver between 0.6 and 1. Now is 1
+            child = heuristic_mutation(crossover(parent1, parent2, ++id, N_QUEENS), N_QUEENS, P_MUTATION);
             NextPopulation[j] = child;
         }
 

@@ -541,6 +541,18 @@ void Add_VectorToMatrix(int * vector, int n, Dinamic_Matrix matrix, int row){
      //matrix.first_empty =matrix.first_empty+1;
 }
 
+void Copy_Vector1ToVector2(int * vector1, int * vector2, int n){
+     for(int i = 0; i<n;i++){
+        vector2[i] = vector1[i];
+     }
+}
+
+void Copy_Vector1ToVector2char(char * vector1, char * vector2, int n){
+     for(int i = 0; i<n;i++){
+        vector2[i] = vector1[i];
+     }
+}
+
 void PrintMatrix(int ** matrix, int nrows, int ncols){
     for(int i = 0; i< nrows;i++){
         PrintVector(matrix[i],ncols);
@@ -548,21 +560,23 @@ void PrintMatrix(int ** matrix, int nrows, int ncols){
 
 }
 
+int COUNTER = 0;
+
 void Permute(int *vector, int i,int n, Dinamic_Matrix matrix, int n_perms) { 
   if (n == i){
+     matrix.first_empty = COUNTER;
      Add_VectorToMatrix(vector,n,matrix, matrix.first_empty);
-     matrix.first_empty++;
-
-     PrintVector(vector ,n );
+     COUNTER++;
+     //matrix.first_empty++;
+     /*PrintVector(vector ,n );
      printf("first_empty = %d\n", matrix.first_empty);
+     printf("first_empty = %d\n", counter);*/
      return;
   }
   int j;
   for (j = i; j < n; j++) { 
      Swap(vector,i,j);
-     //matrix.first_empty++;
      Permute(vector,i+1,n, matrix, n_perms);
-     //matrix.first_empty++;
      Swap(vector,i,j);
   }
 
@@ -575,36 +589,76 @@ int ** Permutations(int * vector, int n){
        int permutations[][]
 
 }*/
-
+Individual * find_best(Individual *Population, int n_pop){
+    Individual *best = NULL;    
+    for(int i=0; i<n_pop;i++){
+        if(Population[i].scorer == 0) {
+            best = &Population[i];
+            break; }       
+    }
+    return best;
+}
 
 
 Individual heuristic_mutation(Individual mutant, int n_queens, float p_mut)
 {
+    //GLOBAL VARIABLE
+    COUNTER = 0;
+
     float random = random_number(1);
     unsigned char alteration, column;
     /* !!! quite strange */
     int lambda = 3;
-    int genes_to_mutate[lambda]; 
+    int genes_to_mutate[lambda], positions_to_mutate[lambda]; 
     int n_perms;
     if(random < p_mut)
-    {
+    {   
+        printf("MUTACIO HEURISTICA \n\n");
 
         Individual * neighbors = (Individual *) malloc(lambda*sizeof(Individual));
         for(int i = 0; i< lambda;i++){
-            genes_to_mutate[i] = (int) (random_number(n_queens));
+            positions_to_mutate[i] = (int) (random_number(n_queens));
+            genes_to_mutate[i] = mutant.genes.column[positions_to_mutate[i]];
         }
         
         Dinamic_Matrix permutations;
         n_perms = Factorial(lambda);
         permutations.array = (int **) malloc(n_perms*sizeof(int *));
-        permutations.first_empty = 0;
+        for(int j = 0; j < n_perms; j++){
+            permutations.array[j] = (int *) malloc(lambda*sizeof(int));
+                                         }
+        printf("Abans del permute \n\n");
 
-        column = (unsigned char) arc4random_uniform(n_queens);
-        alteration = (unsigned char) arc4random_uniform(n_queens);
-        mutant.genes.column[column] = alteration;
+
+        permutations.first_empty = 0;
+        Permute(genes_to_mutate, 0,lambda, permutations, n_perms);
+        printf("Despres del permute \n\n");
+        
+        for(int ind = 0; ind < n_perms;ind++){
+            Copy_Vector1ToVector2char(mutant.genes.column, neighbors[ind].genes.column,n_queens);
+            for(int k = 0; k <lambda; k++){
+                neighbors[ind].genes.column[positions_to_mutate[k]] = permutations.array[ind][k];
+            }
+            //Copy_Vector1ToVector2(neighbors[k].genes  permutations[k]);
+        }
+        
+        printf("Despres del for \n\n");
+
+        Individual * best_neighbor;
+        best_neighbor = find_best(neighbors, n_perms);
+        //Copy_Vector1ToVector2(best_neighbor->genes.column ,mutant.genes.column, n_queens);
+        //d
+        
         //mutant.id = 0;
-        mutant = mutation(mutant, n_queens, p_mut);
+        //mutant = mutation(mutant, n_queens, p_mut);
+    
+
+        //free(neighbors);
+        /*for(int j = 0; j < n_perms; j++) free(permutations.array[j]);
+        free(permutations.array);*/
+        //free(permutations);
     }
+
     return mutant;
 }
 
@@ -623,12 +677,3 @@ void view_population(Individual *Population, int n_pop, int n_queens, int n_gen)
     }
 }
 
-Individual * find_best(Individual *Population, int n_pop){
-    Individual *best = NULL;    
-    for(int i=0; i<n_pop;i++){
-        if(Population[i].scorer == 0) {
-            best = &Population[i];
-            break; }       
-    }
-    return best;
-}
