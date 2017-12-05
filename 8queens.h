@@ -5,6 +5,7 @@
 #include <math.h>
 #include <stdbool.h>
 #include <limits.h>
+#include <time.h>
 
 // Definitions
 #define fit 1
@@ -71,9 +72,14 @@ void PrintVector(int * v, int n){
   }
   printf(")\n");
 }
-   
+
+
+/*I have observed that the initial population obtained using shuffle is not random
+always the same individuals*/
 void shuffle(char * array, size_t n)
-{
+{   
+     //time_t t;
+    //srand((unsigned) random_bool);
     if (n > 1) 
     {
         size_t i;
@@ -583,12 +589,7 @@ void Permute(int *vector, int i,int n, Dinamic_Matrix matrix, int n_perms) {
   return;
 }
 
-/*
-int ** Permutations(int * vector, int n){
-       int n_perms
-       int permutations[][]
 
-}*/
 Individual * find_best(Individual *Population, int n_pop){
     Individual *best = NULL;    
     for(int i=0; i<n_pop;i++){
@@ -608,12 +609,12 @@ Individual heuristic_mutation(Individual mutant, int n_queens, float p_mut)
     float random = random_number(1);
     unsigned char alteration, column;
     /* !!! quite strange */
-    int lambda = 3;
+    int lambda = 3; //per lambda >3 dona core generado, probablement volem reservar massa memoria
     int genes_to_mutate[lambda], positions_to_mutate[lambda]; 
     int n_perms;
     if(random < p_mut)
     {   
-        printf("MUTACIO HEURISTICA \n\n");
+        //printf("MUTACIO HEURISTICA \n\n");
 
         Individual * neighbors = (Individual *) malloc(lambda*sizeof(Individual));
         for(int i = 0; i< lambda;i++){
@@ -627,12 +628,12 @@ Individual heuristic_mutation(Individual mutant, int n_queens, float p_mut)
         for(int j = 0; j < n_perms; j++){
             permutations.array[j] = (int *) malloc(lambda*sizeof(int));
                                          }
-        printf("Abans del permute \n\n");
+        //printf("Abans del permute \n\n");
 
 
         permutations.first_empty = 0;
         Permute(genes_to_mutate, 0,lambda, permutations, n_perms);
-        printf("Despres del permute \n\n");
+        //printf("Despres del permute \n\n");
         
         for(int ind = 0; ind < n_perms;ind++){
             Copy_Vector1ToVector2char(mutant.genes.column, neighbors[ind].genes.column,n_queens);
@@ -642,7 +643,7 @@ Individual heuristic_mutation(Individual mutant, int n_queens, float p_mut)
             //Copy_Vector1ToVector2(neighbors[k].genes  permutations[k]);
         }
         
-        printf("Despres del for \n\n");
+        //printf("Despres del for \n\n");
 
         Individual * best_neighbor;
         best_neighbor = find_best(neighbors, n_perms);
@@ -677,3 +678,14 @@ void view_population(Individual *Population, int n_pop, int n_queens, int n_gen)
     }
 }
 
+void WriteFitnessesToFile(FILE ** file, char * filename, Individual * Population, int n_pop, int generation){
+  *file = fopen(filename, "a");
+  if (*file == NULL){printf("Error changing to append 'a' file!\n");exit(1); }
+  fprintf(*file, "%d,", generation);
+  for(int i = 0;i < n_pop;i++){    
+    if(i<n_pop-1){fprintf(*file, "%u,", Population[i].scorer);}
+    else{fprintf(*file, "%u\n", Population[i].scorer);}
+  }
+  //printf("\n\n"); 
+    fclose(*file);
+}

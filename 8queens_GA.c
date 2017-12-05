@@ -14,14 +14,20 @@ const int N_QUEENS = 8;
 // Population size
 const int N_POPULATION = 100;
 // Number of generations
-const int N_GENERATIONS = 100;
+const int N_GENERATIONS = 1000;
 // Probability of mutation
-const float P_MUTATION = 0.01;
+const float P_MUTATION = 0.7;
 
 int main(){
 
     // Number of deaths per generation
     const int N_DEATHS = (int) (N_POPULATION * 0.5);
+    bool Stop_IfSolutionFound = 0;
+
+    //Create, initialise text files
+    char file_fitness[] = "Fitness.csv";
+    FILE *f = fopen(file_fitness, "w");
+    if (f == NULL){printf("Error opening file!\n");exit(1); }
 
     // Initialize variables
     int id = 1;
@@ -45,10 +51,12 @@ int main(){
     // Initialize population and genetic roulette
     id = initiate_different(Population, id, N_POPULATION, N_QUEENS);
     view_population(Population, N_POPULATION, N_QUEENS, n_gen);
-
+    WriteFitnessesToFile(&f, file_fitness, Population, N_POPULATION, n_gen);
     // Initiate Genetic Algorithm
     while(n_gen <= N_GENERATIONS)
-    {
+    {   
+
+        
         evaluate(Population, N_POPULATION, N_QUEENS);
 
         reset_selection(Population, N_POPULATION);
@@ -77,12 +85,17 @@ int main(){
         ++n_gen;
 
         //Check if in the actual (new) Population is there an optimal (best) individual
-        if( (  candidate = find_best(Population, N_POPULATION)  ) != NULL){
-            best = *candidate;
-            break;
+        if(Stop_IfSolutionFound){
+            if( (  candidate = find_best(Population, N_POPULATION)  ) != NULL){
+                best = *candidate;
+                break;
+            }
         }
- 
-        
+
+
+     if(N_GENERATIONS <= 1000){
+            WriteFitnessesToFile(&f, file_fitness, Population, N_POPULATION, n_gen);
+        }   
     }
     view_population(NextPopulation, N_POPULATION, N_QUEENS, n_gen); //crec que seria Population i no pas next population?
     if(best.scorer != 0){
