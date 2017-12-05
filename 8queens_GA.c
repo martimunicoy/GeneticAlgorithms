@@ -8,21 +8,25 @@
 #define Genes struct Genes
 #define RouletteCompartments struct RouletteCompartments*/
 
-// Constants
-// Number of queens (DON'T CHANGE! (YET))
-const int N_QUEENS = 8;
-// Population size
-const int N_POPULATION = 100;
-// Number of generations
-const int N_GENERATIONS = 1000;
-// Probability of mutation
-const float P_MUTATION = 0.7;
 
 int main(){
 
+    // Constants
+    // Number of queens (DON'T CHANGE! (YET))
+    const int N_QUEENS = 8;
+    // Population size
+    const int N_POPULATION = 100;
+    // Number of generations
+    const int N_GENERATIONS = 100;
+    // Probability of mutation
+    const float P_MUTATION = 0.3;
+    const int N_DEATHS = N_POPULATION * 0.3;
+
+    //N_DEATHS = N_POPULATION * 0.3;
+
     // Number of deaths per generation
-    const int N_DEATHS = (int) (N_POPULATION * 0.5);
-    bool Stop_IfSolutionFound = 0;
+    //const int N_DEATHS = (int) (N_POPULATION * 0.3);
+    bool Stop_IfSolutionFound = 1;
 
     //Create, initialise text files
     char file_fitness[] = "Fitness.csv";
@@ -65,7 +69,7 @@ int main(){
             parent1 = _select(Population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
             parent2 = _select(Population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
             //ìmprovement: likelyhood of crossver between 0.6 and 1. Now is 1
-            child = heuristic_mutation(crossover(parent1, parent2, ++id, N_QUEENS), N_QUEENS, P_MUTATION);
+            child = mutation(crossover(parent1, parent2, ++id, N_QUEENS), N_QUEENS, P_MUTATION);
             NextPopulation[j] = child;
         }
 

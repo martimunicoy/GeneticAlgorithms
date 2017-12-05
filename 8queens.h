@@ -18,7 +18,7 @@
 // Constants
 // Smallest probability for the worst individual to survive
 // The higher, the more exploratory
-const float FRACT_WEIGTH = 0.01;
+const float FRACT_WEIGTH = 2;
 // The higher, the more exploitatory
 const float DENOM_POWER = 1;
 
