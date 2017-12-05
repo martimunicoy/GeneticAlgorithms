@@ -46,6 +46,7 @@ Genes _random_genes(int n_queens)
     Genes genes;
     unsigned char random;
     int i;
+    // Check this (Number of queens)
     for (i = 0; i < 8; ++i){
         arc4random_buf(&random, sizeof random);
         genes.column[i] = random / 256. * n_queens;
