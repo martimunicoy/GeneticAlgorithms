@@ -63,6 +63,15 @@ Genes _random_genes(int n_queens)
    Source: https://stackoverflow.com/questions/6127503/shuffle-array-in-c
    size_t is a type guaranteed to hold any array index
    */
+
+void PrintVector(int * v, int n){
+  printf("\n( ");
+  for(int i = 0; i <n;i++){
+    printf("%d, ", v[i]);
+  }
+  printf(")\n");
+}
+   
 void shuffle(char * array, size_t n)
 {
     if (n > 1) 
@@ -497,10 +506,109 @@ Individual mutation(Individual mutant, int n_queens, float p_mut)
         alteration = (unsigned char) arc4random_uniform(n_queens);
         mutant.genes.column[column] = alteration;
         //mutant.id = 0;
+        mutant = mutation(mutant, n_queens, p_mut);//???????
+    }
+    return mutant;
+}
+
+int Factorial(int m){
+    if(m < 0){ printf("\nFactorial of a negative number does not exist!!\n");exit(0);}
+
+    if(m>=1) return m*Factorial(m-1);
+    else return 1;
+}
+
+void Swap(int * vector, int i, int j){
+    int temp;
+    temp = vector[i];
+    vector[i] = vector[j];
+    vector[j] = temp;
+}
+
+
+typedef struct {
+    int ** array;
+    int first_empty;
+
+} Dinamic_Matrix;
+
+
+void Add_VectorToMatrix(int * vector, int n, Dinamic_Matrix matrix, int row){
+     //int row = matrix.first_empty;
+     for(int i = 0; i<n;i++){
+        matrix.array[row][i] = vector[i];
+     }
+     //matrix.first_empty =matrix.first_empty+1;
+}
+
+void PrintMatrix(int ** matrix, int nrows, int ncols){
+    for(int i = 0; i< nrows;i++){
+        PrintVector(matrix[i],ncols);
+    }
+
+}
+
+void Permute(int *vector, int i,int n, Dinamic_Matrix matrix, int n_perms) { 
+  if (n == i){
+     Add_VectorToMatrix(vector,n,matrix, matrix.first_empty);
+     matrix.first_empty++;
+
+     PrintVector(vector ,n );
+     printf("first_empty = %d\n", matrix.first_empty);
+     return;
+  }
+  int j;
+  for (j = i; j < n; j++) { 
+     Swap(vector,i,j);
+     //matrix.first_empty++;
+     Permute(vector,i+1,n, matrix, n_perms);
+     //matrix.first_empty++;
+     Swap(vector,i,j);
+  }
+
+  return;
+}
+
+/*
+int ** Permutations(int * vector, int n){
+       int n_perms
+       int permutations[][]
+
+}*/
+
+
+
+Individual heuristic_mutation(Individual mutant, int n_queens, float p_mut)
+{
+    float random = random_number(1);
+    unsigned char alteration, column;
+    /* !!! quite strange */
+    int lambda = 3;
+    int genes_to_mutate[lambda]; 
+    int n_perms;
+    if(random < p_mut)
+    {
+
+        Individual * neighbors = (Individual *) malloc(lambda*sizeof(Individual));
+        for(int i = 0; i< lambda;i++){
+            genes_to_mutate[i] = (int) (random_number(n_queens));
+        }
+        
+        Dinamic_Matrix permutations;
+        n_perms = Factorial(lambda);
+        permutations.array = (int **) malloc(n_perms*sizeof(int *));
+        permutations.first_empty = 0;
+
+        column = (unsigned char) arc4random_uniform(n_queens);
+        alteration = (unsigned char) arc4random_uniform(n_queens);
+        mutant.genes.column[column] = alteration;
+        //mutant.id = 0;
         mutant = mutation(mutant, n_queens, p_mut);
     }
     return mutant;
 }
+
+
 
 void view_population(Individual *Population, int n_pop, int n_queens, int n_gen)
 {
