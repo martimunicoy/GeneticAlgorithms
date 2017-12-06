@@ -1,7 +1,7 @@
 // Include Libraries
-#include "general.h"
-#include "utils.h"
-#include "genetics.h"
+#include "lib/general.h"
+#include "lib/utils.h"
+#include "lib/genetics.h"
 
 int main(){
     // Constants
@@ -19,7 +19,7 @@ int main(){
     const bool FORCE_TO_CONTINUE = false;
 
     //Create, initialise text files
-    char file_fitness[] = "Fitness.csv";
+    char file_fitness[] = "DataVisualization/Fitness.csv";
     FILE *f = fopen(file_fitness, "w");
     if (f == NULL){printf("Error opening file!\n");exit(1); }
 
