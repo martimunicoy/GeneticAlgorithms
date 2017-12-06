@@ -6,7 +6,7 @@ data <- read.table(filename, sep =  ",", header = F)
 
 #Tutorial: https://www.statmethods.net/advstats/cluster.html
 #mydata = scale(data)
-mydata = scale(data[1:40,])
+mydata = data[1:40,]
 k_clusters = 3
 # Determine number of clusters
 wss <- (nrow(mydata)-1)*sum(apply(mydata,2,var))
@@ -17,21 +17,13 @@ plot(1:15, wss, type="b", xlab="Number of Clusters",
 
 
 
-
-
-
-
-
-
-
-
-
 # K-Means Cluster Analysis
 fit <- kmeans(mydata, k_clusters) # 5 cluster solution
 # get cluster means 
 aggregate(mydata,by=list(fit$cluster),FUN=mean)
 # append cluster assignment
 mydata <- data.frame(mydata, fit$cluster)
+
 
 
 
@@ -47,7 +39,7 @@ clusplot(mydata, fit$cluster, color=TRUE, shade=TRUE,
          labels=2, lines=0)
 
 # Centroid Plot against 1st 2 discriminant functions
-library(fpc)
-plotcluster(mydata, fit$cluster)
+#library(fpc)
+#plotcluster(mydata, fit$cluster)
 
 
