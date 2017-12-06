@@ -1,4 +1,4 @@
-setwd("C:/Users/Daniel/Dropbox/GitHub/Genetic-Algorithm");
+setwd("C:/Users/Daniel/Dropbox/GitHub/Genetic-Algorithm/queens/DataVisualization");
 
 filename = "Fitness.csv"
 #filename = "InitialRoad.txt"
