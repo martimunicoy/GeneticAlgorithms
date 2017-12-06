@@ -2,5 +2,7 @@
 sudo apt-get update
 sudo apt-get install libbsd-dev
 
-#Compilation:
-gcc 8queens_GA.c -o 8qsim -lbsd -lm
+#Compilation in linux:
+gcc -D LINUX queens_guided-GA.c -lm -lbsd -o 8qsim
+
+#Execution ./8qsim
