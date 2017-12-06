@@ -5,18 +5,22 @@
 
 int main(){
     // Constants
-    // Number of queens (DON'T CHANGE! (YET))
-    const int N_QUEENS = 8;
+    // Number of queens
+    const int N_QUEENS = 80;
     // Population size
-    const int N_POPULATION = 100;
+    const int N_POPULATION = 1000;
     // Number of generations
-    const int N_GENERATIONS = 100;
+    const int N_GENERATIONS = 10000;
     // Number of deaths per generation
     const int N_DEATHS = N_POPULATION * 0.3;
     // Probability of mutation
-    const float P_MUTATION = 0.4;
+    const float P_MUTATION = 0.2;
+    // Number of genes to mutate
+    const int LAMBDA = 4;
     // Force the algorithm to continue after finding a solution
-    const bool FORCE_TO_CONTINUE = true;
+    const bool FORCE_TO_CONTINUE = false;
+    // Frequency to summarize
+    const int SUMMARIZE_FREQ = 500;
     // Number of selections in the tournament_selection function
     const int TOURNAMENT_SELECTIONS = 3;
 
@@ -48,7 +52,7 @@ int main(){
     initiate(population, id, N_POPULATION, N_QUEENS);
     id = N_POPULATION;
     evaluate(population, N_POPULATION, N_QUEENS);
-    view_population(population, N_POPULATION, N_QUEENS, n_gen);
+    //view_population(population, N_POPULATION, N_QUEENS, n_gen);
 
     //write_fitness(&f, file_fitness, population, N_POPULATION, n_gen);
 
@@ -56,14 +60,11 @@ int main(){
     while(n_gen <= N_GENERATIONS)
     {
         reset_selection(population, N_POPULATION);
-
         for (i = 0; i < N_DEATHS; i++)
         {
-            /*parent1 = selection(population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
-            parent2 = selection(population, genetic_roulette, N_POPULATION, N_QUEENS, fit);*/
-            parent1 = tournament_selection(population, N_QUEENS, TOURNAMENT_SELECTIONS);
-            parent2 = tournament_selection(population, N_QUEENS, TOURNAMENT_SELECTIONS);
-            child = heuristic_mutation(ordered_crossover(parent1, parent2, ++id, N_QUEENS), N_QUEENS, P_MUTATION);
+            parent1 = selection(population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
+            parent2 = selection(population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
+            child = heuristic_mutation(ordered_crossover(parent1, parent2, ++id, N_QUEENS), N_QUEENS, LAMBDA, P_MUTATION);
             nextpopulation[i] = child;
         }
 
@@ -80,12 +81,14 @@ int main(){
 
         evaluate(population, N_POPULATION, N_QUEENS);
 
-        //view_population(population, N_POPULATION, N_QUEENS, n_gen);
+        for (i = 0; i < N_POPULATION; i++)
+            if (population[i].scorer < best->scorer) best = &population[i];
+
+        if ((n_gen-1)%SUMMARIZE_FREQ == 0)
+            summarize(population, best, n_gen-1, N_QUEENS);
 
         n_gen++;
 
-        for (i = 0; i < N_POPULATION; i++)
-            if (population[i].scorer < best->scorer) best = &population[i];
 
         if (best->scorer == 0 && !FORCE_TO_CONTINUE) break;
 
@@ -95,13 +98,11 @@ int main(){
     }
     n_gen--;
 
-    view_population(population, N_POPULATION, N_QUEENS, n_gen); //crec que seria population i no pas next population?
     if(best->scorer != 0)
         printf("\n No optimal individual found... \n");
     else
     {
-        printf("Found at least one optimal individual id %d, scorer: %d\n ", best->id, best->scorer);
-        view_population(best, 1, N_QUEENS, n_gen);
+        printf("Found at least one optimal individual id %d, scorer: %d\n", best->id, best->scorer);
         express_genes(*best, N_QUEENS);
     }
 }
