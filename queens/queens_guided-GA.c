@@ -16,7 +16,7 @@ int main(){
     // Probability of mutation
     const float P_MUTATION = 0.4;
     // Force the algorithm to continue after finding a solution
-    const bool FORCE_TO_CONTINUE = false;
+    const bool FORCE_TO_CONTINUE = true;
 
     //Create, initialise text files
     char file_fitness[] = "DataVisualization/Fitness.csv";
