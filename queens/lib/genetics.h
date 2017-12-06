@@ -409,3 +409,28 @@ void write_fitness(FILE ** file, char * filename, Individual * population, int n
 
     fclose(*file);
 }
+
+void write_population_genes(FILE ** file, char * filename, Individual * population, int n_pop, int n_queens)
+{
+    *file = fopen(filename, "a");
+
+    if (*file == NULL)
+    {
+        printf("Error changing to append 'a' file!\n");
+        exit(1);
+    }   
+
+    for(int i = 0;i < n_pop;i++){
+        for(int j = 0; j < n_queens; j++){
+            if(j < n_queens-1){ 
+                fprintf(*file, "%u,", population[i].genes.rows[j]);
+            }
+            else{
+                fprintf(*file, "%u\n", population[i].genes.rows[j]);
+            }    
+
+        }    
+    }
+
+    fclose(*file);
+}

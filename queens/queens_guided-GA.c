@@ -6,21 +6,21 @@
 int main(){
     // Constants
     // Number of queens
-    const int N_QUEENS = 80;
+    const int N_QUEENS = 8;
     // Population size
-    const int N_POPULATION = 1000;
+    const int N_POPULATION = 100;
     // Number of generations
-    const int N_GENERATIONS = 10000;
+    const int N_GENERATIONS = 20;
     // Number of deaths per generation
     const int N_DEATHS = N_POPULATION * 0.3;
     // Probability of mutation
     const float P_MUTATION = 0.2;
     // Number of genes to mutate
-    const int LAMBDA = 4;
+    const int LAMBDA = 3;
     // Force the algorithm to continue after finding a solution
-    const bool FORCE_TO_CONTINUE = false;
+    const bool FORCE_TO_CONTINUE = true;
     // Frequency to summarize
-    const int SUMMARIZE_FREQ = 500;
+    const int SUMMARIZE_FREQ = 50;
     // Number of selections in the tournament_selection function
     const int TOURNAMENT_SELECTIONS = 3;
 
@@ -28,6 +28,11 @@ int main(){
     char file_fitness[] = "DataVisualization/Fitness.csv";
     FILE *f = fopen(file_fitness, "w");
     if (f == NULL){printf("Error opening file!\n");exit(1); }
+
+    char file_population_genes[] = "DataVisualization/Genes.csv";
+    FILE *f_population_genes = fopen(file_population_genes, "w");
+    if (f_population_genes == NULL){printf("Error opening file!\n");exit(1); }
+
 
     // Initialize variables
     int id = 1;
@@ -95,6 +100,9 @@ int main(){
         if (N_GENERATIONS <= 1000){
             write_fitness(&f, file_fitness, population, N_POPULATION, n_gen);
         }
+        if ( N_GENERATIONS == n_gen ){
+            write_population_genes(&f_population_genes, file_population_genes, population, N_POPULATION, N_QUEENS);
+        }
     }
     n_gen--;
 
@@ -103,6 +111,6 @@ int main(){
     else
     {
         printf("Found at least one optimal individual id %d, scorer: %d\n", best->id, best->scorer);
-        express_genes(*best, N_QUEENS);
+        express_genes(*best, N_QUEENS);        
     }
 }
