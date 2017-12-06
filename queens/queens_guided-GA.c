@@ -17,6 +17,8 @@ int main(){
     const float P_MUTATION = 0.4;
     // Force the algorithm to continue after finding a solution
     const bool FORCE_TO_CONTINUE = true;
+    // Number of selections in the tournament_selection function
+    const int TOURNAMENT_SELECTIONS = 3;
 
     //Create, initialise text files
     char file_fitness[] = "DataVisualization/Fitness.csv";
@@ -57,8 +59,10 @@ int main(){
 
         for (i = 0; i < N_DEATHS; i++)
         {
-            parent1 = selection(population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
-            parent2 = selection(population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
+            /*parent1 = selection(population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
+            parent2 = selection(population, genetic_roulette, N_POPULATION, N_QUEENS, fit);*/
+            parent1 = tournament_selection(population, N_QUEENS, TOURNAMENT_SELECTIONS);
+            parent2 = tournament_selection(population, N_QUEENS, TOURNAMENT_SELECTIONS);
             child = heuristic_mutation(ordered_crossover(parent1, parent2, ++id, N_QUEENS), N_QUEENS, P_MUTATION);
             nextpopulation[i] = child;
         }

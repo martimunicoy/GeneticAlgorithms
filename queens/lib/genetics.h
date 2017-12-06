@@ -170,6 +170,17 @@ float initiate_roulette(Individual *Population, RouletteCompartments *genetic_ro
     return sum;
 }
 
+Individual * find_best(Individual *population, int n_pop)
+{
+    int i;
+    Individual * best = &population[0];
+
+    for (i = 1; i < n_pop; i++)
+        if (population[i].scorer < best->scorer) best = &population[i];
+
+    return best;
+}
+
 Individual selection(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, bool fitness)
 {
     /*
@@ -197,6 +208,29 @@ Individual selection(Individual *population, RouletteCompartments *genetic_roule
 
     return *genetic_roulette[choice].individual;
 }
+
+Individual tournament_selection(Individual *population, int n_queens, int K_selections)
+{
+    /*
+      Selects K individuals at random from population and returns the fittest one
+    */
+
+    int k;
+    int random_position;
+    Individual * selected_individuals = (Individual *) malloc(sizeof(Individual) * K_selections);
+    Individual best_selected_individual;
+
+    for (k = 0;  k < K_selections; k++){
+        random_position = (int) random_number(n_queens);
+        selected_individuals[k] = population[random_position];
+    }
+
+    best_selected_individual = *(find_best(selected_individuals, K_selections));
+
+    return best_selected_individual;
+}    
+
+
 
 void reset_selection(Individual *Population, int n_pop)
 {
@@ -256,16 +290,7 @@ Individual ordered_crossover(Individual parent1, Individual parent2, int id, int
     return child;
 }
 
-Individual * find_best(Individual *population, int n_pop)
-{
-    int i;
-    Individual * best = &population[0];
 
-    for (i = 1; i < n_pop; i++)
-        if (population[i].scorer < best->scorer) best = &population[i];
-
-    return best;
-}
 
 Individual heuristic_mutation(Individual mutant, int n_queens, float p_mut)
 {
