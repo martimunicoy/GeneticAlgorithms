@@ -5,7 +5,7 @@
 
 int main(){
     // Constants
-    // Number of queens (DON'T CHANGE! (YET))
+    // Number of queens
     const int N_QUEENS = 8;
     // Population size
     const int N_POPULATION = 100;
