@@ -1,20 +1,20 @@
 // Constants
 // The higher, the more exploratory
-const float FRACT_WEIGTH = 2;
+const float FRACT_WEIGTH = 0.1;
 // The higher, the more exploitatory
-const float DENOM_POWER = 1;
+const float DENOM_POWER = 3;
 
 // Define Structures
 typedef struct
-{   //maybe it could be unsigned char
-    char rows[8];
+{
+    unsigned int * rows;
 } Genes;
 
 typedef struct
 {
     int id;
     Genes genes;
-    unsigned char scorer;
+    unsigned int scorer;
     bool chosen;
 } Individual;
 
@@ -25,11 +25,17 @@ typedef struct
 } RouletteCompartments;
 
 //Functions
-Genes random_genes(int n_queens)
+Genes initiate_genes(int n_queens)
 {
     Genes genes;
-    unsigned char random;
-    int i;
+    genes.rows = (unsigned int *) malloc(sizeof(unsigned int) * n_queens);
+    return genes;
+}
+
+Genes random_genes(int n_queens)
+{
+    Genes genes = initiate_genes(n_queens);
+    unsigned int i;
     for (i = 1; i <= n_queens; i++){
         genes.rows[i - 1] = i;
     }
@@ -63,9 +69,10 @@ void express_genes(Individual individual, int n_queens)
     Print the fenotype of the individual, which is a particular
     chessboard (8x8) configuration of 8 queens.
     */
-    int row, col;
-    for(row = n_queens; row > 0; row--){
-        printf("%d ", row);
+    int row, col, index;
+    for (row = n_queens; row > 0; row--)
+    {
+        printf("%3d ", row);
         for(col = 0; col < n_queens; col++)
         {
             if (row == individual.genes.rows[col]) printf("X ");
@@ -73,24 +80,38 @@ void express_genes(Individual individual, int n_queens)
         }
         printf("\n");
     }
-    printf("  A B C D E F G H\n");
+    printf("   ");
+    for (col = 0; col < n_queens; col++)
+    {
+        index = col;
+        while(index > 25) index -= 26;
+        printf(" %c", ALPHABET[index]);
+    }
+    printf("\n");
+    printf("   ");
+    if (n_queens > 26)
+    {
+        for (col = 0; col < n_queens; col++)
+            printf(" %d", (int) col/26+1);
+        printf("\n");
+    }
 }
 
-bool diagonal(unsigned char column1, unsigned char row1, unsigned char column2, unsigned char row2)
+bool diagonal(unsigned int column1, unsigned int row1, unsigned int column2, unsigned int row2)
 {
     /*
     Given the position (col, row) of two queens, returns wheter they meet in a diagonal or not.
     It works due to pitagoras theorem, and since we work with a squared chessboard.
     */
-    unsigned char diff1, diff2;
+    unsigned int diff1, diff2;
     diff1 = absolute(column1 - column2);
     diff2 = absolute(row1 - row2);
-    if(diff1==diff2)
+    if(diff1 == diff2)
         return true;
     return false;
 }
 
-void evaluate(Individual *Population, int n_pop, int n_queens)
+void evaluate(Individual *population, int n_pop, int n_queens)
 {
     /*
      The smallest the scorer of an individual it gets, the better it is.
@@ -108,26 +129,24 @@ void evaluate(Individual *Population, int n_pop, int n_queens)
      in this function the scorer+= sum_down() is not needed
       */
     int i, j, k, row;
-    unsigned char scorer;
-    char *sorted_cols = (char *) malloc(sizeof(char) * 8);
-    short *slopes = (short *) malloc(sizeof(short) * 8); //unused
-    int sumdown = sum_down(n_queens);
+    unsigned int scorer;
+    unsigned int initial_scorer = sum_down(n_queens);
     for(i = 0; i < n_pop; ++i)
     {
-        if(Population[i].scorer != sumdown) //!!!!scorer is unsigned char [0,255], sum_down is int
+        if(population[i].scorer != initial_scorer)
             continue;
         else
         {
             scorer = 0;
-            for(j = 1; j < n_queens; j++)
+            for(j = 0; j < n_queens; j++)
             {
-                row = Population[i].genes.rows[j];
+                row = population[i].genes.rows[j];
                 //start from j+1 to not compare to itself and not to repeat a pair of individuals
-                for(k = j + 1; k <= n_queens; k++)
-                    if(diagonal(row, j, Population[i].genes.rows[k], k))
+                for(k = j + 1; k < n_queens; k++)
+                    if(diagonal(row, j+1, population[i].genes.rows[k], k+1))
                         ++scorer;
             }
-            Population[i].scorer = scorer;
+            population[i].scorer = scorer;
         }
     }
 }
@@ -138,7 +157,7 @@ RouletteCompartments *malloc_roulette(int n_pop)
     return genetic_roulette;
 }
 
-float initiate_roulette(Individual *Population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, bool fitness)
+float initiate_roulette(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, bool fitness)
 {
     int i;
     float sum = 0;
@@ -147,7 +166,7 @@ float initiate_roulette(Individual *Population, RouletteCompartments *genetic_ro
     {
         for(i = 0; i < n_pop; ++i)
         {
-            competitor = &Population[i];
+            competitor = &population[i];
             if(!competitor->chosen)
                 sum += 1 / pow((competitor->scorer + FRACT_WEIGTH), DENOM_POWER);
             genetic_roulette[i].delimiter = sum;
@@ -159,7 +178,7 @@ float initiate_roulette(Individual *Population, RouletteCompartments *genetic_ro
     {
         for(i = 0; i < n_pop; ++i)
         {
-            competitor = &Population[i];
+            competitor = &population[i];
             if(competitor->chosen)
                 continue;
             sum += 1 / pow(sum_down(n_queens) - competitor->scorer + FRACT_WEIGTH, DENOM_POWER);
@@ -198,19 +217,19 @@ Individual selection(Individual *population, RouletteCompartments *genetic_roule
     return *genetic_roulette[choice].individual;
 }
 
-void reset_selection(Individual *Population, int n_pop)
+void reset_selection(Individual *population, int n_pop)
 {
     int i;
-    /*!!! To check: is the input array Population modified outside the function?*/
+    /*!!! To check: is the input array population modified outside the function?*/
     for(i = 0; i < n_pop; ++i)
-        Population[i].chosen = false;
+        population[i].chosen = false;
 }
 
 Individual ordered_crossover(Individual parent1, Individual parent2, int id, int n_queens)
 {
     int i, j = 0, k, tmp;
-    Genes genes;
-    char row;
+    Genes genes = initiate_genes(n_queens);
+    unsigned int row;
     bool missing;
 
     int random1 = arc4random_uniform(n_queens);
@@ -267,12 +286,11 @@ Individual * find_best(Individual *population, int n_pop)
     return best;
 }
 
-Individual heuristic_mutation(Individual mutant, int n_queens, float p_mut)
+Individual heuristic_mutation(Individual mutant, int n_queens, int lambda, float p_mut)
 {
     float random = random_number(1);
-    unsigned char alteration, row;
-    int lambda = 3; //per lambda >3 dona core generado, probablement volem reservar massa memoria
     int i, j, k, n_perms, cols_to_mutate[lambda], rows_to_mutate[lambda];
+
     if(random < p_mut)
     {
         for (i = 0; i < lambda; i++)
@@ -315,20 +333,39 @@ Individual heuristic_mutation(Individual mutant, int n_queens, float p_mut)
     return mutant;
 }
 
-void view_population(Individual *Population, int n_pop, int n_queens, int n_gen)
+void view_population(Individual *population, int n_pop, int n_queens, int n_gen)
 {
     int i, j;
     printf("\nGeneration %d\n\nIndividual id\tGenes\t\t\tScorer\n", n_gen);
     for(i = 0; i < n_pop; ++i)
     {
-        printf("\t%d\t(%d", Population[i].id, Population[i].genes.rows[0]);
+        printf("\t%d\t(%d", population[i].id, population[i].genes.rows[0]);
         for(j = 1; j < n_queens; ++j)
-            printf(",%d", Population[i].genes.rows[j]);
-        printf(")\t%d\n", Population[i].scorer);
+            printf(",%d", population[i].genes.rows[j]);
+        printf(")\t%d\n", population[i].scorer);
     }
 }
 
-void write_fitness(FILE ** file, char * filename, Individual * population, int n_pop, int generation){
+void summarize(Individual *population, Individual *best, int n_gen, int n_queens)
+{
+    int i;
+    float mean, st_deviation, sum = 0, sum_of_squares = 0;
+
+    for (i = 0; i < n_queens; i++)
+        sum += population[i].scorer;
+
+    mean = sum / n_queens;
+
+    for (i = 0; i < n_queens; i++)
+        sum_of_squares += pow(population[i].scorer - mean, 2);
+
+    st_deviation = sqrt(sum_of_squares/(n_queens-1));
+
+    print_summary(n_gen, mean, st_deviation, best->scorer);
+}
+
+void write_fitness(FILE ** file, char * filename, Individual * population, int n_pop, int generation)
+{
     *file = fopen(filename, "a");
 
     if (*file == NULL)

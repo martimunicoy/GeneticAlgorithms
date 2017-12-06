@@ -8,7 +8,7 @@ float random_number(float max)
     return random;
 }
 
-void shuffle(char * rows, int n_queens)
+void shuffle(unsigned int * rows, int n_queens)
 {
     /*
     Arrange the N elements of ARRAY in random order.
@@ -19,11 +19,11 @@ void shuffle(char * rows, int n_queens)
     size_t is a type guaranteed to hold any array index
     */
     int i, j;
-    char tmp;
+    unsigned int tmp;
 
     for (i = n_queens-1; i >= 0; i--)
     {
-        j = (int) random_number(n_queens);
+        j = (unsigned int) random_number(n_queens);
         tmp = *(rows + i);
         *(rows + i) = *(rows + j);
         *(rows + j) = tmp;
@@ -38,9 +38,9 @@ int sum_down(int n)
     return n*(n+1)/2;
 }
 
-unsigned char absolute(char value)
+unsigned int absolute(int value)
 {   /*
-    Returns the absolute value of a char
+    Returns the absolute value of a int
     */
     if(value < 0)
         return -value;
@@ -85,4 +85,19 @@ void permute(int ** permutations, int * vector, int start, int end, int *counter
         }
     }
     return;
+}
+
+void print_summary(int n_gen, float mean, float st_deviation, int best_score)
+{
+
+    printf("\n");
+    printf("+-------------------------------+\n");
+    printf("|        GENETIC SUMMARY        |\n");
+    printf("+-------------------------------+\n");
+    printf("| Generation:            %6d |\n", n_gen);
+    printf("| Mean score:             %3d.%d |\n", (int) mean, (int) (mean*10) - ((int) mean)*10);
+    printf("| Standard deviation:     %3d.%d |\n", (int) st_deviation, (int) (st_deviation*10) - ((int) st_deviation)*10);
+    printf("| Best score:            %6d |\n", best_score);
+    printf("+-------------------------------+\n");
+    printf("\n");
 }
