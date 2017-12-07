@@ -1,12 +1,11 @@
 // Include Libraries
-#include "../lib/definitions.h"
-#include "../lib/queens_GA.h"
-#include "../lib/constants.h"
-#include "../lib/utils.h"
-#include "../lib/genetics.h"
-#include "../lib/arguments.h"
-#include "../lib/strategies.h"
-
+#include "definitions.h"
+#include "queens_GA.h"
+#include "constants.h"
+#include "utils.h"
+#include "genetics.h"
+#include "arguments.h"
+#include "strategies.h"
 
 int main(int argc, char* argv[]){
     // Parse arguments

@@ -3,6 +3,10 @@ sudo apt-get update
 sudo apt-get install libbsd-dev
 
 #Compilation in linux:
+#Makefile
+  #to create the executable
+  make all
+  #to clean the executable and the .o files from the src/ folder
 
 #From the queens folder:
 gcc -D LINUX src/queens_GA.c src/constants.c src/genetics.c src/utils.c src/arguments.c src/strategies.c -lm -lbsd -o queens_GA.out
@@ -11,6 +15,8 @@ gcc -D LINUX src/queens_GA.c src/constants.c src/genetics.c src/utils.c src/argu
 gcc -D LINUX queens_GA.c constants.c genetics.c utils.c arguments.c strategies.c -lm -lbsd -o 8qsim
 
 #Execution ./queens_GA.out
+
+
 
 #Flags
   @TODO

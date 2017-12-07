@@ -1,7 +1,7 @@
-#include "../lib/queens_GA.h"
-#include "../lib/constants.h"
-#include "../lib/utils.h"
-#include "../lib/definitions.h"
+#include "queens_GA.h"
+#include "constants.h"
+#include "utils.h"
+#include "definitions.h"
 
 //Function bodies
 float random_number(float max)
