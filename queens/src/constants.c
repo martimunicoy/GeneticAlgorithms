@@ -1,16 +1,37 @@
+/*****************************************************************************
+ *               <N Queens Problem Solver - Genetic Algorithm>               *
+ *             Copyright (C) <2017>   <Municoy, M., Salgado, D.>             *
+ *                                                                           *
+ *   Contact the authors at: martimunicoy@gmail.com                          *
+ *                           danysalgado14@gmail.com                         *
+ *                                                                           *
+ *   This program is free software: you can redistribute it and/or modify    *
+ *   it under the terms of the GNU General Public License as published by    *
+ *   the Free Software Foundation, either version 3 of the License, or       *
+ *   (at your option) any later version.                                     *
+ *                                                                           *
+ *   This program is distributed in the hope that it will be useful,         *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of          *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
+ *   GNU General Public License for more details.                            *
+ *                                                                           *
+ *   You should have received a copy of the GNU General Public License       *
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.   *
+ *****************************************************************************/
+
 #include "../lib/constants.h"
 #include "../lib/definitions.h"
 
 const char ALPHABET[26] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
                                'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
                                'U', 'V', 'W', 'X', 'Y', 'Z'};
-    // List of arguments                               
+    // List of arguments
 const char ARGS[ARGS_NUM][3] = {"-q", "-p", "-g", "-d", "-m", "-l", "-c",
                                     "-i", "-r", "-x", "-s", "-t", "-w", "-e",
-                                    "-y", "-f"};      
+                                    "-y", "-f"};
 
 // Constants for default parameters
-                         
+
     // Number of queens -q
 const int N_QUEENS = 8;
     // Population size -p

@@ -1,3 +1,24 @@
+/*****************************************************************************
+ *               <N Queens Problem Solver - Genetic Algorithm>               *
+ *             Copyright (C) <2017>   <Municoy, M., Salgado, D.>             *
+ *                                                                           *
+ *   Contact the authors at: martimunicoy@gmail.com                          *
+ *                           danysalgado14@gmail.com                         *
+ *                                                                           *
+ *   This program is free software: you can redistribute it and/or modify    *
+ *   it under the terms of the GNU General Public License as published by    *
+ *   the Free Software Foundation, either version 3 of the License, or       *
+ *   (at your option) any later version.                                     *
+ *                                                                           *
+ *   This program is distributed in the hope that it will be useful,         *
+ *   but WITHOUT ANY WARRANTY; without even the implied warranty of          *
+ *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
+ *   GNU General Public License for more details.                            *
+ *                                                                           *
+ *   You should have received a copy of the GNU General Public License       *
+ *   along with this program.  If not, see <http://www.gnu.org/licenses/>.   *
+ *****************************************************************************/
+
 #include "../lib/queens_GA.h"
 #include "../lib/constants.h"
 #include "../lib/utils.h"
@@ -18,7 +39,7 @@ float random_number(float max)
 void shuffle(unsigned int * rows, int n_queens)
 {
     /*
-    Arrange the 'n_queens' elements of the array 'rows' in random order.    
+    Arrange the 'n_queens' elements of the array 'rows' in random order.
     Reference: https://stackoverflow.com/questions/6127503/shuffle-array-in-c
     size_t is a type guaranteed to hold any array index
     */
@@ -44,7 +65,7 @@ int sum_down(int n)
 }
 
 unsigned int absolute(int value)
-{   
+{
     /*
     Returns the absolute value of an integer
     */
@@ -69,7 +90,7 @@ int factorial(int m)
 }
 
 void swap(int * vector, int i, int j)
-{   
+{
     /*
      Given a vector and two positions of the vector, i and j,
      a swap operation between the vector components is performed:
@@ -82,11 +103,11 @@ void swap(int * vector, int i, int j)
 }
 
 void permute(int ** permutations, int * vector, int start, int end, int *counter)
-{    
+{
     /*
      Given an input vector, start = 0, end = length of the vector, a matrix 'permutations'
      and a pointer to integer 'counter' (outside of the scope of this function), successive calls
-     to this function and the swap function, recurssively fills the rows of the matrix 'permutations' 
+     to this function and the swap function, recurssively fills the rows of the matrix 'permutations'
      with all the possible (end!) permutations of the input 'vector'.
     */
 
@@ -131,7 +152,7 @@ void print_summary(int n_gen, float mean, float st_deviation, int best_score)
 }
 
 bool print_results(unsigned int scorer)
-{   
+{
     /*
      @TODO
     */

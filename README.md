@@ -1,6 +1,7 @@
 # Genetic Algorithm Programs
 
 This repository contains a set of optimization programs which make use of Genetic Algorithms.
+
 ## Contents
 
 * 8 Queens problem solver
@@ -8,5 +9,6 @@ This repository contains a set of optimization programs which make use of Geneti
 
 ## Authors
 
-* **Dani Salgado**
-* **Martí Municoy**
+* **Martí Municoy** martimunicoy@gmail.com
+* **Dani Salgado** danysalgado14@gmail.com
+
