@@ -14,7 +14,7 @@ CC = gcc
 # detect OS
 UNAME := $(shell uname)
 
-# define any compile-time flags
+#define any compile-time flags
 ifeq ($(UNAME), Linux)
 	CFLAGS = -D LINUX
 endif
@@ -34,7 +34,7 @@ LFLAGS = -L./lib
 #   if I want to link in libraries (libx.so or libx.a) I use the -llibname
 #   option, something like (this will link in libmylib.so and libm.so:
 ifeq ($(UNAME), Linux)
-	CFLAGS = -lm -lbsd
+	LFLAGS = -D LINUX -lm -lbsd
 endif
 
 # define the C source files
