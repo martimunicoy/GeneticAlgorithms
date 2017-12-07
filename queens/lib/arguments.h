@@ -3,35 +3,36 @@
 #define ARGS_NUM 14
 
 // Constants for default parameters
-// Number of queens
-const int N_QUEENS = 8;
-// Population size
-const int N_POPULATION = 10;
-// Number of generations
-const int N_GENERATIONS = 500;
-// Death ratio per generation
-const float DEATH_RATIO = 0.3;
-// Probability of mutation
-const float P_MUTATION = 0.2;
-// Number of genes to mutate
-const int LAMBDA = 3;
-// Force the algorithm to continue after finding a solution
-const bool FORCE_TO_CONTINUE = false;
-// Infinite number of generations
-const bool INFINITE_GENERATIONS = false;
-// Write fitness data to file
-const bool WRITE_FITNESS = false;
-// Frequency to summarize
-const int SUMMARIZE_FREQ = 50;
-// Number of selections in the tournament_selection function
-const int TOURNAMENT_SELECTIONS = 3;
-// The higher, the more exploratory
-const float FRACT_WEIGTH = 0.1;
-// The higher, the more exploitatory
-const float DENOM_POWER = 2;
 // List of arguments
 const char ARGS[ARGS_NUM][3] = {"-q", "-p", "-g", "-d", "-m", "-l", "-c",
                                 "-i", "-r", "-s", "-t", "-w", "-e", "-f"};
+// Number of queens -q
+const int N_QUEENS = 8;
+// Population size -p
+const int N_POPULATION = 10;
+// Number of generations -g
+const int N_GENERATIONS = 500;
+// Death ratio per generation -d
+const float DEATH_RATIO = 0.3;
+// Probability of mutation -m
+const float P_MUTATION = 0.2;
+// Number of genes to mutate -l
+const int LAMBDA = 3;
+// Force the algorithm to continue after finding a solution -c
+const bool FORCE_TO_CONTINUE = false;
+// Infinite number of generations -i
+const bool INFINITE_GENERATIONS = false;
+// Write fitness data to file -r
+const bool WRITE_FITNESS = false;
+// Frequency to summarize -s
+const int SUMMARIZE_FREQ = 50;
+// Number of selections in the tournament_selection function -t
+const int TOURNAMENT_SELECTIONS = 3;
+// The higher, the more exploratory -w
+const float FRACT_WEIGTH = 0.1;
+// The higher, the more exploitatory -e
+const float DENOM_POWER = 2;
+
 
 struct Args{
     int n_queens;
