@@ -1,33 +1,49 @@
 // Define Structures
 typedef struct
-{
-    unsigned int * rows;
+{   /* Given a column j of a NxN chessboard, rows[j] is the row
+       where we have a queen, i.e., we have a queen at each point
+       (column, row) = (j, rows[j]), j = 0,...,N-1 
+    */
+    unsigned int * rows; 
 } Genes;
 
 typedef struct
 {
-    int id;
-    Genes genes;
-    unsigned int scorer;
-    bool chosen;
+    int id; /* Id of the individual, it is thought to be unique among any other individual.
+               The idea is to consider unique id's during a whole run of the GA algorithm.
+            */
+    Genes genes; /* Genes of the individual */
+    unsigned int scorer; /* The fitness of the individual */
+    bool chosen; /* Boolean to check if the individual has been chosen in some selection procedure*/
 } Individual;
 
 typedef struct
 {
-    float delimiter;
+    float delimiter; /*@TODO  */
     Individual *individual;
 } RouletteCompartments;
 
 //Functions
 Genes initiate_genes(int n_queens)
-{
+{   
+     /*
+     Returns a Genes struct variable after reserving memory for it.
+    */
+
     Genes genes;
     genes.rows = (unsigned int *) malloc(sizeof(unsigned int) * n_queens);
     return genes;
 }
 
 Genes random_genes(int n_queens)
-{
+{   
+    /*
+     Initialises a Genes variable with rows (1,..., n_queens),
+     shuffles it to obrain a random permutation of it and returns
+     the obtained permutation. This assures there is one unique
+     queen for each column (and each row).
+    */
+
     Genes genes = initiate_genes(n_queens);
     unsigned int i;
     for (i = 1; i <= n_queens; i++){
@@ -40,10 +56,12 @@ Genes random_genes(int n_queens)
 void initiate(Individual *population, int id, int n_pop, int n_queens)
 {
     /*
-      Population: array of individuals  (pointer to the first individual)
-      ?id: last individual id not already used (id = id_lastused + 1)??
-      n_pop: number of individuals of the Population
-      n_queens: number of queens (dimension of the chess table)
+      Initialises a population of individuals.
+
+      population: array of individuals (pointer to the first individual)
+      id: the last id number available (id = id_lastused + 1)
+      n_pop: number of individuals of the population
+      n_queens: number of queens (dimension of the chessboard)
     */
 
     int sumdown = sum_down(n_queens);
@@ -61,7 +79,7 @@ void initiate(Individual *population, int id, int n_pop, int n_queens)
 void express_genes(Individual individual, int n_queens)
 {   /*
     Print the fenotype of the individual, which is a particular
-    chessboard (8x8) configuration of 8 queens.
+    chessboard (n_queens x n_queens) configuration of n_queens queens.
     */
     int row, col, index;
     for (row = n_queens; row > 0; row--)
