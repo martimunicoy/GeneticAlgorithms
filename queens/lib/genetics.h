@@ -77,10 +77,12 @@ void initiate(Individual *population, int id, int n_pop, int n_queens)
 }
 
 void express_genes(Individual individual, int n_queens)
-{   /*
-    Print the fenotype of the individual, which is a particular
+{   
+    /*
+    Prints the fenotype of the individual, which is a particular
     chessboard (n_queens x n_queens) configuration of n_queens queens.
     */
+
     int row, col, index;
     for (row = n_queens; row > 0; row--)
     {
@@ -112,9 +114,11 @@ void express_genes(Individual individual, int n_queens)
 bool diagonal(unsigned int column1, unsigned int row1, unsigned int column2, unsigned int row2)
 {
     /*
-    Given the position (col, row) of two queens, returns wheter they meet in a diagonal or not.
-    It works due to pitagoras theorem, and since we work with a squared chessboard.
+    Given the position (col, row) of two queens, returns whether they meet in a diagonal or not.
+    It works since we work with a squared chessboard and the diagonals have slope = 1. Thus,
+    Two queens meet if and only if they form the hipotenuse of a rectangle triangle with equal catetus:
     */
+
     unsigned int diff1, diff2;
     diff1 = absolute(column1 - column2);
     diff2 = absolute(row1 - row2);
@@ -126,11 +130,19 @@ bool diagonal(unsigned int column1, unsigned int row1, unsigned int column2, uns
 void evaluate(Individual *population, int n_pop, int n_queens)
 {
     /*
+     Given a input population of size n_pop initialises the scorer (fitness)
+     of each individual. The default scorer is 1+...+n_queens = sum_down(n_queens)
+     since it is the case where all queens are situated in a main diagonal and each
+     one meets with all the others.
+
+     If the individual scorer is equal to the default scorer, then it is counted the
+     number of (unique) pairs of queens that meet and uptdate the scorer of that individual.
+
      The smallest the scorer of an individual it gets, the better it is.
     */
 
-     /*
-     Improvements:
+    /*
+     @Improvements:
 
      - I would do an additional function to perform the loop in j and k
      that, given a the an individual, returns the number of pairs of queens that meet in a diagonal.
@@ -139,7 +151,8 @@ void evaluate(Individual *population, int n_pop, int n_queens)
 
      - Not allow that an individual has repeated columns in different rows, so that
      in this function the scorer+= sum_down() is not needed
-      */
+    */
+
     int i, j, k, row;
     unsigned int scorer;
     unsigned int initial_scorer = sum_down(n_queens);
@@ -164,16 +177,24 @@ void evaluate(Individual *population, int n_pop, int n_queens)
 }
 
 RouletteCompartments *malloc_roulette(int n_pop)
-{
+{   
+    /*
+     Reserves memory for a RouletteCompartments struct (a wheel roulette) and returns it
+    */
     RouletteCompartments *genetic_roulette = (RouletteCompartments *) malloc(sizeof(RouletteCompartments) * n_pop);
     return genetic_roulette;
 }
 
 float initiate_roulette(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, float weight, float power, bool fitness)
 {
+    /*
+     @TODO
+    */
+
     int i;
     float sum = 0;
     Individual *competitor;
+
     if(fitness == fit)
     {
         for(i = 0; i < n_pop; ++i)
@@ -202,7 +223,14 @@ float initiate_roulette(Individual *population, RouletteCompartments *genetic_ro
 }
 
 Individual * find_best(Individual *population, int n_pop)
-{
+{   
+    /*
+     Given a population of n_pop individuals, finds the FIRST with 
+     the best scorer and returns it.
+
+     @IMPROVE: choose a random individual among all 'best' individuals
+    */
+
     int i;
     Individual * best = &population[0];
 
@@ -215,8 +243,14 @@ Individual * find_best(Individual *population, int n_pop)
 Individual roulette_selection(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, float weight, float power, bool fitness)
 {
     /*
-     Given a Population of individuals, initiates a roulette and returns the selected individual
+     Given a population of n_pop individuals, initiates a roulette and returns the selected individual
+
+     genetic_roulette: an empty RouletteCompartments object, with memory already reserved.
+     @weight:
+     @power:
+     @fitness:
     */
+
     float max_delimiter, random;
 
     max_delimiter = initiate_roulette(population, genetic_roulette, n_pop, n_queens, weight, power, fitness);
@@ -243,8 +277,12 @@ Individual roulette_selection(Individual *population, RouletteCompartments *gene
 Individual tournament_selection(Individual *population, int n_pop, int k_selections)
 {
     /*
-      Selects K individuals at random from population and returns the fittest one
+      Selects k_selections individuals at random from a population and returns the fittest one
+
+      @IMPROVE: add the possibility do choose if the selections are with replacement or not
+      (i.e., if we mark an individual as chosen or not?)
     */
+
     int k;
     int random_position;
     Individual * selected_individuals = (Individual *) malloc(sizeof(Individual) * k_selections);
@@ -266,14 +304,35 @@ Individual tournament_selection(Individual *population, int n_pop, int k_selecti
 
 void reset_selection(Individual *population, int n_pop)
 {
+    /*
+     Resets the variable 'chosen' of each individual of the input population
+     to false.
+    */
+
     int i;
-    /*!!! To check: is the input array population modified outside the function?*/
+    /*@tocheck: is the input array population modified outside the function?*/
     for(i = 0; i < n_pop; ++i)
         population[i].chosen = false;
 }
 
 Individual ordered_crossover(Individual parent1, Individual parent2, int id, int n_queens)
-{
+{   
+    /*
+     Givne two parents, parent1 and parent2, this function performs the classical OX corssover
+     algorithm to obtain only ONE child by means of the genes of both parents.
+
+     Procedure: OX
+        1. Select a substring from the genes.rows of a parent at random.
+        2. Produce a proto-child by copying the substring into the
+        corresponding position of it, now in the genes.rows of the proto-child.
+        3. Delete the rows which are already in the substring from the 2nd
+        parent. The resulted sequence of gene.rows after the deletion, 
+        contains the rows that the proto-child needs.
+        4. Place the rows that the proto-child needs into the unfixed positions 
+        of the proto-child.genes.rows from left to right according to the order of the sequence 
+        to produce an offspring.
+    */
+
     int i, j = 0, k, tmp;
     Genes genes = initiate_genes(n_queens);
     unsigned int row;
