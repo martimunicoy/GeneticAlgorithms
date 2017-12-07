@@ -5,6 +5,7 @@
 #include "arguments.h"
 #include "strategies.h"
 #include "definitions.h"
+
 //Function bodies
 Individual * strategy1(Individual * population, Individual * nextpopulation,
                        Individual * best,

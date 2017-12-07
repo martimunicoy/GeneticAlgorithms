@@ -1,6 +1,5 @@
 #include "queens_GA.h"
 #include "constants.h"
-#include <string.h>
 #include "arguments.h"
 #include "definitions.h"
 

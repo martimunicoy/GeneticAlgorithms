@@ -3,6 +3,7 @@
 #include "utils.h"
 #include "genetics.h"
 #include "definitions.h"
+
 //Function bodies
 Genes initiate_genes(int n_queens)
 {

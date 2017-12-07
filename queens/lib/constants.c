@@ -1,18 +1,16 @@
-#include "queens_GA.h"
 #include "constants.h"
 #include "definitions.h"
-
-//const int ARGS_NUM = 16;
 
 const char ALPHABET[26] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
                                'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
                                'U', 'V', 'W', 'X', 'Y', 'Z'};
-    // Constants for default parameters
-    // List of arguments
-                               
+    // List of arguments                               
 const char ARGS[ARGS_NUM][3] = {"-q", "-p", "-g", "-d", "-m", "-l", "-c",
                                     "-i", "-r", "-x", "-s", "-t", "-w", "-e",
-                                    "-y", "-f"};                               
+                                    "-y", "-f"};      
+
+// Constants for default parameters
+                         
     // Number of queens -q
 const int N_QUEENS = 8;
     // Population size -p
