@@ -83,8 +83,8 @@ Have fun!
 A list of all the available flags is found below with a brief description of their use.
 
 ## Authors
-* **Martí Municoy** martimunicoy@gmail.com
-* **Dani Salgado** danysalgado14@gmail.com
+* **Martí Municoy**, martimunicoy@gmail.com
+* **Dani Salgado**, danysalgado14@gmail.com
 
 ## References
 [1] 8 queens problem, general information. https://en.wikipedia.org/wiki/Eight_queens_puzzle .

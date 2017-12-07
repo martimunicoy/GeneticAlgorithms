@@ -9,6 +9,6 @@ This repository contains a set of optimization programs which make use of Geneti
 
 ## Authors
 
-* **Martí Municoy** martimunicoy@gmail.com
-* **Dani Salgado** danysalgado14@gmail.com
+* **Martí Municoy**, martimunicoy@gmail.com
+* **Dani Salgado**, danysalgado14@gmail.com
 
