@@ -3,6 +3,7 @@ float random_number(float max)
     /*
     Returns a random float number between 0 and max
     */
+
     float random;
     random = (arc4random_uniform(UINT16_MAX))/ ((float)(UINT16_MAX)) * max;
     return random;
@@ -11,13 +12,11 @@ float random_number(float max)
 void shuffle(unsigned int * rows, int n_queens)
 {
     /*
-    Arrange the N elements of ARRAY in random order.
-    Only effective if N is much smaller than RAND_MAX;
-    if this may not be the case, use a better random
-    number generator.
-    Source: https://stackoverflow.com/questions/6127503/shuffle-array-in-c
+    Arrange the 'n_queens' elements of the array 'rows' in random order.    
+    Reference: https://stackoverflow.com/questions/6127503/shuffle-array-in-c
     size_t is a type guaranteed to hold any array index
     */
+
     int i, j;
     unsigned int tmp;
 
@@ -39,15 +38,22 @@ int sum_down(int n)
 }
 
 unsigned int absolute(int value)
-{   /*
-    Returns the absolute value of a int
+{   
+    /*
+    Returns the absolute value of an integer
     */
+
     if(value < 0)
         return -value;
     return value;
 }
 
-int factorial(int m){
+int factorial(int m)
+{
+    /*
+     Recursive function that return the value of m!
+     (factorial of m).
+    */
     if(m < 0){
         printf("\nFactorial of a negative number does not exist!\n");
         exit(0);
@@ -56,7 +62,13 @@ int factorial(int m){
     else return 1;
 }
 
-void swap(int * vector, int i, int j){
+void swap(int * vector, int i, int j)
+{   
+    /*
+     Given a vector and two positions of the vector, i and j,
+     a swap operation between the vector components is performed:
+         vector[i] <--> vector[j]
+    */
     int temp;
     temp = vector[i];
     vector[i] = vector[j];
@@ -64,7 +76,14 @@ void swap(int * vector, int i, int j){
 }
 
 void permute(int ** permutations, int * vector, int start, int end, int *counter)
-{
+{    
+    /*
+     Given an input vector, start = 0, end = length of the vector, a matrix 'permutations'
+     and a pointer to integer 'counter' (outside of the scope of this function), successive calls
+     to this function and the swap function, recurssively fills the rows of the matrix 'permutations' 
+     with all the possible (end!) permutations of the input 'vector'.
+    */
+
     int i, j;
     if (start == end)
     {
@@ -89,6 +108,10 @@ void permute(int ** permutations, int * vector, int start, int end, int *counter
 
 void print_summary(int n_gen, float mean, float st_deviation, int best_score)
 {
+    /*
+     @TODO
+    */
+
     printf("\n");
     printf("+-------------------------------+\n");
     printf("|        GENETIC SUMMARY        |\n");
@@ -102,7 +125,11 @@ void print_summary(int n_gen, float mean, float st_deviation, int best_score)
 }
 
 bool print_results(unsigned int scorer)
-{
+{   
+    /*
+     @TODO
+    */
+
     printf("\n");
     printf("+-------------------------------+\n");
     printf("|            RESULTS            |\n");
