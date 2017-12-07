@@ -10,7 +10,6 @@ The following program attempts to solve the so-called 8 Queens Problem in the ge
 Martin Richards published a program to count solutions to the n-queens problem using bitwise operations. However, this solution has already been published by Zongyan Qiu*, [1].
 
 The approach we follow is based on genetic algorithms.
-Getting Started
 
 ## Getting started
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
@@ -55,15 +54,15 @@ gcc -D LINUX src/queens_GA.c src/constants.c src/genetics.c src/utils.c src/argu
 ### Installing with Make
 It is also possible to compile the C Program by using _make_. Just go to the main folder of the project and enter the following command:
 
-"""
+```
 make
-"""
+```
 
 In case that your OS does not come with _stdlib.h_ you will get the following error while compiling:
 
-"""
+```
 ./lib/queens_GA.h:3:15: fatal error: 'bsd/stdlib.h' file not found
-"""
+```
 
 Then, you will need to install this missing library and execute _make_ again. You can find more information about how to install this missing library in the Installing on Linux section.
 
