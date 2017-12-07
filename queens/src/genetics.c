@@ -19,11 +19,11 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.   *
  *****************************************************************************/
 
-#include "../lib/queens_GA.h"
-#include "../lib/constants.h"
-#include "../lib/utils.h"
-#include "../lib/genetics.h"
-#include "../lib/definitions.h"
+#include "queens_GA.h"
+#include "constants.h"
+#include "utils.h"
+#include "genetics.h"
+#include "definitions.h"
 
 //Function bodies
 Genes initiate_genes(int n_queens)

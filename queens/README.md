@@ -52,6 +52,21 @@ After its installation, the compiler should work fine by looking for it at _bsd/
 gcc -D LINUX src/queens_GA.c src/constants.c src/genetics.c src/utils.c src/arguments.c src/strategies.c -lm -lbsd -o queens_GA.out
 '''
 
+### Installing with Make
+It is also possible to compile the C Program by using _make_. Just go to the main folder of the project and enter the following command:
+
+"""
+make
+"""
+
+In case that your OS does not come with _stdlib.h_ you will get the following error while compiling:
+
+"""
+./lib/queens_GA.h:3:15: fatal error: 'bsd/stdlib.h' file not found
+"""
+
+Then, you will need to install this missing library and execute _make_ again. You can find more information about how to install this missing library in the Installing on Linux section.
+
 ## Test running
 To see if the executable was properly built, a quick test can be run. On the same main folder of the project run the executable _queens_GA.out_ by using the next command:
 

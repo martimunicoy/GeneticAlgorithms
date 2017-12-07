@@ -19,10 +19,10 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.   *
  *****************************************************************************/
 
-#include "../lib/queens_GA.h"
-#include "../lib/constants.h"
-#include "../lib/arguments.h"
-#include "../lib/definitions.h"
+#include "queens_GA.h"
+#include "constants.h"
+#include "arguments.h"
+#include "definitions.h"
 
 // Function bodies
 bool starts_with(const char *string, const char *prefix){
