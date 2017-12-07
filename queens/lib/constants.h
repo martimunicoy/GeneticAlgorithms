@@ -1,7 +1,7 @@
 #ifndef CONSTANTS
 #define CONSTANTS
     #include <stdbool.h>
-    #include "definitions.h"
+    #include "../lib/definitions.h"
     
     // Constants global parameters
 

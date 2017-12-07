@@ -1,5 +1,5 @@
-#include "constants.h"
-#include "definitions.h"
+#include "../lib/constants.h"
+#include "../lib/definitions.h"
 
 const char ALPHABET[26] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
                                'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
