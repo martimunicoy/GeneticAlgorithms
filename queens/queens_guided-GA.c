@@ -41,13 +41,19 @@ int main(int argc, char* argv[]){
     //write_fitness(&f, file_fitness, population, args.n_population, n_gen);
 
     // Initiate Genetic Algorithm
-    while(n_gen <= args.n_generations || INFINITE_GENERATIONS)
+    while(n_gen <= args.n_generations || args.infinite_generations)
     {
         reset_selection(population, args.n_population);
         for (i = 0; i < N_DEATHS; i++)
         {
-            parent1 = roulette_selection(population, genetic_roulette, args.n_population, args.n_queens, args.fract_weight, args.denom_power, fit);
-            parent2 = roulette_selection(population, genetic_roulette, args.n_population, args.n_queens, args.fract_weight, args.denom_power, fit);
+            //parent1 = roulette_selection(population, genetic_roulette, args.n_population, args.n_queens, args.fract_weight, args.denom_power, fit);
+            //parent2 = roulette_selection(population, genetic_roulette, args.n_population, args.n_queens, args.fract_weight, args.denom_power, fit);
+
+            // ONLY FOR TOURNAMENT SELECTION
+            reset_selection(population, args.n_population);
+            // ONLY FOR TOURNAMENT SELECTION
+            parent1 = tournament_selection(population, args.n_population, args.tournament_selections);
+            parent2 = tournament_selection(population, args.n_population, args.tournament_selections);
             child = heuristic_mutation(ordered_crossover(parent1, parent2, ++id, args.n_queens), args.n_queens, args.lambda, args.p_mutation);
             nextpopulation[i] = child;
         }
@@ -55,7 +61,12 @@ int main(int argc, char* argv[]){
         reset_selection(population, args.n_population);
         for (i = N_DEATHS; i < args.n_population; i++)
         {
-            survivor = roulette_selection(population, genetic_roulette, args.n_population, args.n_queens, args.fract_weight, args.denom_power, fit);
+            //survivor = roulette_selection(population, genetic_roulette, args.n_population, args.n_queens, args.fract_weight, args.denom_power, fit);
+
+            // ONLY FOR TOURNAMENT SELECTION
+            reset_selection(population, args.n_population);
+            // ONLY FOR TOURNAMENT SELECTION
+            survivor = tournament_selection(population, args.n_population, args.tournament_selections);
             nextpopulation[i] = survivor;
         }
 
@@ -70,12 +81,11 @@ int main(int argc, char* argv[]){
 
         if (args.summarize_freq != 0)
             if ((n_gen-1) % args.summarize_freq == 0)
-                summarize(population, best, n_gen-1, args.n_queens);
+                summarize(population, best, n_gen-1, args.n_population);
 
         n_gen++;
 
-
-        if (best->scorer == 0 && !FORCE_TO_CONTINUE) break;
+        if (best->scorer == 0 && !args.force_to_continue) break;
 
         if (args.n_generations <= 1000){
             write_fitness(&f, file_fitness, population, args.n_population, n_gen);

@@ -219,28 +219,31 @@ Individual roulette_selection(Individual *population, RouletteCompartments *gene
 
     //view_selection(genetic_roulette, n_pop, random, choice);
 
-    return *genetic_roulette[choice].individual;
+    return * genetic_roulette[choice].individual;
 }
 
-Individual tournament_selection(Individual *population, int n_queens, int K_selections)
+Individual tournament_selection(Individual *population, int n_pop, int k_selections)
 {
     /*
       Selects K individuals at random from population and returns the fittest one
     */
-
     int k;
     int random_position;
-    Individual * selected_individuals = (Individual *) malloc(sizeof(Individual) * K_selections);
-    Individual best_selected_individual;
+    Individual * selected_individuals = (Individual *) malloc(sizeof(Individual) * k_selections);
+    Individual * best_selected_individual;
 
-    for (k = 0;  k < K_selections; k++){
-        random_position = (int) random_number(n_queens); // hauria de ser random_number(n_pop);
-        selected_individuals[k] = population[random_position];
+    for (k = 0;  k < k_selections;){
+        random_position = (int) random_number(n_pop);
+        if (!population[random_position].chosen){
+            population[random_position].chosen = true;
+            selected_individuals[k] = population[random_position];
+            k++;
+        }
     }
 
-    best_selected_individual = *(find_best(selected_individuals, K_selections));
+    best_selected_individual = find_best(selected_individuals, k_selections);
 
-    return best_selected_individual;
+    return * best_selected_individual;
 }
 
 void reset_selection(Individual *population, int n_pop)
@@ -361,20 +364,20 @@ void view_population(Individual *population, int n_pop, int n_queens, int n_gen)
     }
 }
 
-void summarize(Individual *population, Individual *best, int n_gen, int n_queens)
+void summarize(Individual *population, Individual *best, int n_gen, int n_pop)
 {
     int i;
     float mean, st_deviation, sum = 0, sum_of_squares = 0;
 
-    for (i = 0; i < n_queens; i++)
+    for (i = 0; i < n_pop; i++)
         sum += population[i].scorer;
 
-    mean = sum / n_queens;
+    mean = sum / n_pop;
 
-    for (i = 0; i < n_queens; i++)
+    for (i = 0; i < n_pop; i++)
         sum_of_squares += pow(population[i].scorer - mean, 2);
 
-    st_deviation = sqrt(sum_of_squares/(n_queens-1));
+    st_deviation = sqrt(sum_of_squares/(n_pop-1));
 
     print_summary(n_gen, mean, st_deviation, best->scorer);
 }

@@ -89,7 +89,6 @@ void permute(int ** permutations, int * vector, int start, int end, int *counter
 
 void print_summary(int n_gen, float mean, float st_deviation, int best_score)
 {
-
     printf("\n");
     printf("+-------------------------------+\n");
     printf("|        GENETIC SUMMARY        |\n");
