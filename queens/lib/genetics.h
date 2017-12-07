@@ -382,7 +382,20 @@ Individual ordered_crossover(Individual parent1, Individual parent2, int id, int
 }
 
 Individual heuristic_mutation(Individual mutant, int n_queens, int lambda, float p_mut)
-{
+{   
+    /*
+     Given an input individual 'mutant', a probability p_mut of mutation
+     and an integer lambda, if a generated random number between 0 and 1
+     is smaller than p_mut, then the mutant individual will mutate as follows:
+
+     Procedure: Heuristic Mutation.
+        1. Pick up lambda genes (from mutant.genes.rows) at random.
+        2. Generate neighbors according to all possible permutations of the
+        selected gens.
+        3. Evaluate all neighbors and select the best one as offspring.
+     The best selected is returned.
+    */
+
     float random = random_number(1);
     int i, j, k, n_perms, cols_to_mutate[lambda], rows_to_mutate[lambda];
 
@@ -429,20 +442,30 @@ Individual heuristic_mutation(Individual mutant, int n_queens, int lambda, float
 }
 
 void view_population(Individual *population, int n_pop, int n_queens, int n_gen)
-{
+{   
+    /*
+     Given a population of n_pop individuals and its generation,
+     prints out onto the screen the genes and the scorer (fitness) of
+     each of its individuals, line by line.
+    */
+
     int i, j;
     printf("\nGeneration %d\n\nIndividual id\tGenes\t\t\tScorer\n", n_gen);
-    for(i = 0; i < n_pop; ++i)
+    for (i = 0; i < n_pop; ++i)
     {
         printf("\t%d\t(%d", population[i].id, population[i].genes.rows[0]);
-        for(j = 1; j < n_queens; ++j)
+        for (j = 1; j < n_queens; ++j)
             printf(",%d", population[i].genes.rows[j]);
         printf(")\t%d\n", population[i].scorer);
     }
 }
 
 void summarize(Individual *population, Individual *best, int n_gen, int n_pop)
-{
+{   
+    /*
+     @TODO
+    */
+
     int i;
     float mean, st_deviation, sum = 0, sum_of_squares = 0;
 
@@ -461,6 +484,16 @@ void summarize(Individual *population, Individual *best, int n_gen, int n_pop)
 
 void write_fitness(FILE ** file, char * filename, Individual * population, int n_pop, int generation)
 {
+    /*
+     Given a pointer to file and a file name, appends into a file the scorer
+     of each individual of the input population, one by one and separated by commas.
+     In the first position it is printed the generation of the input population.
+
+     By calling this function after sucessive generations of individuals are created,
+     we can obtain a file whose rows are the fitnesses of the corresponding individuals
+     for each generation.
+    */
+
     *file = fopen(filename, "a");
 
     if (*file == NULL)
@@ -471,9 +504,9 @@ void write_fitness(FILE ** file, char * filename, Individual * population, int n
 
     fprintf(*file, "%d,", generation);
 
-    for(int i = 0;i < n_pop;i++)
+    for (int i = 0; i < n_pop; i++)
     {
-        if(i<n_pop-1)
+        if (i < n_pop-1)
             fprintf(*file, "%u,", population[i].scorer);
         else
             fprintf(*file, "%u\n", population[i].scorer);
