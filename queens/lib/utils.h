@@ -100,3 +100,21 @@ void print_summary(int n_gen, float mean, float st_deviation, int best_score)
     printf("+-------------------------------+\n");
     printf("\n");
 }
+
+bool print_results(unsigned int scorer)
+{
+    printf("\n");
+    printf("+-------------------------------+\n");
+    printf("|            RESULTS            |\n");
+    printf("+-------------------------------+\n");
+    printf("\n");
+
+    if(scorer != 0)
+    {
+        printf("\nNo optimal individual found.\n");
+        printf("\n");
+        return false;
+    }
+    else
+        return true;
+}

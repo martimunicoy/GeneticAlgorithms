@@ -1,6 +1,6 @@
 #include <string.h>
 
-#define ARGS_NUM 13
+#define ARGS_NUM 14
 
 // Constants for default parameters
 // Number of queens
@@ -9,8 +9,8 @@ const int N_QUEENS = 8;
 const int N_POPULATION = 10;
 // Number of generations
 const int N_GENERATIONS = 500;
-// Number of deaths per generation
-const int N_DEATHS = 3;
+// Death ratio per generation
+const float DEATH_RATIO = 0.3;
 // Probability of mutation
 const float P_MUTATION = 0.2;
 // Number of genes to mutate
@@ -19,6 +19,8 @@ const int LAMBDA = 3;
 const bool FORCE_TO_CONTINUE = false;
 // Infinite number of generations
 const bool INFINITE_GENERATIONS = false;
+// Write fitness data to file
+const bool WRITE_FITNESS = false;
 // Frequency to summarize
 const int SUMMARIZE_FREQ = 50;
 // Number of selections in the tournament_selection function
@@ -29,17 +31,18 @@ const float FRACT_WEIGTH = 0.1;
 const float DENOM_POWER = 2;
 // List of arguments
 const char ARGS[ARGS_NUM][3] = {"-q", "-p", "-g", "-d", "-m", "-l", "-c",
-                                 "-i", "-s", "-t", "-w", "-e", "-f"};
+                                "-i", "-r", "-s", "-t", "-w", "-e", "-f"};
 
 struct Args{
     int n_queens;
     int n_population;
     int n_generations;
-    int n_deaths;
+    float death_ratio;
     float p_mutation;
     int lambda;
     bool force_to_continue;
     bool infinite_generations;
+    bool write_fitness;
     int summarize_freq;
     int tournament_selections;
     float fract_weight;
@@ -52,7 +55,7 @@ bool starts_with(const char *string, const char *prefix){
 
 struct Args args_initializer()
 {
-    struct Args arguments = {N_QUEENS, N_POPULATION, N_GENERATIONS, N_DEATHS,
+    struct Args arguments = {N_QUEENS, N_POPULATION, N_GENERATIONS, DEATH_RATIO,
                              P_MUTATION, LAMBDA, FORCE_TO_CONTINUE,
                              INFINITE_GENERATIONS, SUMMARIZE_FREQ,
                              TOURNAMENT_SELECTIONS, FRACT_WEIGTH, DENOM_POWER};
@@ -77,10 +80,10 @@ struct Args check_arguments(struct Args arguments)
         printf("\'n_generations\' out of range, using default value (%d)\n", N_GENERATIONS);
         arguments.n_generations = N_GENERATIONS;
     }
-    if (arguments.n_deaths < 0 | arguments.n_deaths > arguments.n_population/2)
+    if (arguments.death_ratio < 0 | arguments.death_ratio > 0.5)
     {
-        printf("\'n_deaths\' out of range, using default value (%d)\n", N_DEATHS);
-        arguments.n_deaths = N_DEATHS;
+        printf("\'n_deaths\' out of range, using default value (%f)\n", DEATH_RATIO);
+        arguments.death_ratio = DEATH_RATIO;
     }
     if (arguments.p_mutation < 0 | arguments.p_mutation > 1)
     {
@@ -115,6 +118,96 @@ struct Args check_arguments(struct Args arguments)
 
     return arguments;
 }
+
+bool atob(char * subline)
+{
+    if (strncmp(subline, "true", 4) == 0)
+        return true;
+    else if (strncmp(subline, "t", 1) == 0)
+        return true;
+    else if (strncmp(subline, "1", 1) == 0)
+        return true;
+    else if (strncmp(subline, "false", 4) == 0)
+        return false;
+    else if (strncmp(subline, "f", 1) == 0)
+        return false;
+    else if (strncmp(subline, "0", 1) == 0)
+        return false;
+    else
+    {
+        printf("Error while parsing %s from the input file.\n", subline);
+        exit(EXIT_FAILURE);
+    }
+}
+
+struct Args line_parser(char * subline1, char * subline2, struct Args arguments)
+{
+    if (starts_with(subline1, "N_QUEENS"))
+        arguments.n_queens = atoi(subline2);
+    else if (starts_with(subline1, "N_POPULATION"))
+        arguments.n_population = atoi(subline2);
+    else if (starts_with(subline1, "N_GENERATIONS"))
+        arguments.n_generations = atoi(subline2);
+    else if (starts_with(subline1, "DEATH_RATIO"))
+        arguments.death_ratio = atof(subline2);
+    else if (starts_with(subline1, "P_MUTATION"))
+        arguments.p_mutation = atof(subline2);
+    else if (starts_with(subline1, "LAMBDA"))
+        arguments.lambda = atoi(subline2);
+    else if (starts_with(subline1, "FORCE_TO_CONTINUE"))
+        arguments.force_to_continue = atob(subline2);
+    else if (starts_with(subline1, "INFINITE_GENERATIONS"))
+        arguments.infinite_generations = atob(subline2);
+    else if (starts_with(subline1, "WRITE_FITNESS"))
+        arguments.write_fitness = atob(subline2);
+    else if (starts_with(subline1, "SUMMARIZE_FREQ"))
+        arguments.summarize_freq = atoi(subline2);
+    else if (starts_with(subline1, "TOURNAMENT_SELECTIONS"))
+        arguments.tournament_selections = atoi(subline2);
+    else if (starts_with(subline1, "FRACT_WEIGTH"))
+        arguments.fract_weight = atof(subline2);
+    else if (starts_with(subline1, "DENOM_POWER"))
+        arguments.denom_power = atof(subline2);
+
+    return arguments;
+}
+
+struct Args args_from_file(struct Args arguments, char file_dir[50])
+{
+    FILE * f;
+    char * line = NULL;
+    char * subline1, * subline2;
+    size_t len = 0;
+    ssize_t read;
+
+    f = fopen(file_dir, "r");
+
+    if (f == NULL)
+    {
+        printf("Error while openening arguments input file %s\n", file_dir);
+        exit(EXIT_FAILURE);
+    }
+
+    while ((read = getline(&line, &len, f)) != -1)
+    {
+        subline1 = strtok(line, " ");
+        subline2 = strtok(NULL, " ");
+        if (subline2 != NULL)
+            arguments = line_parser(subline1, subline2, arguments);
+        else
+        {
+            printf("Wrong input line: %s\n", line);
+            exit(EXIT_FAILURE);
+        }
+    }
+
+    fclose(f);
+    if (line)
+        free(line);
+
+    return arguments;
+}
+
 struct Args args_parser(int argc, char *argv[])
 {
     int i, j;
@@ -126,8 +219,7 @@ struct Args args_parser(int argc, char *argv[])
         if (starts_with(*(argv + i), "-f"))
             if (i + 2 <= argc){
                 strcpy(file_dir, *(argv + i + 1));
-                //arguments = args_from_file(file_dir);
-                printf("Not available yet\n");
+                arguments = args_from_file(arguments, file_dir);
             }
     }
 
@@ -138,18 +230,19 @@ struct Args args_parser(int argc, char *argv[])
             {
                 if (j == 6) arguments.force_to_continue = true;
                 else if (j == 7) arguments.infinite_generations = true;
+                else if (j == 8) arguments.write_fitness = true;
                 else if (i + 2 <= argc)
                 {
                     if (j == 0) arguments.n_queens = atoi(*(argv + i + 1));
                     else if (j == 1) arguments.n_population = atoi(*(argv + i + 1));
                     else if (j == 2) arguments.n_generations = atoi(*(argv + i + 1));
-                    else if (j == 3) arguments.n_deaths = atoi(*(argv + i + 1));
+                    else if (j == 3) arguments.death_ratio = atof(*(argv + i + 1));
                     else if (j == 4) arguments.p_mutation = atof(*(argv + i + 1));
                     else if (j == 5) arguments.lambda = atoi(*(argv + i + 1));
-                    else if (j == 8) arguments.summarize_freq = atoi(*(argv + i + 1));
-                    else if (j == 9) arguments.tournament_selections = atoi(*(argv + i + 1));
-                    else if (j == 10) arguments.fract_weight = atof(*(argv + i + 1));
-                    else if (j == 11) arguments.denom_power = atof(*(argv + i + 1));
+                    else if (j == 9) arguments.summarize_freq = atoi(*(argv + i + 1));
+                    else if (j == 10) arguments.tournament_selections = atoi(*(argv + i + 1));
+                    else if (j == 11) arguments.fract_weight = atof(*(argv + i + 1));
+                    else if (j == 12) arguments.denom_power = atof(*(argv + i + 1));
                 }
                 else
                     printf("Wrong command (%s), using default values.\n", *(argv + i));
