@@ -2,9 +2,9 @@
 typedef struct
 {   /* Given a column j of a NxN chessboard, rows[j] is the row
        where we have a queen, i.e., we have a queen at each point
-       (column, row) = (j, rows[j]), j = 0,...,N-1 
+       (column, row) = (j, rows[j]), j = 0,...,N-1
     */
-    unsigned int * rows; 
+    unsigned int * rows;
 } Genes;
 
 typedef struct
@@ -25,7 +25,7 @@ typedef struct
 
 //Functions
 Genes initiate_genes(int n_queens)
-{   
+{
      /*
      Returns a Genes struct variable after reserving memory for it.
     */
@@ -36,7 +36,7 @@ Genes initiate_genes(int n_queens)
 }
 
 Genes random_genes(int n_queens)
-{   
+{
     /*
      Initialises a Genes variable with rows (1,..., n_queens),
      shuffles it to obrain a random permutation of it and returns
@@ -77,7 +77,7 @@ void initiate(Individual *population, int id, int n_pop, int n_queens)
 }
 
 void express_genes(Individual individual, int n_queens)
-{   
+{
     /*
     Prints the fenotype of the individual, which is a particular
     chessboard (n_queens x n_queens) configuration of n_queens queens.
@@ -178,7 +178,7 @@ void evaluate(Individual *population, int n_pop, int n_queens)
 }
 
 RouletteCompartments *malloc_roulette(int n_pop)
-{   
+{
     /*
      Reserves memory for a RouletteCompartments struct (a wheel roulette) and returns it
     */
@@ -224,9 +224,9 @@ float initiate_roulette(Individual *population, RouletteCompartments *genetic_ro
 }
 
 Individual * find_best(Individual *population, int n_pop)
-{   
+{
     /*
-     Given a population of n_pop individuals, finds the FIRST with 
+     Given a population of n_pop individuals, finds the FIRST with
      the best scorer and returns it.
 
      @IMPROVE: choose a random individual among all 'best' individuals
@@ -275,7 +275,7 @@ Individual roulette_selection(Individual *population, RouletteCompartments *gene
     return * genetic_roulette[choice].individual;
 }
 
-Individual tournament_selection(Individual *population, int n_pop, int k_selections)
+Individual tournament_selection(Individual *population, int n_pop, int k_selections, bool replacement)
 {
     /*
       Selects k_selections individuals at random from a population and returns the fittest one
@@ -291,8 +291,16 @@ Individual tournament_selection(Individual *population, int n_pop, int k_selecti
 
     for (k = 0;  k < k_selections;){
         random_position = (int) random_number(n_pop);
-        if (!population[random_position].chosen){
-            population[random_position].chosen = true;
+        if (replacement)
+        {
+            if (!population[random_position].chosen){
+                population[random_position].chosen = true;
+                selected_individuals[k] = population[random_position];
+                k++;
+            }
+        }
+        else
+        {
             selected_individuals[k] = population[random_position];
             k++;
         }
@@ -317,7 +325,7 @@ void reset_selection(Individual *population, int n_pop)
 }
 
 Individual ordered_crossover(Individual parent1, Individual parent2, int id, int n_queens)
-{   
+{
     /*
      Givne two parents, parent1 and parent2, this function performs the classical OX corssover
      algorithm to obtain only ONE child by means of the genes of both parents.
@@ -327,10 +335,10 @@ Individual ordered_crossover(Individual parent1, Individual parent2, int id, int
         2. Produce a proto-child by copying the substring into the
         corresponding position of it, now in the genes.rows of the proto-child.
         3. Delete the rows which are already in the substring from the 2nd
-        parent. The resulted sequence of gene.rows after the deletion, 
+        parent. The resulted sequence of gene.rows after the deletion,
         contains the rows that the proto-child needs.
-        4. Place the rows that the proto-child needs into the unfixed positions 
-        of the proto-child.genes.rows from left to right according to the order of the sequence 
+        4. Place the rows that the proto-child needs into the unfixed positions
+        of the proto-child.genes.rows from left to right according to the order of the sequence
         to produce an offspring.
     */
 
@@ -383,7 +391,7 @@ Individual ordered_crossover(Individual parent1, Individual parent2, int id, int
 }
 
 Individual heuristic_mutation(Individual mutant, int n_queens, int lambda, float p_mut)
-{   
+{
     /*
      Given an input individual 'mutant', a probability p_mut of mutation
      and an integer lambda, if a generated random number between 0 and 1
@@ -443,7 +451,7 @@ Individual heuristic_mutation(Individual mutant, int n_queens, int lambda, float
 }
 
 void view_population(Individual *population, int n_pop, int n_queens, int n_gen)
-{   
+{
     /*
      Given a population of n_pop individuals and its generation,
      prints out onto the screen the genes and the scorer (fitness) of
@@ -462,7 +470,7 @@ void view_population(Individual *population, int n_pop, int n_queens, int n_gen)
 }
 
 void summarize(Individual *population, Individual *best, int n_gen, int n_pop)
-{   
+{
     /*
      @TODO
     */

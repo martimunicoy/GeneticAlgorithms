@@ -9,8 +9,10 @@
 #include <math.h>
 
 // Definitions
-#define fit 1
-#define unfit 0
+#define fit true
+#define unfit false
+#define replace true
+#define not_replace false
 #define random_bool arc4random_uniform(2)
 
 const char ALPHABET[26] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',

@@ -1,17 +1,18 @@
 #include <string.h>
 
-#define ARGS_NUM 14
+#define ARGS_NUM 16
 
 // Constants for default parameters
 // List of arguments
 const char ARGS[ARGS_NUM][3] = {"-q", "-p", "-g", "-d", "-m", "-l", "-c",
-                                "-i", "-r", "-s", "-t", "-w", "-e", "-f"};
+                                "-i", "-r", "-x", "-s", "-t", "-w", "-e",
+                                "-y", "-f"};
 // Number of queens -q
 const int N_QUEENS = 8;
 // Population size -p
 const int N_POPULATION = 10;
 // Number of generations -g
-const int N_GENERATIONS = 500;
+const int N_GENERATIONS = 1000;
 // Death ratio per generation -d
 const float DEATH_RATIO = 0.3;
 // Probability of mutation -m
@@ -24,15 +25,18 @@ const bool FORCE_TO_CONTINUE = false;
 const bool INFINITE_GENERATIONS = false;
 // Write fitness data to file -r
 const bool WRITE_FITNESS = false;
+// Maximum fitness points -x
+const int MAX_FITNESS_POINTS = 1000;
 // Frequency to summarize -s
-const int SUMMARIZE_FREQ = 50;
+const int SUMMARIZE_FREQ = 100;
 // Number of selections in the tournament_selection function -t
 const int TOURNAMENT_SELECTIONS = 3;
 // The higher, the more exploratory -w
 const float FRACT_WEIGTH = 0.1;
 // The higher, the more exploitatory -e
 const float DENOM_POWER = 2;
-
+// Set the strategy to apply -y
+const int STRATEGY = 1;
 
 struct Args{
     int n_queens;
@@ -44,10 +48,12 @@ struct Args{
     bool force_to_continue;
     bool infinite_generations;
     bool write_fitness;
+    int max_fitness_points;
     int summarize_freq;
     int tournament_selections;
     float fract_weight;
     float denom_power;
+    int strategy;
 };
 
 bool starts_with(const char *string, const char *prefix){
@@ -58,8 +64,10 @@ struct Args args_initializer()
 {
     struct Args arguments = {N_QUEENS, N_POPULATION, N_GENERATIONS, DEATH_RATIO,
                              P_MUTATION, LAMBDA, FORCE_TO_CONTINUE,
-                             INFINITE_GENERATIONS, SUMMARIZE_FREQ,
-                             TOURNAMENT_SELECTIONS, FRACT_WEIGTH, DENOM_POWER};
+                             INFINITE_GENERATIONS, WRITE_FITNESS,
+                             MAX_FITNESS_POINTS, SUMMARIZE_FREQ,
+                             TOURNAMENT_SELECTIONS, FRACT_WEIGTH, DENOM_POWER,
+                             STRATEGY};
 
     return arguments;
 }
@@ -96,9 +104,14 @@ struct Args check_arguments(struct Args arguments)
         printf("\'lambda\' out of range, using default value (%d)\n", LAMBDA);
         arguments.lambda = LAMBDA;
     }
+    if (arguments.max_fitness_points < 0 | arguments.max_fitness_points > 999999)
+    {
+        printf("\'max_fitness_points\' out of range, using default value (%d)\n", MAX_FITNESS_POINTS);
+        arguments.max_fitness_points = MAX_FITNESS_POINTS;
+    }
     if (arguments.summarize_freq < 0 | arguments.summarize_freq > 999999999)
     {
-        printf("\'p_mutation\' out of range, using default value (%d)\n", SUMMARIZE_FREQ);
+        printf("\'summarize_freq\' out of range, using default value (%d)\n", SUMMARIZE_FREQ);
         arguments.summarize_freq = SUMMARIZE_FREQ;
     }
     if (arguments.tournament_selections < 1 | arguments.tournament_selections > arguments.n_population)
@@ -115,6 +128,11 @@ struct Args check_arguments(struct Args arguments)
     {
         printf("\'denom_power\' out of range, using default value (%f)\n", DENOM_POWER);
         arguments.denom_power = DENOM_POWER;
+    }
+    if (arguments.strategy < 1 | arguments.strategy > 3)
+    {
+        printf("\'strategy\' out of range, using default value (%d)\n", STRATEGY);
+        arguments.strategy = STRATEGY;
     }
 
     return arguments;
@@ -163,12 +181,16 @@ struct Args line_parser(char * subline1, char * subline2, struct Args arguments)
         arguments.write_fitness = atob(subline2);
     else if (starts_with(subline1, "SUMMARIZE_FREQ"))
         arguments.summarize_freq = atoi(subline2);
+    else if (starts_with(subline1, "MAX_FITNESS_POINTS"))
+        arguments.max_fitness_points = atoi(subline2);
     else if (starts_with(subline1, "TOURNAMENT_SELECTIONS"))
         arguments.tournament_selections = atoi(subline2);
     else if (starts_with(subline1, "FRACT_WEIGTH"))
         arguments.fract_weight = atof(subline2);
     else if (starts_with(subline1, "DENOM_POWER"))
         arguments.denom_power = atof(subline2);
+    else if (starts_with(subline1, "STRATEGY"))
+        arguments.strategy = atoi(subline2);
 
     return arguments;
 }
@@ -240,10 +262,12 @@ struct Args args_parser(int argc, char *argv[])
                     else if (j == 3) arguments.death_ratio = atof(*(argv + i + 1));
                     else if (j == 4) arguments.p_mutation = atof(*(argv + i + 1));
                     else if (j == 5) arguments.lambda = atoi(*(argv + i + 1));
-                    else if (j == 9) arguments.summarize_freq = atoi(*(argv + i + 1));
-                    else if (j == 10) arguments.tournament_selections = atoi(*(argv + i + 1));
-                    else if (j == 11) arguments.fract_weight = atof(*(argv + i + 1));
-                    else if (j == 12) arguments.denom_power = atof(*(argv + i + 1));
+                    else if (j == 9) arguments.max_fitness_points = atoi(*(argv + i + 1));
+                    else if (j == 10) arguments.summarize_freq = atoi(*(argv + i + 1));
+                    else if (j == 11) arguments.tournament_selections = atoi(*(argv + i + 1));
+                    else if (j == 12) arguments.fract_weight = atof(*(argv + i + 1));
+                    else if (j == 13) arguments.denom_power = atof(*(argv + i + 1));
+                    else if (j == 14) arguments.strategy = atoi(*(argv + i + 1));
                 }
                 else
                     printf("Wrong command (%s), using default values.\n", *(argv + i));
