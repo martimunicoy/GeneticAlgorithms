@@ -109,6 +109,7 @@ void express_genes(Individual individual, int n_queens)
             printf(" %d", (int) col/26+1);
         printf("\n");
     }
+    printf("\n");
 }
 
 bool diagonal(unsigned int column1, unsigned int row1, unsigned int column2, unsigned int row2)

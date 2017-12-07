@@ -9,9 +9,17 @@ int main(int argc, char* argv[]){
     struct Args args = args_parser(argc, argv);
 
     // Create, initialize text files
+    FILE * file;
     char file_fitness[] = "DataVisualization/Fitness.csv";
-    FILE *f = fopen(file_fitness, "w");
-    if (f == NULL){printf("Error opening file!\n");exit(1); }
+    if (args.write_fitness)
+    {
+        file = fopen(file_fitness, "w");
+        if (file == NULL)
+        {
+            printf("Error opening file!\n");
+            exit(1);
+        }
+    }
 
     // Initialize variables
     int id = 1;
@@ -38,13 +46,17 @@ int main(int argc, char* argv[]){
     evaluate(population, args.n_population, args.n_queens);
     //view_population(population, args.n_population, args.n_queens, n_gen);
 
-    //write_fitness(&f, file_fitness, population, args.n_population, n_gen);
+    if (args.write_fitness)
+        write_fitness(&file, file_fitness, population, args.n_population, n_gen);
+
+    // Get number of deaths per generation
+    int n_deaths = (int) (args.n_population * args.death_ratio);
 
     // Initiate Genetic Algorithm
     while(n_gen <= args.n_generations || args.infinite_generations)
     {
         reset_selection(population, args.n_population);
-        for (i = 0; i < N_DEATHS; i++)
+        for (i = 0; i < n_deaths; i++)
         {
             //parent1 = roulette_selection(population, genetic_roulette, args.n_population, args.n_queens, args.fract_weight, args.denom_power, fit);
             //parent2 = roulette_selection(population, genetic_roulette, args.n_population, args.n_queens, args.fract_weight, args.denom_power, fit);
@@ -59,7 +71,7 @@ int main(int argc, char* argv[]){
         }
 
         reset_selection(population, args.n_population);
-        for (i = N_DEATHS; i < args.n_population; i++)
+        for (i = n_deaths; i < args.n_population; i++)
         {
             //survivor = roulette_selection(population, genetic_roulette, args.n_population, args.n_queens, args.fract_weight, args.denom_power, fit);
 
@@ -87,21 +99,11 @@ int main(int argc, char* argv[]){
 
         if (best->scorer == 0 && !args.force_to_continue) break;
 
-        if (args.n_generations <= 1000){
-            write_fitness(&f, file_fitness, population, args.n_population, n_gen);
-        }
+        if (args.write_fitness && args.n_generations <= 1000)
+            write_fitness(&file, file_fitness, population, args.n_population, n_gen);
     }
     n_gen--;
 
-    printf("\n");
-    printf("+-------------------------------+\n");
-    printf("|            RESULTS            |\n");
-    printf("+-------------------------------+\n");
-    printf("\n");
-
-    if(best->scorer != 0)
-        printf("\nNo optimal individual found.\n");
-    else
+    if (print_results(best->scorer))
         express_genes(*best, args.n_queens);
-    printf("\n");
 }
