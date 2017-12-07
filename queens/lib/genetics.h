@@ -23,7 +23,26 @@ typedef struct
     Individual *individual;
 } RouletteCompartments;
 
-//Functions
+//Function headers
+Genes initiate_genes(int n_queens);
+Genes random_genes(int n_queens);
+void initiate(Individual *population, int id, int n_pop, int n_queens);
+void express_genes(Individual individual, int n_queens);
+bool diagonal(unsigned int column1, unsigned int row1, unsigned int column2, unsigned int row2);
+void evaluate(Individual *population, int n_pop, int n_queens);
+RouletteCompartments *malloc_roulette(int n_pop);
+float initiate_roulette(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, float weight, float power, bool fitness);
+Individual * find_best(Individual *population, int n_pop);
+Individual roulette_selection(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, float weight, float power, bool fitness);
+Individual tournament_selection(Individual *population, int n_pop, int k_selections);
+void reset_selection(Individual *population, int n_pop);
+Individual ordered_crossover(Individual parent1, Individual parent2, int id, int n_queens);
+Individual heuristic_mutation(Individual mutant, int n_queens, int lambda, float p_mut);
+void view_population(Individual *population, int n_pop, int n_queens, int n_gen);
+void summarize(Individual *population, Individual *best, int n_gen, int n_pop);
+void write_fitness(FILE ** file, char * filename, Individual * population, int n_pop, int generation);
+
+//Function bodies
 Genes initiate_genes(int n_queens)
 {   
      /*
