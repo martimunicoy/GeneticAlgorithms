@@ -2,29 +2,13 @@
 #include "lib/general.h"
 #include "lib/utils.h"
 #include "lib/genetics.h"
+#include "lib/arguments.h"
 
-int main(){
-    // Constants
-    // Number of queens
-    const int N_QUEENS = 80;
-    // Population size
-    const int N_POPULATION = 1000;
-    // Number of generations
-    const int N_GENERATIONS = 10000;
-    // Number of deaths per generation
-    const int N_DEATHS = N_POPULATION * 0.3;
-    // Probability of mutation
-    const float P_MUTATION = 0.2;
-    // Number of genes to mutate
-    const int LAMBDA = 4;
-    // Force the algorithm to continue after finding a solution
-    const bool FORCE_TO_CONTINUE = false;
-    // Frequency to summarize
-    const int SUMMARIZE_FREQ = 500;
-    // Number of selections in the tournament_selection function
-    const int TOURNAMENT_SELECTIONS = 3;
+int main(int argc, char* argv[]){
+    // Parse arguments
+    struct Args args = args_parser(argc, argv);
 
-    //Create, initialise text files
+    // Create, initialize text files
     char file_fitness[] = "DataVisualization/Fitness.csv";
     FILE *f = fopen(file_fitness, "w");
     if (f == NULL){printf("Error opening file!\n");exit(1); }
@@ -36,9 +20,9 @@ int main(){
     Individual * best, parent1, parent2, child, survivor, *population, *nextpopulation, *candidate;
 
     // Save memory space for population and genetic roulette
-    Individual *P = (Individual *) malloc(sizeof(Individual) * N_POPULATION);
-    Individual *Q = (Individual *) malloc(sizeof(Individual) * N_POPULATION);
-    RouletteCompartments *genetic_roulette = malloc_roulette(N_POPULATION);
+    Individual *P = (Individual *) malloc(sizeof(Individual) * args.n_population);
+    Individual *Q = (Individual *) malloc(sizeof(Individual) * args.n_population);
+    RouletteCompartments *genetic_roulette = malloc_roulette(args.n_population);
 
     // Set population pointers
     population = P;
@@ -49,29 +33,29 @@ int main(){
     best = &population[0];
 
     // Initialize population and genetic roulette
-    initiate(population, id, N_POPULATION, N_QUEENS);
-    id = N_POPULATION;
-    evaluate(population, N_POPULATION, N_QUEENS);
-    //view_population(population, N_POPULATION, N_QUEENS, n_gen);
+    initiate(population, id, args.n_population, args.n_queens);
+    id = args.n_population;
+    evaluate(population, args.n_population, args.n_queens);
+    //view_population(population, args.n_population, args.n_queens, n_gen);
 
-    //write_fitness(&f, file_fitness, population, N_POPULATION, n_gen);
+    //write_fitness(&f, file_fitness, population, args.n_population, n_gen);
 
     // Initiate Genetic Algorithm
-    while(n_gen <= N_GENERATIONS)
+    while(n_gen <= args.n_generations || INFINITE_GENERATIONS)
     {
-        reset_selection(population, N_POPULATION);
+        reset_selection(population, args.n_population);
         for (i = 0; i < N_DEATHS; i++)
         {
-            parent1 = selection(population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
-            parent2 = selection(population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
-            child = heuristic_mutation(ordered_crossover(parent1, parent2, ++id, N_QUEENS), N_QUEENS, LAMBDA, P_MUTATION);
+            parent1 = roulette_selection(population, genetic_roulette, args.n_population, args.n_queens, args.fract_weight, args.denom_power, fit);
+            parent2 = roulette_selection(population, genetic_roulette, args.n_population, args.n_queens, args.fract_weight, args.denom_power, fit);
+            child = heuristic_mutation(ordered_crossover(parent1, parent2, ++id, args.n_queens), args.n_queens, args.lambda, args.p_mutation);
             nextpopulation[i] = child;
         }
 
-        reset_selection(population, N_POPULATION);
-        for (i = N_DEATHS; i < N_POPULATION; i++)
+        reset_selection(population, args.n_population);
+        for (i = N_DEATHS; i < args.n_population; i++)
         {
-            survivor = selection(population, genetic_roulette, N_POPULATION, N_QUEENS, fit);
+            survivor = roulette_selection(population, genetic_roulette, args.n_population, args.n_queens, args.fract_weight, args.denom_power, fit);
             nextpopulation[i] = survivor;
         }
 
@@ -79,30 +63,35 @@ int main(){
         population = nextpopulation;
         nextpopulation = T;
 
-        evaluate(population, N_POPULATION, N_QUEENS);
+        evaluate(population, args.n_population, args.n_queens);
 
-        for (i = 0; i < N_POPULATION; i++)
+        for (i = 0; i < args.n_population; i++)
             if (population[i].scorer < best->scorer) best = &population[i];
 
-        if ((n_gen-1)%SUMMARIZE_FREQ == 0)
-            summarize(population, best, n_gen-1, N_QUEENS);
+        if (args.summarize_freq != 0)
+            if ((n_gen-1) % args.summarize_freq == 0)
+                summarize(population, best, n_gen-1, args.n_queens);
 
         n_gen++;
 
 
         if (best->scorer == 0 && !FORCE_TO_CONTINUE) break;
 
-        if (N_GENERATIONS <= 1000){
-            write_fitness(&f, file_fitness, population, N_POPULATION, n_gen);
+        if (args.n_generations <= 1000){
+            write_fitness(&f, file_fitness, population, args.n_population, n_gen);
         }
     }
     n_gen--;
 
+    printf("\n");
+    printf("+-------------------------------+\n");
+    printf("|            RESULTS            |\n");
+    printf("+-------------------------------+\n");
+    printf("\n");
+
     if(best->scorer != 0)
-        printf("\n No optimal individual found... \n");
+        printf("\nNo optimal individual found.\n");
     else
-    {
-        printf("Found at least one optimal individual id %d, scorer: %d\n", best->id, best->scorer);
-        express_genes(*best, N_QUEENS);
-    }
+        express_genes(*best, args.n_queens);
+    printf("\n");
 }

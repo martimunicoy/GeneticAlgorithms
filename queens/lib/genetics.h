@@ -1,9 +1,3 @@
-// Constants
-// The higher, the more exploratory
-const float FRACT_WEIGTH = 0.1;
-// The higher, the more exploitatory
-const float DENOM_POWER = 3;
-
 // Define Structures
 typedef struct
 {
@@ -88,9 +82,9 @@ void express_genes(Individual individual, int n_queens)
         printf(" %c", ALPHABET[index]);
     }
     printf("\n");
-    printf("   ");
     if (n_queens > 26)
     {
+        printf("   ");
         for (col = 0; col < n_queens; col++)
             printf(" %d", (int) col/26+1);
         printf("\n");
@@ -157,7 +151,7 @@ RouletteCompartments *malloc_roulette(int n_pop)
     return genetic_roulette;
 }
 
-float initiate_roulette(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, bool fitness)
+float initiate_roulette(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, float weight, float power, bool fitness)
 {
     int i;
     float sum = 0;
@@ -168,7 +162,7 @@ float initiate_roulette(Individual *population, RouletteCompartments *genetic_ro
         {
             competitor = &population[i];
             if(!competitor->chosen)
-                sum += 1 / pow((competitor->scorer + FRACT_WEIGTH), DENOM_POWER);
+                sum += 1 / pow((competitor->scorer + weight), power);
             genetic_roulette[i].delimiter = sum;
             genetic_roulette[i].individual = competitor;
         }
@@ -181,7 +175,7 @@ float initiate_roulette(Individual *population, RouletteCompartments *genetic_ro
             competitor = &population[i];
             if(competitor->chosen)
                 continue;
-            sum += 1 / pow(sum_down(n_queens) - competitor->scorer + FRACT_WEIGTH, DENOM_POWER);
+            sum += 1 / pow(sum_down(n_queens) - competitor->scorer + weight, power);
             genetic_roulette[i].delimiter = sum;
             genetic_roulette[i].individual = competitor;
         }
@@ -200,14 +194,14 @@ Individual * find_best(Individual *population, int n_pop)
     return best;
 }
 
-Individual selection(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, bool fitness)
+Individual roulette_selection(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, float weight, float power, bool fitness)
 {
     /*
      Given a Population of individuals, initiates a roulette and returns the selected individual
     */
     float max_delimiter, random;
 
-    max_delimiter = initiate_roulette(population, genetic_roulette, n_pop, n_queens, fitness);
+    max_delimiter = initiate_roulette(population, genetic_roulette, n_pop, n_queens, weight, power, fitness);
     random = random_number(max_delimiter);
 
     int choice = 0;
@@ -240,7 +234,7 @@ Individual tournament_selection(Individual *population, int n_queens, int K_sele
     Individual best_selected_individual;
 
     for (k = 0;  k < K_selections; k++){
-        random_position = (int) random_number(n_queens);
+        random_position = (int) random_number(n_queens); // hauria de ser random_number(n_pop);
         selected_individuals[k] = population[random_position];
     }
 
@@ -306,8 +300,6 @@ Individual ordered_crossover(Individual parent1, Individual parent2, int id, int
     Individual child = {id, genes, sum_down(n_queens), false};
     return child;
 }
-
-
 
 Individual heuristic_mutation(Individual mutant, int n_queens, int lambda, float p_mut)
 {
