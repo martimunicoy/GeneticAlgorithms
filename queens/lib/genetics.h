@@ -34,7 +34,7 @@ RouletteCompartments *malloc_roulette(int n_pop);
 float initiate_roulette(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, float weight, float power, bool fitness);
 Individual * find_best(Individual *population, int n_pop);
 Individual roulette_selection(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, float weight, float power, bool fitness);
-Individual tournament_selection(Individual *population, int n_pop, int k_selections);
+Individual tournament_selection(Individual *population, int n_pop, int k_selections, bool replacement);
 void reset_selection(Individual *population, int n_pop);
 Individual ordered_crossover(Individual parent1, Individual parent2, int id, int n_queens);
 Individual heuristic_mutation(Individual mutant, int n_queens, int lambda, float p_mut);
