@@ -27,30 +27,30 @@ Other regular C compilers should work as well but have not been tested yet.
 ### Installing on OSX
 On the main folder of the project call the compiler to create the executable.
 
-'''
+```
 gcc src/queens_GA.c src/constants.c src/genetics.c src/utils.c src/arguments.c src/strategies.c -lm -o queens_GA.out
-'''
+```
 
 It will compile the source files and it will build the executable _queens_GA.out_.
 
 ### Installing on Linux
 On the main folder of the project call the compiler to create the executable.
 
-'''
+```
 gcc src/queens_GA.c src/constants.c src/genetics.c src/utils.c src/arguments.c src/strategies.c -lm -o queens_GA.out
-'''
+```
 
 For non-GNU Linux systems the previous command will complain about a missing library (_stdlib.h_). Then, this library needs to be manually installed by means of the following command:
-'''
+```
 sudo apt-get update
 sudo apt-get install libbsd-dev
-'''
+```
 
 After its installation, the compiler should work fine by looking for it at _bsd/stdlib.h_. Run again the gcc command. Be aware of the gcc flag _-D LINUX_ that looks for this new _bsd/stdlib.h_ library.
 
-'''
+```
 gcc -D LINUX src/queens_GA.c src/constants.c src/genetics.c src/utils.c src/arguments.c src/strategies.c -lm -lbsd -o queens_GA.out
-'''
+```
 
 ### Installing with Make
 It is also possible to compile the C Program by using _make_. Just go to the main folder of the project and enter the following command:
@@ -70,9 +70,9 @@ Then, you will need to install this missing library and execute _make_ again. Yo
 ## Test running
 To see if the executable was properly built, a quick test can be run. On the same main folder of the project run the executable _queens_GA.out_ by using the next command:
 
-'''
+```
 ./queens_GA.out
-'''
+```
 
 A solution for the 8 Queens Problem should be displayed in the terminal.
 
