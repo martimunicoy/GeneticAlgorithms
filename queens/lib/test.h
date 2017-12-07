@@ -1,5 +1,9 @@
 void check_random_uniformity(float max)
-{
+{   
+    /*
+     @TODO
+    */
+
     float num;
     int N = 10000000;
     int n1, n2, n3, n4, n5, n6, n7, n8, n9, n10;
@@ -33,7 +37,11 @@ void check_random_uniformity(float max)
 }
 
 void check_random_uniformity2()
-{
+{    
+    /*
+     @TODO
+    */
+
     unsigned char random_number;
     unsigned int num;
     int N = 10000000;
@@ -50,6 +58,10 @@ void check_random_uniformity2()
 
 void view_selection(RouletteCompartments *genetic_roulette, int n_pop, float random, int selection)
 {
+    /*
+     @TODO
+    */
+     
     int i;
 
     if(selection == 0)
