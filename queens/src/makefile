@@ -1,3 +1,5 @@
+#Source: https://www.cs.swarthmore.edu/~newhall/unixhelp/howto_makefiles.html
+
 #This is an easier to use and modify makefile, but it is slightly more difficult to read than the simple one:
 #
 # 'make depend' uses makedepend to automatically generate dependencies 
