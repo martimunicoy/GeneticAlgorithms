@@ -21,7 +21,7 @@ Overleaf: https://www.overleaf.com/12684672zycygkcnmryh#/48375443/
 
 * Queden pendents els TODO (allà on hi hagi '@'). Entre ells comentar algunes funcions que vaig deixar pendents (algunes que tú sabrás explicar millor). Estaria bé deixar enllestits els comentaris de funcions, la resta de coses amb @ que siguin improvements afegir-los en aquesta llista si cal.
 
-* (FET) Afegir al summary el temps d'execució actual (el que porta fins a la generació en questió).
+* (FET?? segur, crec k no?) Afegir al summary el temps d'execució actual (el que porta fins a la generació en questió).
 
 * Rallada the **strategies.c**: si no m'equivoco la part de codi de cadascuna de les strategies on posa:
 
@@ -51,6 +51,7 @@ Overleaf: https://www.overleaf.com/12684672zycygkcnmryh#/48375443/
 
 es repeteix en totes, i quan vulguem canviar alguna cosa referent a quant imprimir coses per pantalla, en arxius etc etc, doncs llavors caldrà canviaro en totes. La qüestió és: **és molt lio fer una funció a part a la mateixa llibreria strategies si vols, que faci això??**.
 
+* BUG mig chorra sobre el writefitness: mhe adonat que les fitness de l'última població quan troba l'òptim i para, no és afegida al .csv (pensava que posant el write_fitness just abans del if aquell que fa un exit ho solucionaria, pero crec que té a veure amb quina popplació conté el vector population)
 
 * Afegir al summary quin percentatge de la població a convergit a l'òptim? (fent la norma euclidiana de sempre per exemple) i retornar el percentage de la població que ho ha fet? (95% segons [3])
 
