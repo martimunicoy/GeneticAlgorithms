@@ -51,7 +51,7 @@ SRCS = src/queens_GA.c src/constants.c src/genetics.c src/utils.c src/arguments.
 OBJS = $(SRCS:.c=.o)
 
 # define the executable file
-MAIN = src/queens_GA.out
+MAIN = queens_GA.out
 
 #
 # The following part of the makefile is generic; it can be used to
