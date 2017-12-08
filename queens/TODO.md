@@ -9,6 +9,9 @@ For each assignment a report must be written including:
 * the results of running the program and
 * conclusions.
 
+Overleaf: https://www.overleaf.com/12684672zycygkcnmryh#/48375443/
+
+
 ## Prioritaries
 
 * Millora de la funció **find_best**: si hi ha individus amb la mateixa scorer crec que sempre es quedarà amb el primer que troba (per la desigualtat estricte; i es quedaria amb l'últim que trobés si posesim desigualtat no estricta, crec). Llavors la idea de millorar-ho era d'entre els que tenen la mateixa scorer triar un at random. Així sense pensar massa crec que és bastant útil al principi, però al final si molts individus són iguals potser ja no tant. (tanmateix, si la implementació no es gaire costosa computacionalment llavors no passaria res)
