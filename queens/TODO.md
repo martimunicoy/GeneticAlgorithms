@@ -59,7 +59,7 @@ es repeteix en totes, i quan vulguem canviar alguna cosa referent a quant imprim
 
 * Fixats uns parametres raonables, estudiar com evoluciona el temps total d'execució en funció de N (nombre de queens).
 
-*
+* Vaig deixar penjada la branca analysis_stuff on estava tot allò que vaig fer de dimenssional reduction etc, si cal ja ho recuperaré i ho afegire a mà al master per no liarla amb merges ni històries.
 
 *
 
