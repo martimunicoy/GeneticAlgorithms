@@ -15,7 +15,7 @@ Overleaf: https://www.overleaf.com/12684672zycygkcnmryh#/48375443/
 
 ## Prioritaries
 
-* Millora de la funció **find_best**: si hi ha individus amb la mateixa scorer crec que sempre es quedarà amb el primer que troba (per la desigualtat estricte; i es quedaria amb l'últim que trobés si posesim desigualtat no estricta, crec). Llavors la idea de millorar-ho era d'entre els que tenen la mateixa scorer triar un at random. Així sense pensar massa crec que és bastant útil al principi, però al final si molts individus són iguals potser ja no tant. (tanmateix, si la implementació no es gaire costosa computacionalment llavors no passaria res)
+* (FET) Millora de la funció **find_best**: si hi ha individus amb la mateixa scorer crec que sempre es quedarà amb el primer que troba (per la desigualtat estricte; i es quedaria amb l'últim que trobés si posesim desigualtat no estricta, crec). Llavors la idea de millorar-ho era d'entre els que tenen la mateixa scorer triar un at random. Així sense pensar massa crec que és bastant útil al principi, però al final si molts individus són iguals potser ja no tant. (tanmateix, si la implementació no es gaire costosa computacionalment llavors no passaria res)
 
 * Queden pendents els TODO (allà on hi hagi '@'). Entre ells comentar algunes funcions que vaig deixar pendents (algunes que tú sabrás explicar millor). Estaria bé deixar enllestits els comentaris de funcions, la resta de coses amb @ que siguin improvements afegir-los en aquesta llista si cal.
 
@@ -87,5 +87,5 @@ es repeteix en totes, i quan vulguem canviar alguna cosa referent a quant imprim
 
 ## Comentari (ja es un poc tard per fer-ho)
 
-* M'he fixat que potser des del principi hagués estat convenient una struct que es digués Population{ Individual * individuals; int size} per 
+* M'he fixat que potser des del principi hagués estat convenient una struct que es digués Population{ Individual * individuals; int size} per
 no tener que pasar sempre com a parametre n_pop. Això ens permetria també considerar poblacions amb mida variable, ja que la mida vindria controlada per la variable size.

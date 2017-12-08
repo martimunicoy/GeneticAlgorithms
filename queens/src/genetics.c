@@ -225,7 +225,32 @@ float initiate_roulette(Individual *population, RouletteCompartments *genetic_ro
     return sum;
 }
 
-Individual * find_best(Individual *population, int n_pop)
+void sort_by_scorer(Individual *subpopulation, int k_selections)
+{
+    /*
+    Improvements:
+       - Do the algorithm for a N dimensional array (general)
+       - This algorithm is o(n^2), use a more efficient one.
+       - I think there is no need to copy the input array,
+         instead do a void type function which modifies the input array
+         since it is passed by reference (vale fals, he vist per a què s'utilitzava).
+    */
+    int i, j;
+    Individual t;
+
+    for (i = 0; i < k_selections - 1; i++)
+        for (j = 0; j < k_selections - 1; j++)
+        {
+            if (subpopulation[j].scorer > subpopulation[j+1].scorer)
+            {
+                t = subpopulation[j+1];
+                subpopulation[j+1] = subpopulation[j];
+                subpopulation[j] = t;
+            }
+        }
+}
+
+Individual * find_best(Individual *subpopulation, int k_selections)
 {
     /*
      Given a population of n_pop individuals, finds the FIRST with
@@ -234,11 +259,23 @@ Individual * find_best(Individual *population, int n_pop)
      @IMPROVE: choose a random individual among all 'best' individuals
     */
 
-    int i;
-    Individual * best = &population[0];
+    int i, rand_index, repetitions = 0;
+    Individual *best;
 
-    for (i = 1; i < n_pop; i++)
-        if (population[i].scorer < best->scorer) best = &population[i];
+    sort_by_scorer(subpopulation, k_selections);
+
+    for (i = 0;
+         subpopulation[i].scorer == subpopulation[i+1].scorer && i < k_selections;
+         i++)
+        repetitions++;
+
+    if (repetitions > 0)
+    {
+        rand_index = arc4random_uniform(repetitions+1);
+        best = &subpopulation[rand_index];
+    }
+    else
+        best = &subpopulation[0];
 
     return best;
 }

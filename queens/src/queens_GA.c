@@ -59,14 +59,14 @@ int main(int argc, char* argv[]){
     population = P;
     nextpopulation = Q;
 
-    // Initialize best individual
+    // Initialize randomly best individual
     best = &population[0];
 
     // Initialize population and genetic roulette
     initiate(population, id, args.n_population, args.n_queens);
     id = args.n_population;
     evaluate(population, args.n_population, args.n_queens);
-    //view_population(population, args.n_population, args.n_queens, n_gen);
+    //view_population(population, args.n_population, args.n_queens, 0);
 
     if (args.write_fitness)
         write_fitness(&file, file_fitness, population, args.n_population, 1);
