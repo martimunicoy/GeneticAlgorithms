@@ -67,7 +67,7 @@ es repeteix en totes, i quan vulguem canviar alguna cosa referent a quant imprim
 
 * Fer un altra (programa) arxiu .c (main) que utilitzant les altres llibreries i maquinaria que tenim, puguem fer com un procés iteratiu que vagi cridant la funció genetic algorithm, vagi registrant les solucions que troba i les que hagi trobat donar-les com a invalides (això últim és el que seria chungo, d'entrada). Fixar com un nombre màxim d'iteracions i veure quantes troba. Per N= 8 sabem que n'hi ha 92 de solucions diferents.
 
-* 
+* Adaptative mutation rate (veure pàgina 34 de la referència [2]).  Allà es parla d'una tal $\sigma^2$, que fent el símil jo crec que per nosalres seria la probabilitat de mutar: p_mutation.
 
 ## Comentari (ja es un poc tard per fer-ho)
 
