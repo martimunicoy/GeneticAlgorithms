@@ -19,7 +19,7 @@ ifeq ($(UNAME), Linux)
 	CFLAGS = -D LINUX
 endif
 ifeq ($(UNAME), Darwin)
-	CFLAGS = -D LINUX
+	CFLAGS = -D OSX
 endif
 
 # define any directories containing header files other than /usr/include
