@@ -16,9 +16,9 @@
 
 * Sobretot al main: separar les inicialitzacions de variables per poder comentar cadascuna al costat (potser no cal, ho deixo aquí per recordar-m'ho).
 
-* 
+* Al readme posar Authors al principi
 
-*
+* Canviar el correu danysalgado14@gmail.com per daniel.salgado@e-campus.uab.cat (readme, .c ... ?)
 
 ## Idees per analitzar l'algoritme a partir de resultats
 
