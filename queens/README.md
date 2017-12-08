@@ -140,6 +140,9 @@ If a solution is found, the final output should look like this
 * [2] Essentials of Metaheuristics, A Set of Undergraduate Lecture Notes, Sean Luke, Department of Computer Science, George Mason University.
 * [3] An Overview of Genetic Algorithms: Part 1, Fundamentals, David Beasley, David R. Bull, Ralph R. Martin.
 * [4] A list of genetic operations (crossover and mutation) (http://mat.uab.cat/~alseda/MasterOpt/GeneticOperations.pdf). Author ?????
+* [5] Solving n-Queen problem using global parallel genetic algorithm (extended abstract), Marko Božikovic, Marin Golub, Leo Budin. EUROCON 2003 Ljubljana, Slovenia.
+* [6] Parent selection methods: https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_parent_selection.htm.
+
 
 ## License
 This project is licensed under the GNU License - see the [LICENSE.txt](LICENSE.txt) file for details
