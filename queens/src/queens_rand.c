@@ -22,6 +22,7 @@
 // Include Libraries
 #include "queens_GA.h"
 #include "genetics.h"
+#include "arguments.h"
 #include "utils.h"
 #include "constants.h"
 

@@ -39,5 +39,4 @@ void reset_selection(Individual *population, int n_pop);
 Individual ordered_crossover(Individual parent1, Individual parent2, int id, int n_queens);
 Individual heuristic_mutation(Individual mutant, int n_queens, int lambda, float p_mut);
 void view_population(Individual *population, int n_pop, int n_queens, int n_gen);
-void summarize(Individual *population, Individual *best, int n_gen, int n_pop);
 void write_fitness(FILE ** file, char * filename, Individual * population, int n_pop, int generation);

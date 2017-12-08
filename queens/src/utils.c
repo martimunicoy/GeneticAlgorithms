@@ -20,7 +20,9 @@
  *****************************************************************************/
 
 #include "queens_GA.h"
+#include "genetics.h"
 #include "constants.h"
+#include "arguments.h"
 #include "utils.h"
 #include "definitions.h"
 
@@ -133,42 +135,337 @@ void permute(int ** permutations, int * vector, int start, int end, int *counter
     return;
 }
 
-void print_summary(int n_gen, float mean, float st_deviation, int best_score)
+AnalysisResults population_analysis(Individual *population, int n_pop)
 {
     /*
      @TODO
     */
 
+    int i;
+    float sum = 0, sum_of_squares = 0;
+    AnalysisResults results;
+
+    for (i = 0; i < n_pop; i++)
+        sum += population[i].scorer;
+
+    results.mean = sum / n_pop;
+
+    for (i = 0; i < n_pop; i++)
+        sum_of_squares += pow(population[i].scorer - results.mean, 2);
+
+    results.st_deviation = sqrt(sum_of_squares/(n_pop-1));
+
+    return results;
+}
+
+void exit_code_parser(unsigned char exit_code, char *exit_message)
+{
+    switch (exit_code)
+    {
+        case 0:
+            strncpy(exit_message, "- Reached maximum generations", 30);
+            break;
+        case 1:
+            strncpy(exit_message, "- Found at least one solution", 30);
+    }
+}
+
+void print_summary(Individual *population, Individual *best, int n_pop,
+                   int n_gen)
+{
+    /*
+     @TODO
+    */
+
+    AnalysisResults results = population_analysis(population, n_pop);
+
     printf("\n");
-    printf("+-------------------------------+\n");
-    printf("|        GENETIC SUMMARY        |\n");
-    printf("+-------------------------------+\n");
-    printf("| Generation:            %6d |\n", n_gen);
-    printf("| Mean score:             %3d.%d |\n", (int) mean, (int) (mean*10) - ((int) mean)*10);
-    printf("| Standard deviation:     %3d.%d |\n", (int) st_deviation, (int) (st_deviation*10) - ((int) st_deviation)*10);
-    printf("| Best score:            %6d |\n", best_score);
-    printf("+-------------------------------+\n");
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("|         GENETIC SUMMARY         |\n");
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Generation:              %6d |\n", n_gen);
+    printf("\t\t      ");
+    printf("| Mean score:               ");
+    printf("%3d.%d |\n", (int) results.mean,
+                         (int) (results.mean * 10) -
+                         ((int) results.mean) * 10);
+    printf("\t\t      ");
+    printf("| Standard deviation:       ");
+    printf("%3d.%d |\n", (int) results.st_deviation,
+                         (int) (results.st_deviation * 10) -
+                         ((int) results.st_deviation) * 10);
+    printf("\t\t      ");
+    printf("| Best score:              %6d |\n", best->scorer);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
     printf("\n");
 }
 
-bool print_results(unsigned int scorer)
+void print_results(GAResults ga_results, int n_queens)
 {
     /*
      @TODO
     */
 
+    AnalysisResults results = population_analysis(ga_results.population,
+                                                  ga_results.n_pop);
+    char *exit_message = (char *) malloc(sizeof(char) * 30);
+    exit_code_parser(ga_results.exit_code, exit_message);
+
     printf("\n");
-    printf("+-------------------------------+\n");
-    printf("|            RESULTS            |\n");
-    printf("+-------------------------------+\n");
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("|      FINAL GENETIC SUMMARY      |\n");
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Generations:             %6d |\n", ga_results.n_gen);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Mean score:               ");
+    printf("%3d.%d |\n", (int) results.mean,
+                         (int) (results.mean * 10) -
+                         ((int) results.mean) * 10);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Standard deviation:       ");
+    printf("%3d.%d |\n", (int) results.st_deviation,
+                         (int) (results.st_deviation * 10) -
+                         ((int) results.st_deviation) * 10);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Best score:              %6d |\n", ga_results.best->scorer);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Exit message:                   |\n");
+    printf("\t\t      ");
+    printf("|  %s  |\n", exit_message);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
     printf("\n");
 
-    if(scorer != 0)
+    free(exit_message);
+
+    printf("+-----------------------------------------------------------");
+    printf("-------------------+\n");
+    printf("|                                    RESULTS                ");
+    printf("                   |\n");
+    printf("+-----------------------------------------------------------");
+    printf("-------------------+\n");
+    printf("\n");
+
+    if(ga_results.best->scorer != 0)
     {
         printf("\nNo optimal individual found.\n");
         printf("\n");
-        return false;
     }
     else
-        return true;
+        express_genes(*ga_results.best, n_queens);
+}
+
+void print_problem_description(struct Args args)
+{
+    printf("\n");
+    printf("This algorithm will try to find a way to place %d", args.n_queens);
+    printf(" chess Queens in a %dx%d board\nby", args.n_queens, args.n_queens);
+    printf(" applying a Genetic Algorithm\n");
+    printf("\n");
+}
+
+void translate_bool(bool bool_to_translate, char *bool_string)
+{
+    if (bool_to_translate)
+        strncpy(bool_string, " True", 6);
+    else
+        strncpy(bool_string, "False", 6);
+}
+
+void print_program_name()
+{
+    printf("+---------------------------------------------------------------");
+    printf("---------------+\n");
+    printf("|                           N QUEENS PROBLEM SOLVER             ");
+    printf("               |\n");
+    printf("+---------------------------------------------------------------");
+    printf("---------------+\n");
+}
+
+void print_license_header()
+{
+    printf("\n");
+    printf("                 <N Queens Problem Solver - Genetic Algorithm>\n");
+    printf("               Copyright (C) <2017>   <Municoy, M., Salgado, D.>");
+    printf("\n\nThis program comes with ABSOLUTELY NO WARRANTY. This is free");
+    printf(" software, and you\nare welcome to redistribute it under certain");
+    printf(" conditions. See LICENSE.txt for\ndetails.");
+    printf("\n");
+}
+
+void print_GA_constants(struct Args args)
+{
+    printf("\n");
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("|   GENETIC ALGORITHM CONSTANTS   |\n");
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Population size:      %9d |\n", args.n_population);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Generations:          %9d |\n", args.n_generations);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Death ratio:              %.3f |\n", args.death_ratio);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Mutation probability:     %.3f |\n", args.p_mutation);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Lambda:                      %2d |\n", args.lambda);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Tournament selections:       %2d |", args.tournament_selections);
+    printf("\n");
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Fraction weight:           ");
+    printf("%2d.%d |\n", (int) args.fract_weight,
+                         (int) (args.fract_weight * 10) -
+                         ((int) args.fract_weight) * 10);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Denominator power:         ");
+    printf("%2d.%d |\n", (int) args.denom_power,
+                         (int) (args.denom_power * 10) -
+                         ((int) args.denom_power) * 10);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\n");
+
+}
+
+void print_configuration(struct Args args)
+{
+    char *bool_string1 = (char *) malloc(sizeof(char) * 6);
+    char *bool_string2 = (char *) malloc(sizeof(char) * 6);
+    char *bool_string3 = (char *) malloc(sizeof(char) * 6);
+
+    translate_bool(args.force_to_continue, bool_string1);
+    translate_bool(args.infinite_generations, bool_string2);
+    translate_bool(args.write_fitness, bool_string3);
+
+    printf("\n");
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| GENETIC ALGORITHM CONFIGURATION |\n");
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Force to continue:        %s |\n", bool_string1);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Infinite generations:     %s |\n", bool_string2);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Write fitness:            %s |\n", bool_string1);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Summary frequency:    %9d |\n", args.summarize_freq);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Maximum fitness points:  %6d |\n", args.max_fitness_points);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+
+    printf("\n");
+
+    free(bool_string1);
+    free(bool_string2);
+    free(bool_string3);
+
+}
+
+void print_strategy_info(int strategy)
+{
+    printf("\n");
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("|      STRATEGY  INFORMATION      |\n");
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Strategy number:             %2d |\n", strategy);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+
+    switch (strategy)
+    {
+        case 1:
+            printf("| Selection:             Roulette |\n");
+            printf("\t\t      ");
+            printf("+---------------------------------+\n");
+            printf("\t\t      ");
+            printf("| Crossover:              Ordered |\n");
+            printf("\t\t      ");
+            printf("+---------------------------------+\n");
+            printf("\t\t      ");
+            printf("| Mutation:             Heuristic |\n");
+            break;
+
+        case 2:
+            printf("| Selection:                      |\n");
+            printf("\t\t      ");
+            printf("|     Tournament with replacement |\n");
+            printf("\t\t      ");
+            printf("+---------------------------------+\n");
+            printf("\t\t      ");
+            printf("| Crossover:              Ordered |\n");
+            printf("\t\t      ");
+            printf("+---------------------------------+\n");
+            printf("\t\t      ");
+            printf("| Mutation:             Heuristic |\n");
+            break;
+
+        case 3:
+            printf("| Selection:                      |\n");
+            printf("\t\t      ");
+            printf("|  Tournament without replacement |\n");
+            printf("\t\t      ");
+            printf("+---------------------------------+\n");
+            printf("\t\t      ");
+            printf("| Crossover:              Ordered |\n");
+            printf("\t\t      ");
+            printf("+---------------------------------+\n");
+            printf("\t\t      ");
+            printf("| Mutation:             Heuristic |\n");
+            break;
+    }
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\n");
 }

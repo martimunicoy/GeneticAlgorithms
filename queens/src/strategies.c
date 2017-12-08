@@ -21,23 +21,24 @@
 
 #include "queens_GA.h"
 #include "constants.h"
-#include "utils.h"
 #include "genetics.h"
 #include "arguments.h"
+#include "utils.h"
 #include "strategies.h"
 #include "definitions.h"
 
 //Function bodies
-Individual * strategy1(Individual * population, Individual * nextpopulation,
-                       Individual * best,
-                       RouletteCompartments * genetic_roulette,
-                       Individual parent1, Individual parent2,
-                       Individual child, Individual survivor, int id,
-                       int n_deaths, struct Args args, FILE * file,
-                       char * file_fitness)
+GAResults strategy1(Individual * population, Individual * nextpopulation,
+                    Individual * best,
+                    RouletteCompartments * genetic_roulette,
+                    Individual parent1, Individual parent2,
+                    Individual child, Individual survivor, int id,
+                    int n_deaths, struct Args args, FILE * file,
+                    char * file_fitness)
 {
     int i;
     int n_gen = 1;
+    unsigned char exit_code = 0;
     Individual * T;
 
     while(n_gen <= args.n_generations || args.infinite_generations)
@@ -70,30 +71,37 @@ Individual * strategy1(Individual * population, Individual * nextpopulation,
 
         if (args.summarize_freq != 0)
             if ((n_gen-1) % args.summarize_freq == 0)
-                summarize(population, best, n_gen-1, args.n_population);
+                print_summary(population, best, args.n_population, n_gen-1);
 
         n_gen++;
 
         if (best->scorer == 0 && !args.force_to_continue)
-            return best;
+        {
+            exit_code = 1;
+            break;
+        }
 
         if (args.write_fitness && n_gen <= args.max_fitness_points)
             write_fitness(&file, file_fitness, population, args.n_population, n_gen);
     }
 
-    return best;
+    GAResults results = {best, population, args.n_population, n_gen-1,
+                         exit_code};
+
+    return results;
 }
 
-Individual * strategy2(Individual * population, Individual * nextpopulation,
-                       Individual * best,
-                       RouletteCompartments * genetic_roulette,
-                       Individual parent1, Individual parent2,
-                       Individual child, Individual survivor, int id,
-                       int n_deaths, struct Args args, FILE * file,
-                       char * file_fitness)
+GAResults strategy2(Individual * population, Individual * nextpopulation,
+                    Individual * best,
+                    RouletteCompartments * genetic_roulette,
+                    Individual parent1, Individual parent2,
+                    Individual child, Individual survivor, int id,
+                    int n_deaths, struct Args args, FILE * file,
+                    char * file_fitness)
 {
     int i;
     int n_gen = 1;
+    unsigned char exit_code = 0;
     Individual * T;
 
     while(n_gen <= args.n_generations || args.infinite_generations)
@@ -125,30 +133,37 @@ Individual * strategy2(Individual * population, Individual * nextpopulation,
 
         if (args.summarize_freq != 0)
             if ((n_gen-1) % args.summarize_freq == 0)
-                summarize(population, best, n_gen-1, args.n_population);
+                print_summary(population, best, args.n_population, n_gen-1);
 
         n_gen++;
 
         if (best->scorer == 0 && !args.force_to_continue)
-            return best;
+        {
+            exit_code = 1;
+            break;
+        }
 
         if (args.write_fitness && n_gen <= args.max_fitness_points)
             write_fitness(&file, file_fitness, population, args.n_population, n_gen);
     }
 
-    return best;
+    GAResults results = {best, population, args.n_population, n_gen-1,
+                         exit_code};
+
+    return results;
 }
 
-Individual * strategy3(Individual * population, Individual * nextpopulation,
-                       Individual * best,
-                       RouletteCompartments * genetic_roulette,
-                       Individual parent1, Individual parent2,
-                       Individual child, Individual survivor, int id,
-                       int n_deaths, struct Args args, FILE * file,
-                       char * file_fitness)
+GAResults strategy3(Individual * population, Individual * nextpopulation,
+                    Individual * best,
+                    RouletteCompartments * genetic_roulette,
+                    Individual parent1, Individual parent2,
+                    Individual child, Individual survivor, int id,
+                    int n_deaths, struct Args args, FILE * file,
+                    char * file_fitness)
 {
     int i;
     int n_gen = 1;
+    unsigned char exit_code = 0;
     Individual * T;
 
     while(n_gen <= args.n_generations || args.infinite_generations)
@@ -178,28 +193,34 @@ Individual * strategy3(Individual * population, Individual * nextpopulation,
 
         if (args.summarize_freq != 0)
             if ((n_gen-1) % args.summarize_freq == 0)
-                summarize(population, best, n_gen-1, args.n_population);
+                print_summary(population, best, args.n_population, n_gen-1);
 
         n_gen++;
 
         if (best->scorer == 0 && !args.force_to_continue)
-            return best;
-
+        {
+            exit_code = 1;
+            break;
+        }
         if (args.write_fitness && n_gen <= args.max_fitness_points)
             write_fitness(&file, file_fitness, population, args.n_population, n_gen);
     }
 
-    return best;
+    GAResults results = {best, population, args.n_population, n_gen-1,
+                         exit_code};
+
+    return results;
 }
 
-Individual * genetic_algorithm(int strategy, Individual * population,
-                               Individual * nextpopulation, Individual * best,
-                               RouletteCompartments * genetic_roulette,
-                               Individual parent1, Individual parent2,
-                               Individual child, Individual survivor, int id,
-                               int n_deaths, struct Args args, FILE * file,
-                               char * file_fitness)
+GAResults genetic_algorithm(int strategy, Individual * population,
+                            Individual * nextpopulation, Individual * best,
+                            RouletteCompartments * genetic_roulette,
+                            Individual parent1, Individual parent2,
+                            Individual child, Individual survivor, int id,
+                            int n_deaths, struct Args args, FILE * file,
+                            char * file_fitness)
 {
+    print_strategy_info(strategy);
     switch (strategy)
     {
         case 1:
@@ -211,7 +232,7 @@ Individual * genetic_algorithm(int strategy, Individual * population,
                              parent1, parent2, child, survivor, id, n_deaths,
                              args, file, file_fitness);
         case 3:
-            return strategy2(population, nextpopulation, best, genetic_roulette,
+            return strategy3(population, nextpopulation, best, genetic_roulette,
                              parent1, parent2, child, survivor, id, n_deaths,
                              args, file, file_fitness);
         default:

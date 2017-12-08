@@ -23,9 +23,9 @@
 #include "definitions.h"
 #include "queens_GA.h"
 #include "constants.h"
-#include "utils.h"
 #include "genetics.h"
 #include "arguments.h"
+#include "utils.h"
 #include "strategies.h"
 
 int main(int argc, char* argv[]){
@@ -49,6 +49,7 @@ int main(int argc, char* argv[]){
     int id = 1;
     Individual * best, * population, * nextpopulation;
     Individual parent1, parent2, child, survivor;
+    GAResults results;
 
     // Save memory space for population and genetic roulette
     Individual * P = (Individual *) malloc(sizeof(Individual) * args.n_population);
@@ -74,14 +75,22 @@ int main(int argc, char* argv[]){
     // Get number of deaths per generation
     int n_deaths = (int) (args.n_population * args.death_ratio);
 
+    // Print out useful information
+    print_program_name();
+    print_license_header();
+    print_problem_description(args);
+    print_GA_constants(args);
+    print_configuration(args);
+
     // Initiate Genetic Algorithm
-    best = genetic_algorithm(args.strategy, population, nextpopulation, best,
-                             genetic_roulette, parent1, parent2, child,
-                             survivor, id, n_deaths, args, file, file_fitness);
+    results = genetic_algorithm(args.strategy, population, nextpopulation,
+                                best, genetic_roulette, parent1, parent2,
+                                child, survivor, id, n_deaths, args, file,
+                                file_fitness);
 
     // Print results
-    if (print_results(best->scorer))
-        express_genes(* best, args.n_queens);
+    //results.best = &population[0];
+    print_results(results, args.n_queens);
 
     // Free memory
     free(P);

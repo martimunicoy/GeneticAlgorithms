@@ -21,8 +21,9 @@
 
 #include "queens_GA.h"
 #include "constants.h"
-#include "utils.h"
 #include "genetics.h"
+#include "arguments.h"
+#include "utils.h"
 #include "definitions.h"
 
 //Function bodies
@@ -84,11 +85,15 @@ void express_genes(Individual individual, int n_queens)
     Prints the fenotype of the individual, which is a particular
     chessboard (n_queens x n_queens) configuration of n_queens queens.
     */
-
+    char span[40] = {                                        };
     int row, col, index;
+
+    for (col = 0; col < (int) ((80 - n_queens * 2 - 4) / 2); col++)
+        span[col] = ' ';
+
     for (row = n_queens; row > 0; row--)
     {
-        printf("%3d ", row);
+        printf("%s%3d ", span, row);
         for(col = 0; col < n_queens; col++)
         {
             if (row == individual.genes.rows[col]) printf("X ");
@@ -97,6 +102,7 @@ void express_genes(Individual individual, int n_queens)
         printf("\n");
     }
     printf("   ");
+    printf("%s", span);
     for (col = 0; col < n_queens; col++)
     {
         index = col;
@@ -104,6 +110,7 @@ void express_genes(Individual individual, int n_queens)
         printf(" %c", ALPHABET[index]);
     }
     printf("\n");
+    printf("%s", span);
     if (n_queens > 26)
     {
         printf("   ");
@@ -506,28 +513,6 @@ void view_population(Individual *population, int n_pop, int n_queens, int n_gen)
             printf(",%d", population[i].genes.rows[j]);
         printf(")\t%d\n", population[i].scorer);
     }
-}
-
-void summarize(Individual *population, Individual *best, int n_gen, int n_pop)
-{
-    /*
-     @TODO
-    */
-
-    int i;
-    float mean, st_deviation, sum = 0, sum_of_squares = 0;
-
-    for (i = 0; i < n_pop; i++)
-        sum += population[i].scorer;
-
-    mean = sum / n_pop;
-
-    for (i = 0; i < n_pop; i++)
-        sum_of_squares += pow(population[i].scorer - mean, 2);
-
-    st_deviation = sqrt(sum_of_squares/(n_pop-1));
-
-    print_summary(n_gen, mean, st_deviation, best->scorer);
 }
 
 void write_fitness(FILE ** file, char * filename, Individual * population, int n_pop, int generation)
