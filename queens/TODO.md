@@ -8,7 +8,33 @@
 
 * Afegir al summary el temps d'execució actual (el que porta fins a la generació en questió).
 
+* Rallada the **strategies.c**: si no m'equivoco la part de codi de cadascuna de les strategies on posa:
 
+```
+ T = population;
+        population = nextpopulation;
+        nextpopulation = T;
+        evaluate(population, args.n_population, args.n_queens);
+
+        for (i = 0; i < args.n_population; i++)
+            if (population[i].scorer < best->scorer)
+                best = &population[i];
+
+        if (args.summarize_freq != 0)
+            if ((n_gen-1) % args.summarize_freq == 0)
+                summarize(population, best, n_gen-1, args.n_population);
+
+        n_gen++;
+
+        if (best->scorer == 0 && !args.force_to_continue)
+            return best;
+
+        if (args.write_fitness && n_gen <= args.max_fitness_points)
+            write_fitness(&file, file_fitness, population, args.n_population, n_gen);
+
+```
+
+es repeteix en totes, i quan vulguem canviar alguna cosa referent a quant imprimir coses per pantalla, en arxius etc etc, doncs llavors caldrà canviaro en totes. La qüestió és: **és molt lio fer una funció a part a la mateixa llibreria strategies si vols, que faci això??**.
 
 ## Sobre la marxa
 
