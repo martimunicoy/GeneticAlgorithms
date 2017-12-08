@@ -82,6 +82,55 @@ Have fun!
 ## Flags
 A list of all the available flags is found below with a brief description of their use.
 
+
+## Test running reading parameters from a file
+
+Our implementation also alows us to read parameters from a file during execution time.
+In the folder */examples* there are some samples of input files. 
+
+To run the program using the *args.in* file for the 15 queens problem do:
+
+```
+./queens_GA.out -f /examples/args.in
+```
+
+If a solution is found, the final output should look like this
+
+```
++-------------------------------+
+|        GENETIC SUMMARY        |
++-------------------------------+
+| Generation:             18000 |
+| Mean score:               1.3 |
+| Standard deviation:       1.0 |
+| Best score:                 1 |
++-------------------------------+
+
+
++-------------------------------+
+|            RESULTS            |
++-------------------------------+
+
+ 14 . . . . . . X . . . . . . . 
+ 13 . . . . . . . . . . . X . . 
+ 12 . . . . . X . . . . . . . . 
+ 11 . . X . . . . . . . . . . . 
+ 10 . . . . . . . . . X . . . . 
+  9 . . . . . . . . . . . . X . 
+  8 . . . . . . . . X . . . . . 
+  7 . X . . . . . . . . . . . . 
+  6 . . . X . . . . . . . . . . 
+  5 . . . . . . . . . . X . . . 
+  4 X . . . . . . . . . . . . . 
+  3 . . . . . . . X . . . . . . 
+  2 . . . . X . . . . . . . . . 
+  1 . . . . . . . . . . . . . X 
+    A B C D E F G H I J K L M N
+    
+```
+
+
+
 ## Authors
 * **Martí Municoy**, martimunicoy@gmail.com
 * **Dani Salgado**, danysalgado14@gmail.com
