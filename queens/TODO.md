@@ -1,4 +1,5 @@
 # TO DO List
+Si alguna cosa de la llista la completem, al principi del punt/linia posar (FET)
 
 ## Report
 Això crec que ho hauriem d'anar planejant a partir de demà (divendres 08/12/2017) ja, abans de fer més i més millores xd
