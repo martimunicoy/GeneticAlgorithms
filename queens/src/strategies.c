@@ -1,9 +1,10 @@
 /*****************************************************************************
+ *                                                                           *
  *               <N Queens Problem Solver - Genetic Algorithm>               *
  *             Copyright (C) <2017>   <Municoy, M., Salgado, D.>             *
  *                                                                           *
- *   Contact the authors at: martimunicoy@gmail.com                          *
- *                           danysalgado14@gmail.com                         *
+ *   Contact the authors at: mail@martimunicoy.com                           *
+ *                           daniel.salgado@e-campus.uab.cat                 *
  *                                                                           *
  *   This program is free software: you can redistribute it and/or modify    *
  *   it under the terms of the GNU General Public License as published by    *
@@ -15,10 +16,11 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
  *   GNU General Public License for more details.                            *
  *                                                                           *
- *   You should have received a copy of the GNU General Public License       *
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.   *
  *****************************************************************************/
 
+/*****************************************************************************/
+// Includes
+/*****************************************************************************/
 #include "queens_GA.h"
 #include "constants.h"
 #include "genetics.h"
@@ -27,10 +29,11 @@
 #include "strategies.h"
 #include "definitions.h"
 
-//Function bodies
-GAResults strategy1(Individual * population, Individual * nextpopulation,
-                    Individual * best,
-                    RouletteCompartments * genetic_roulette,
+/*****************************************************************************/
+// Functions
+/*****************************************************************************/
+GAResults strategy1(Individual *population, Individual *nextpopulation,
+                    Individual *best, RouletteCompartments *genetic_roulette,
                     Individual parent1, Individual parent2,
                     Individual child, Individual survivor, int id,
                     int n_deaths, struct Args args, FILE * file,
@@ -39,7 +42,7 @@ GAResults strategy1(Individual * population, Individual * nextpopulation,
     int i;
     int n_gen = 1;
     unsigned char exit_code = 0;
-    Individual * T;
+    Individual *T;
 
     while(n_gen <= args.n_generations || args.infinite_generations)
     {
@@ -60,34 +63,38 @@ GAResults strategy1(Individual * population, Individual * nextpopulation,
             nextpopulation[i] = survivor;
         }
 
-        T = population;
-        population = nextpopulation;
-        nextpopulation = T;
-        evaluate(population, args.n_population, args.n_queens);
+        // Swap populations
+        swap_populations(&population, &nextpopulation);
 
+        // Find best individual
+        evaluate(population, args.n_population, args.n_queens);
         for (i = 0; i < args.n_population; i++)
             if (population[i].scorer < best->scorer)
                 best = &population[i];
 
+        // Print summary
         if (args.summarize_freq != 0)
             if ((n_gen-1) % args.summarize_freq == 0)
                 print_summary(population, best, args.n_population, n_gen-1);
 
+        // Sum up 1 generation
         n_gen++;
 
+        // Look out for a solution
         if (best->scorer == 0 && !args.force_to_continue)
         {
             exit_code = 1;
             break;
         }
 
+        // Write fitness
         if (args.write_fitness && n_gen <= args.max_fitness_points)
             write_fitness(&file, file_fitness, population, args.n_population, n_gen);
     }
 
+    // Wrap the results and return them
     GAResults results = {best, population, args.n_population, n_gen-1,
                          exit_code};
-
     return results;
 }
 
@@ -221,6 +228,7 @@ GAResults genetic_algorithm(int strategy, Individual * population,
                             char * file_fitness)
 {
     print_strategy_info(strategy);
+    print_GA_starts();
     switch (strategy)
     {
         case 1:

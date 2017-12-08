@@ -32,7 +32,7 @@ bool diagonal(unsigned int column1, unsigned int row1, unsigned int column2, uns
 void evaluate(Individual *population, int n_pop, int n_queens);
 RouletteCompartments *malloc_roulette(int n_pop);
 float initiate_roulette(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, float weight, float power, bool fitness);
-Individual * find_best(Individual *population, int n_pop);
+Individual *find_best(Individual *population, int n_pop);
 Individual roulette_selection(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, float weight, float power, bool fitness);
 Individual tournament_selection(Individual *population, int n_pop, int k_selections, bool replacement);
 void reset_selection(Individual *population, int n_pop);

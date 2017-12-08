@@ -1,9 +1,10 @@
 /*****************************************************************************
+ *                                                                           *
  *               <N Queens Problem Solver - Genetic Algorithm>               *
  *             Copyright (C) <2017>   <Municoy, M., Salgado, D.>             *
  *                                                                           *
- *   Contact the authors at: martimunicoy@gmail.com                          *
- *                           danysalgado14@gmail.com                         *
+ *   Contact the authors at: mail@martimunicoy.com                           *
+ *                           daniel.salgado@e-campus.uab.cat                 *
  *                                                                           *
  *   This program is free software: you can redistribute it and/or modify    *
  *   it under the terms of the GNU General Public License as published by    *
@@ -15,8 +16,6 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
  *   GNU General Public License for more details.                            *
  *                                                                           *
- *   You should have received a copy of the GNU General Public License       *
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.   *
  *****************************************************************************/
 
 // Include Libraries
@@ -29,8 +28,13 @@
 #include "strategies.h"
 
 int main(int argc, char* argv[]){
+    // Print welcome
+    print_program_name();
+    print_license_header();
+
     // Parse arguments
     struct Args args = args_parser(argc, argv);
+    printf("%d\n", args.n_population);
 
     // Create, initialize text files
     FILE * file;
@@ -52,9 +56,9 @@ int main(int argc, char* argv[]){
     GAResults results;
 
     // Save memory space for population and genetic roulette
-    Individual * P = (Individual *) malloc(sizeof(Individual) * args.n_population);
-    Individual * Q = (Individual *) malloc(sizeof(Individual) * args.n_population);
-    RouletteCompartments * genetic_roulette = malloc_roulette(args.n_population);
+    Individual *P = (Individual *) malloc(sizeof(Individual) * (int) args.n_population);
+    Individual *Q = (Individual *) malloc(sizeof(Individual) * (int) args.n_population);
+    RouletteCompartments *genetic_roulette = malloc_roulette(args.n_population);
 
     // Set population pointers
     population = P;
@@ -76,9 +80,8 @@ int main(int argc, char* argv[]){
     int n_deaths = (int) (args.n_population * args.death_ratio);
 
     // Print out useful information
-    print_program_name();
-    print_license_header();
     print_problem_description(args);
+    print_GA_input();
     print_GA_constants(args);
     print_configuration(args);
 
@@ -90,6 +93,7 @@ int main(int argc, char* argv[]){
 
     // Print results
     //results.best = &population[0];
+    print_GA_completed();
     print_results(results, args.n_queens);
 
     // Free memory

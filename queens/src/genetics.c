@@ -1,9 +1,10 @@
 /*****************************************************************************
+ *                                                                           *
  *               <N Queens Problem Solver - Genetic Algorithm>               *
  *             Copyright (C) <2017>   <Municoy, M., Salgado, D.>             *
  *                                                                           *
- *   Contact the authors at: martimunicoy@gmail.com                          *
- *                           danysalgado14@gmail.com                         *
+ *   Contact the authors at: mail@martimunicoy.com                           *
+ *                           daniel.salgado@e-campus.uab.cat                 *
  *                                                                           *
  *   This program is free software: you can redistribute it and/or modify    *
  *   it under the terms of the GNU General Public License as published by    *
@@ -15,8 +16,6 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
  *   GNU General Public License for more details.                            *
  *                                                                           *
- *   You should have received a copy of the GNU General Public License       *
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.   *
  *****************************************************************************/
 
 #include "queens_GA.h"
@@ -257,7 +256,7 @@ void sort_by_scorer(Individual *subpopulation, int k_selections)
         }
 }
 
-Individual * find_best(Individual *subpopulation, int k_selections)
+Individual *find_best(Individual *subpopulation, int k_selections)
 {
     /*
      Given a population of n_pop individuals, finds the FIRST with
@@ -318,7 +317,7 @@ Individual roulette_selection(Individual *population, RouletteCompartments *gene
 
     //view_selection(genetic_roulette, n_pop, random, choice);
 
-    return * genetic_roulette[choice].individual;
+    return *genetic_roulette[choice].individual;
 }
 
 Individual tournament_selection(Individual *population, int n_pop, int k_selections, bool replacement)
@@ -332,8 +331,9 @@ Individual tournament_selection(Individual *population, int n_pop, int k_selecti
 
     int k;
     int random_position;
-    Individual * selected_individuals = (Individual *) malloc(sizeof(Individual) * k_selections);
-    Individual * best_selected_individual;
+    Individual *selected_individuals = (Individual *) malloc(sizeof(Individual)
+                                                             * k_selections);
+    Individual *best_selected_individual;
 
     for (k = 0;  k < k_selections;){
         random_position = (int) random_number(n_pop);
@@ -354,7 +354,9 @@ Individual tournament_selection(Individual *population, int n_pop, int k_selecti
 
     best_selected_individual = find_best(selected_individuals, k_selections);
 
-    return * best_selected_individual;
+    free(selected_individuals);
+
+    return *best_selected_individual;
 }
 
 void reset_selection(Individual *population, int n_pop)
@@ -465,14 +467,14 @@ Individual heuristic_mutation(Individual mutant, int n_queens, int lambda, float
         }
 
         n_perms = factorial(lambda);
-        int ** permutations = (int **) malloc(n_perms * sizeof(int *));
+        int **permutations = (int **) malloc(n_perms * sizeof(int *));
         for(j = 0; j < n_perms; j++)
             permutations[j] = (int *) malloc(lambda * sizeof(int));
 
         int counter = 0;
         permute(permutations, rows_to_mutate, 0,lambda, &counter);
 
-        Individual * childs = (Individual *) malloc(sizeof(Individual) * n_perms);
+        Individual *childs = (Individual *) malloc(sizeof(Individual) * n_perms);
         bool mutation;
         int m;
         for (i = 0; i < n_perms; i++)
@@ -492,7 +494,13 @@ Individual heuristic_mutation(Individual mutant, int n_queens, int lambda, float
         }
         evaluate(childs, n_perms, n_queens);
         mutant = *find_best(childs, n_perms);
+
+        // Free memory
+        for(j = 0; j < n_perms; j++)
+            free(permutations[j]);
+        free(permutations);
     }
+
     return mutant;
 }
 
