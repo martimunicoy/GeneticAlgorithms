@@ -21,9 +21,9 @@ Overleaf: https://www.overleaf.com/12684672zycygkcnmryh#/48375443/
 
 * Queden pendents els TODO (allà on hi hagi '@'). Entre ells comentar algunes funcions que vaig deixar pendents (algunes que tú sabrás explicar millor). Estaria bé deixar enllestits els comentaris de funcions, la resta de coses amb @ que siguin improvements afegir-los en aquesta llista si cal.
 
-* (FET?? segur, crec k no?) Afegir al summary el temps d'execució actual (el que porta fins a la generació en questió).
+* Afegir al summary el temps d'execució actual (el que porta fins a la generació en questió).
 
-* Rallada the **strategies.c**: si no m'equivoco la part de codi de cadascuna de les strategies on posa:
+* (FET) Rallada the **strategies.c**: si no m'equivoco la part de codi de cadascuna de les strategies on posa:
 
 ```
  T = population;
