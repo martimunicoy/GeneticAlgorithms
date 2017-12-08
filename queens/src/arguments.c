@@ -1,9 +1,10 @@
 /*****************************************************************************
+ *                                                                           *
  *               <N Queens Problem Solver - Genetic Algorithm>               *
  *             Copyright (C) <2017>   <Municoy, M., Salgado, D.>             *
  *                                                                           *
- *   Contact the authors at: martimunicoy@gmail.com                          *
- *                           danysalgado14@gmail.com                         *
+ *   Contact the authors at: mail@martimunicoy.com                           *
+ *                           daniel.salgado@e-campus.uab.cat                 *
  *                                                                           *
  *   This program is free software: you can redistribute it and/or modify    *
  *   it under the terms of the GNU General Public License as published by    *
@@ -15,8 +16,6 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
  *   GNU General Public License for more details.                            *
  *                                                                           *
- *   You should have received a copy of the GNU General Public License       *
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.   *
  *****************************************************************************/
 
 #include "queens_GA.h"

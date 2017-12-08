@@ -2,6 +2,10 @@
 
 The following program attempts to solve the so-called 8 Queens Problem in the general case of having N Queens by means of a genetic algorithm which is developed "ad-hoc".
 
+## Authors
+* **Martí Municoy**, mail@martimunicoy.com
+* **Dani Salgado**, daniel.salgado@e-campus.uab.cat
+
 ## Problem description
 
 *The eight queens problem or puzzle is the problem of placing eight chess queens on an 8×8 chessboard so that no two queens threaten each other. Thus, a solution requires that no two queens share the same row, column, or diagonal. The eight queens puzzle is an example of the more general n queens problem of placing n non-attacking queens on an n×n chessboard, for which solutions exist for all natural numbers n with the exception of n=2 and n=3*, [1].
@@ -86,7 +90,7 @@ A list of all the available flags is found below with a brief description of the
 ## Test running reading parameters from a file
 
 Our implementation also alows us to read parameters from a file during execution time.
-In the folder */examples* there are some samples of input files. 
+In the folder */examples* there are some samples of input files.
 
 To run the program using the *args.in* file for the 15 queens problem do:
 
@@ -111,29 +115,24 @@ If a solution is found, the final output should look like this
 |            RESULTS            |
 +-------------------------------+
 
- 14 . . . . . . X . . . . . . . 
- 13 . . . . . . . . . . . X . . 
- 12 . . . . . X . . . . . . . . 
- 11 . . X . . . . . . . . . . . 
- 10 . . . . . . . . . X . . . . 
-  9 . . . . . . . . . . . . X . 
-  8 . . . . . . . . X . . . . . 
-  7 . X . . . . . . . . . . . . 
-  6 . . . X . . . . . . . . . . 
-  5 . . . . . . . . . . X . . . 
-  4 X . . . . . . . . . . . . . 
-  3 . . . . . . . X . . . . . . 
-  2 . . . . X . . . . . . . . . 
-  1 . . . . . . . . . . . . . X 
+ 14 . . . . . . X . . . . . . .
+ 13 . . . . . . . . . . . X . .
+ 12 . . . . . X . . . . . . . .
+ 11 . . X . . . . . . . . . . .
+ 10 . . . . . . . . . X . . . .
+  9 . . . . . . . . . . . . X .
+  8 . . . . . . . . X . . . . .
+  7 . X . . . . . . . . . . . .
+  6 . . . X . . . . . . . . . .
+  5 . . . . . . . . . . X . . .
+  4 X . . . . . . . . . . . . .
+  3 . . . . . . . X . . . . . .
+  2 . . . . X . . . . . . . . .
+  1 . . . . . . . . . . . . . X
     A B C D E F G H I J K L M N
-    
+
 ```
 
-
-
-## Authors
-* **Martí Municoy**, martimunicoy@gmail.com
-* **Dani Salgado**, danysalgado14@gmail.com
 
 ## References
 * [1] 8 queens problem, general information. https://en.wikipedia.org/wiki/Eight_queens_puzzle .

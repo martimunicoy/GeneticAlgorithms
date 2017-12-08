@@ -15,11 +15,13 @@ Overleaf: https://www.overleaf.com/12684672zycygkcnmryh#/48375443/
 
 ## Prioritaries
 
+* Unknown bug that causes a segmentation fault error while writting the results through express_genes() function.
+
 * (FET) Millora de la funció **find_best**: si hi ha individus amb la mateixa scorer crec que sempre es quedarà amb el primer que troba (per la desigualtat estricte; i es quedaria amb l'últim que trobés si posesim desigualtat no estricta, crec). Llavors la idea de millorar-ho era d'entre els que tenen la mateixa scorer triar un at random. Així sense pensar massa crec que és bastant útil al principi, però al final si molts individus són iguals potser ja no tant. (tanmateix, si la implementació no es gaire costosa computacionalment llavors no passaria res)
 
 * Queden pendents els TODO (allà on hi hagi '@'). Entre ells comentar algunes funcions que vaig deixar pendents (algunes que tú sabrás explicar millor). Estaria bé deixar enllestits els comentaris de funcions, la resta de coses amb @ que siguin improvements afegir-los en aquesta llista si cal.
 
-* Afegir al summary el temps d'execució actual (el que porta fins a la generació en questió).
+* (FET) Afegir al summary el temps d'execució actual (el que porta fins a la generació en questió).
 
 * Rallada the **strategies.c**: si no m'equivoco la part de codi de cadascuna de les strategies on posa:
 
@@ -64,9 +66,9 @@ es repeteix en totes, i quan vulguem canviar alguna cosa referent a quant imprim
 
 * Sobretot al main: separar les inicialitzacions de variables per poder comentar cadascuna al costat (potser no cal, ho deixo aquí per recordar-m'ho).
 
-* Al readme posar Authors al principi
+* (FET) Al readme posar Authors al principi
 
-* Canviar el correu danysalgado14@gmail.com per daniel.salgado@e-campus.uab.cat (readme, .c ... ?)
+* (FET) Canviar el correu danysalgado14@gmail.com per daniel.salgado@e-campus.uab.cat (readme, .c ... ?)
 
 
 

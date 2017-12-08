@@ -1,9 +1,10 @@
 /*****************************************************************************
+ *                                                                           *
  *               <N Queens Problem Solver - Genetic Algorithm>               *
  *             Copyright (C) <2017>   <Municoy, M., Salgado, D.>             *
  *                                                                           *
- *   Contact the authors at: martimunicoy@gmail.com                          *
- *                           danysalgado14@gmail.com                         *
+ *   Contact the authors at: mail@martimunicoy.com                           *
+ *                           daniel.salgado@e-campus.uab.cat                 *
  *                                                                           *
  *   This program is free software: you can redistribute it and/or modify    *
  *   it under the terms of the GNU General Public License as published by    *
@@ -15,8 +16,6 @@
  *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the           *
  *   GNU General Public License for more details.                            *
  *                                                                           *
- *   You should have received a copy of the GNU General Public License       *
- *   along with this program.  If not, see <http://www.gnu.org/licenses/>.   *
  *****************************************************************************/
 
 #include "queens_GA.h"
@@ -255,6 +254,7 @@ void print_results(GAResults ga_results, int n_queens)
 
     free(exit_message);
 
+    printf("\n");
     printf("+-----------------------------------------------------------");
     printf("-------------------+\n");
     printf("|                                    RESULTS                ");
@@ -274,6 +274,13 @@ void print_results(GAResults ga_results, int n_queens)
 
 void print_problem_description(struct Args args)
 {
+    printf("+---------------------------------------------------------------");
+    printf("---------------+\n");
+    printf("|                             PROBLEM DESCRIPTION               ");
+    printf("               |\n");
+    printf("+---------------------------------------------------------------");
+    printf("---------------+\n");
+
     printf("\n");
     printf("This algorithm will try to find a way to place %d", args.n_queens);
     printf(" chess Queens in a %dx%d board\nby", args.n_queens, args.n_queens);
@@ -304,10 +311,17 @@ void print_license_header()
     printf("\n");
     printf("                 <N Queens Problem Solver - Genetic Algorithm>\n");
     printf("               Copyright (C) <2017>   <Municoy, M., Salgado, D.>");
-    printf("\n\nThis program comes with ABSOLUTELY NO WARRANTY. This is free");
-    printf(" software, and you\nare welcome to redistribute it under certain");
-    printf(" conditions. See LICENSE.txt for\ndetails.");
-    printf("\n");
+    printf("\n\n     Contact the authors at: mail@martimunicoy.com\n        ");
+    printf("                     daniel.salgado@e-campus.uab.cat\n\n     Thi");
+    printf("s program is free software: you can redistribute it and/or modif");
+    printf("y\n     it under the terms of the GNU General Public License as ");
+    printf("published by\n     the Free Software Foundation, either version ");
+    printf("3 of the License, or\n     (at your option) any later version.\n");
+    printf("\n     This program is distributed in the hope that it will be u");
+    printf("seful,\n     but WITHOUT ANY WARRANTY; without even the implied ");
+    printf("warranty of\n     MERCHANTABILITY or FITNESS FOR A PARTICULAR PU");
+    printf("RPOSE.  See the\n     GNU General Public License for more detail");
+    printf("s.\n\n");
 }
 
 void print_GA_constants(struct Args args)
@@ -468,4 +482,37 @@ void print_strategy_info(int strategy)
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\n");
+}
+
+void print_GA_starts()
+{
+    printf("\n");
+    printf("+---------------------------------------------------------------");
+    printf("---------------+\n");
+    printf("|                            GENETIC ALGORITHM RUN              ");
+    printf("               |\n");
+    printf("+---------------------------------------------------------------");
+    printf("---------------+\n");
+}
+
+void print_GA_completed()
+{
+    printf("\n");
+    printf("+---------------------------------------------------------------");
+    printf("---------------+\n");
+    printf("|                         GENETIC ALGORITHM COMPLETED           ");
+    printf("               |\n");
+    printf("+---------------------------------------------------------------");
+    printf("---------------+\n");
+}
+
+void print_GA_input()
+{
+    printf("\n");
+    printf("+---------------------------------------------------------------");
+    printf("---------------+\n");
+    printf("|                         GENETIC ALGORITHM INPUT DATA          ");
+    printf("               |\n");
+    printf("+---------------------------------------------------------------");
+    printf("---------------+\n");
 }
