@@ -8,7 +8,13 @@
 
 * Afegir al summary el temps d'execució actual (el que porta fins a la generació en questió).
 
-*
+
+
+## Sobre la marxa
+
+* Anar afegint les references
+
+* Anar completant els README.md, manuals, etc
 
 
 
@@ -20,6 +26,9 @@
 
 * Canviar el correu danysalgado14@gmail.com per daniel.salgado@e-campus.uab.cat (readme, .c ... ?)
 
+
+
+
 ## Idees per analitzar l'algoritme a partir de resultats
 
 * Fixats uns parametres raonables, estudiar com evoluciona el temps total d'execució en funció de N (nombre de queens).
@@ -27,3 +36,9 @@
 *
 
 *
+
+## Implementacions extra (de flipats de la vida)
+
+* Fer un altra (programa) arxiu .c (main) que utilitzant les altres llibreries i maquinaria que tenim, puguem fer com un procés iteratiu que vagi cridant la funció genetic algorithm, vagi registrant les solucions que troba i les que hagi trobat donar-les com a invalides (això últim és el que seria chungo, d'entrada). Fixar com un nombre màxim d'iteracions i veure quantes troba. Per N= 8 sabem que n'hi ha 92 de solucions diferents.
+
+* 
