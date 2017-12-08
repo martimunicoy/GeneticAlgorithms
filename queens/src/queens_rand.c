@@ -20,9 +20,10 @@
  *****************************************************************************/
 
 // Include Libraries
-#include "lib/general.h"
-#include "lib/utils.h"
-#include "lib/genetics.h"
+#include "queens_GA.h"
+#include "genetics.h"
+#include "utils.h"
+#include "constants.h"
 
 int main(){
     // Constants

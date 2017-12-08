@@ -23,12 +23,12 @@ ifeq ($(UNAME), Darwin)
 endif
 
 # define any directories containing header files other than /usr/include
-INCLUDES = -I./lib
+INCLUDES = -I lib
 
 # define library paths in addition to /usr/lib
 #   if I wanted to include libraries not in /usr/lib I'd specify
 #   their path using -Lpath, something like:
-LFLAGS = -L./lib
+LFLAGS = -L lib
 
 # define any libraries to link into executable:
 #   if I want to link in libraries (libx.so or libx.a) I use the -llibname
@@ -38,7 +38,9 @@ ifeq ($(UNAME), Linux)
 endif
 
 # define the C source files
-SRCS = src/queens_GA.c src/constants.c src/genetics.c src/utils.c src/arguments.c src/strategies.c
+_SRCS1 = queens_GA.c genetics.c strategies.c utils.c arguments.c constants.c
+_SRCS2 = queens_rand.c genetics.c utils.c constants.c
+#SRCS = src/queens_GA.c src/constants.c src/genetics.c src/utils.c src/arguments.c src/strategies.c
 
 # define the C object files
 #
@@ -48,36 +50,27 @@ SRCS = src/queens_GA.c src/constants.c src/genetics.c src/utils.c src/arguments.
 # Below we are replacing the suffix .c of all words in the macro SRCS
 # with the .o suffix
 #
-OBJS = $(SRCS:.c=.o)
+SDIR = src
+SRCS1 = $(patsubst %,$(SDIR)/%,$(_SRCS1))
+SRCS2 = $(patsubst %,$(SDIR)/%,$(_SRCS2))
 
 # define the executable file
-MAIN = queens_GA.out
+P1 = queens_GA.out
+P2 = queens_random.out
 
-#
-# The following part of the makefile is generic; it can be used to
-# build any executable just by changing the definitions above and by
-# deleting dependencies appended to the file from 'make depend'
-#
+.PHONY: directories clean
 
-.PHONY: depend clean
+all: $(P1) $(P2)
+	@echo The executables \'$(P1)\' and \'$(P2)\' have been compiled
 
-all:    $(MAIN)
-	@echo  The executable queens_GA.out has been compiled
+$(P1):
+	@$(CC) $(CFLAGS) $(INCLUDES) -o $(P1) $(SRCS1) $(LFLAGS) $(LIBS)
 
-$(MAIN): $(OBJS)
-	$(CC) $(CFLAGS) $(INCLUDES) -o $(MAIN) $(OBJS) $(LFLAGS) $(LIBS)
-
-# this is a suffix replacement rule for building .o's from .c's
-# it uses automatic variables $<: the name of the prerequisite of
-# the rule(a .c file) and $@: the name of the target of the rule (a .o file)
-# (see the gnu make manual section about automatic variables)
-.c.o:
-	$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
+$(P2):
+	@$(CC) $(CFLAGS) $(INCLUDES) -o $(P2) $(SRCS2) $(LFLAGS) $(LIBS)
 
 clean:
-	$(RM) src/*.o $(MAIN)
-
-depend: $(SRCS)
-	makedepend $(INCLUDES) $^
+	@$(RM) -r $(P1) $(P2)
+	@echo The executables \'$(P1)\' and \'$(P2)\' have been deleted
 
 # DO NOT DELETE THIS LINE -- make depend needs it
