@@ -51,7 +51,7 @@ Overleaf: https://www.overleaf.com/12684672zycygkcnmryh#/48375443/
 
 es repeteix en totes, i quan vulguem canviar alguna cosa referent a quant imprimir coses per pantalla, en arxius etc etc, doncs llavors caldrà canviaro en totes. La qüestió és: **és molt lio fer una funció a part a la mateixa llibreria strategies si vols, que faci això??**.
 
-* BUG mig chorra sobre el writefitness: mhe adonat que les fitness de l'última població quan troba l'òptim i para, no és afegida al .csv (pensava que posant el write_fitness just abans del if aquell que fa un exit ho solucionaria, pero crec que té a veure amb quina popplació conté el vector population)
+* BUG mig chorra sobre el writefitness: mhe adonat que les fitness de l'última població quan troba l'òptim i para, no és afegida al .csv (crec que posant el write_fitness just abans del if aquell que fa un exit ho solucionaria)
 
 * Afegir al summary quin percentatge de la població a convergit a l'òptim? (fent la norma euclidiana de sempre per exemple) i retornar el percentage de la població que ho ha fet? (95% segons [3])
 
@@ -87,6 +87,10 @@ es repeteix en totes, i quan vulguem canviar alguna cosa referent a quant imprim
 * Fer un altra (programa) arxiu .c (main) que utilitzant les altres llibreries i maquinaria que tenim, puguem fer com un procés iteratiu que vagi cridant la funció genetic algorithm, vagi registrant les solucions que troba i les que hagi trobat donar-les com a invalides (això últim és el que seria chungo, d'entrada). Fixar com un nombre màxim d'iteracions i veure quantes troba. Per N= 8 sabem que n'hi ha 92 de solucions diferents.
 
 * Adaptative mutation rate (veure pàgina 34 de la referència [2]).  Allà es parla d'una tal $\sigma^2$, que fent el símil jo crec que per nosalres seria la probabilitat de mutar: p_mutation.
+
+* La fitness function que tenim crec que es o(N^2). A la referència [5] sembla que proposen una fitness que és o(2N-1) (osigi linial)
+
+
 
 ## Comentari (ja es un poc tard per fer-ho)
 
