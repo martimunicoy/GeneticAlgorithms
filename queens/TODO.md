@@ -48,6 +48,9 @@ Overleaf: https://www.overleaf.com/12684672zycygkcnmryh#/48375443/
 
 es repeteix en totes, i quan vulguem canviar alguna cosa referent a quant imprimir coses per pantalla, en arxius etc etc, doncs llavors caldrà canviaro en totes. La qüestió és: **és molt lio fer una funció a part a la mateixa llibreria strategies si vols, que faci això??**.
 
+
+* Afegir al summary quin percentatge de la població a convergit a l'òptim? (fent la norma euclidiana de sempre per exemple) i retornar el percentage de la població que ho ha fet? (95% segons [3])
+
 ## Sobre la marxa
 
 * Anar afegint les references
