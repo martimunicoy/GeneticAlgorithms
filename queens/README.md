@@ -136,7 +136,10 @@ If a solution is found, the final output should look like this
 * **Dani Salgado**, danysalgado14@gmail.com
 
 ## References
-[1] 8 queens problem, general information. https://en.wikipedia.org/wiki/Eight_queens_puzzle .
+* [1] 8 queens problem, general information. https://en.wikipedia.org/wiki/Eight_queens_puzzle .
+* [2] Essentials of Metaheuristics, A Set of Undergraduate Lecture Notes, Sean Luke, Department of Computer Science, George Mason University.
+* [3] An Overview of Genetic Algorithms: Part 1, Fundamentals, David Beasley, David R. Bull, Ralph R. Martin.
+* [4] A list of genetic operations (crossover and mutation) (http://mat.uab.cat/~alseda/MasterOpt/GeneticOperations.pdf). Author ?????
 
 ## License
 This project is licensed under the GNU License - see the [LICENSE.txt](LICENSE.txt) file for details
