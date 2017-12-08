@@ -103,6 +103,18 @@ void swap(int * vector, int i, int j)
     vector[j] = temp;
 }
 
+void swap_populations(Individual **p1, Individual **p2)
+{
+    /*
+     Swap two population pointers.
+    */
+    Individual *T;
+
+    T = *p1;
+    *p1 = *p2;
+    *p2 = T;
+}
+
 void permute(int ** permutations, int * vector, int start, int end, int *counter)
 {
     /*

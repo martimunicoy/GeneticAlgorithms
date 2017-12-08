@@ -18,6 +18,9 @@
  *                                                                           *
  *****************************************************************************/
 
+/*****************************************************************************/
+// Includes
+/*****************************************************************************/
 #include "queens_GA.h"
 #include "constants.h"
 #include "genetics.h"
@@ -26,10 +29,11 @@
 #include "strategies.h"
 #include "definitions.h"
 
-//Function bodies
-GAResults strategy1(Individual * population, Individual * nextpopulation,
-                    Individual * best,
-                    RouletteCompartments * genetic_roulette,
+/*****************************************************************************/
+// Functions
+/*****************************************************************************/
+GAResults strategy1(Individual *population, Individual *nextpopulation,
+                    Individual *best, RouletteCompartments *genetic_roulette,
                     Individual parent1, Individual parent2,
                     Individual child, Individual survivor, int id,
                     int n_deaths, struct Args args, FILE * file,
@@ -38,7 +42,7 @@ GAResults strategy1(Individual * population, Individual * nextpopulation,
     int i;
     int n_gen = 1;
     unsigned char exit_code = 0;
-    Individual * T;
+    Individual *T;
 
     while(n_gen <= args.n_generations || args.infinite_generations)
     {
@@ -59,34 +63,38 @@ GAResults strategy1(Individual * population, Individual * nextpopulation,
             nextpopulation[i] = survivor;
         }
 
-        T = population;
-        population = nextpopulation;
-        nextpopulation = T;
-        evaluate(population, args.n_population, args.n_queens);
+        // Swap populations
+        swap_populations(&population, &nextpopulation);
 
+        // Find best individual
+        evaluate(population, args.n_population, args.n_queens);
         for (i = 0; i < args.n_population; i++)
             if (population[i].scorer < best->scorer)
                 best = &population[i];
 
+        // Print summary
         if (args.summarize_freq != 0)
             if ((n_gen-1) % args.summarize_freq == 0)
                 print_summary(population, best, args.n_population, n_gen-1);
 
+        // Sum up 1 generation
         n_gen++;
 
+        // Look out for a solution
         if (best->scorer == 0 && !args.force_to_continue)
         {
             exit_code = 1;
             break;
         }
 
+        // Write fitness
         if (args.write_fitness && n_gen <= args.max_fitness_points)
             write_fitness(&file, file_fitness, population, args.n_population, n_gen);
     }
 
+    // Wrap the results and return them
     GAResults results = {best, population, args.n_population, n_gen-1,
                          exit_code};
-
     return results;
 }
 

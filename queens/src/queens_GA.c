@@ -28,8 +28,13 @@
 #include "strategies.h"
 
 int main(int argc, char* argv[]){
+    // Print welcome
+    print_program_name();
+    print_license_header();
+
     // Parse arguments
     struct Args args = args_parser(argc, argv);
+    printf("%d\n", args.n_population);
 
     // Create, initialize text files
     FILE * file;
@@ -51,8 +56,8 @@ int main(int argc, char* argv[]){
     GAResults results;
 
     // Save memory space for population and genetic roulette
-    Individual *P = (Individual *) malloc(sizeof(Individual) * args.n_population);
-    Individual *Q = (Individual *) malloc(sizeof(Individual) * args.n_population);
+    Individual *P = (Individual *) malloc(sizeof(Individual) * (int) args.n_population);
+    Individual *Q = (Individual *) malloc(sizeof(Individual) * (int) args.n_population);
     RouletteCompartments *genetic_roulette = malloc_roulette(args.n_population);
 
     // Set population pointers
@@ -75,8 +80,6 @@ int main(int argc, char* argv[]){
     int n_deaths = (int) (args.n_population * args.death_ratio);
 
     // Print out useful information
-    print_program_name();
-    print_license_header();
     print_problem_description(args);
     print_GA_input();
     print_GA_constants(args);
@@ -97,6 +100,4 @@ int main(int argc, char* argv[]){
     free(P);
     free(Q);
     free(genetic_roulette);
-    for (int i = 0; i < args.n_population; i++)
-        free(population[i].genes.rows);
 }
