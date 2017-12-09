@@ -53,6 +53,32 @@ abline(h = 0, col = color_ideal, lwd = lw)
 legend("topright", c("Average fitness","Minimum fitness", "Ideal fitness"), col = c(color_avg,color_opt,color_ideal),lwd=lw, bty ='n', cex = 1, seg.len = 0.5)
 
 
+
+# Random data to plot:
+A <- data.frame(x=rnorm(100, 20, 2), y=rnorm(100, 20, 2))
+B <- data.frame(x=rnorm(100, 21, 1), y=rnorm(100, 21, 1))
+
+# Add extra space to right of plot area; change clipping to figure
+par(mar=c(5.1, 4.1, 4.1, 8.1), xpd=TRUE)
+
+# Plot both groups
+plot(y ~ x, A, ylim=range(c(A$y, B$y)), xlim=range(c(A$x, B$x)), pch=1,
+     main="Scatter plot of two groups")
+points(y ~ x, B, pch=3)
+
+# Add legend to top right, outside plot region
+legend("topright", bty = 'n' , inset=c(-0.2,0), legend=c("A","B"), pch=c(1,3), title="Group")
+
+
+
+
+
+
+
+
+
+
+
 length(fitness)
 last_fitness = t(fitness[length(fitness)]) 
 max_last_fitness = max(last_fitness)
