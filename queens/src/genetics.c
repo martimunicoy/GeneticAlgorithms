@@ -530,7 +530,6 @@ void heuristic_mutation(Individual *mutant, unsigned int **permutations,
             }
         }
 
-        evaluate(childs, n_perms, n_queens);
         *mutant = *find_best(childs, n_perms);
     }
 }
