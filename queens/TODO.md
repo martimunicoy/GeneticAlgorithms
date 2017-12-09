@@ -35,7 +35,7 @@ Overleaf: https://www.overleaf.com/12684672zycygkcnmryh#/48375443/
 
 * 2n: const FILE_FITNESS (que també podem posar als args.in per poder decidir el nom del fitxer, així podre associar el fitxer Fitness1.csv amb args1.in, per exemple). Més que nom del fixter contindria la direció sencera per exemple: DataVisualization/subfolderquebvulgui/nomarxiu)
 
-* 3r.1) Afegir el write_genes que podem recuperar de la branca analysys_stuff per que en un arxiu escrigui els gens dels individus de la població cada certes iteracions com la write_fitness (ho he mirat i es LO MATEIX que el write fitness). SERIA COM DUPLICAR COSES: WRITE_FITNESS seria WRITE_GENES, MAX_FITNESS_POINTS seria MAX_GENES_POINTS.
+* (FET) 3r.1) Afegir el write_genes que podem recuperar de la branca analysys_stuff per que en un arxiu escrigui els gens dels individus de la població cada certes iteracions com la write_fitness (ho he mirat i es LO MATEIX que el write fitness). SERIA COM DUPLICAR COSES: WRITE_FITNESS seria WRITE_GENES, MAX_FITNESS_POINTS seria MAX_GENES_POINTS.
 
 * 3r.2) L'anterior aniria acompanyat amb un FILE_GENES per poder decidir el nom del arxiu (de fet la direció sensera DataVisualization/subfolderquebvulgui/nomarxiu) on posar els genes de les poblacions
 
