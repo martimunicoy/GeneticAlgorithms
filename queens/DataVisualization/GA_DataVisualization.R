@@ -19,4 +19,4 @@ abline(v = 0)
 var(as.numeric(last_fitness) )
 
 
-plot(generations, as.numeric(apply(fitness,1,sd)) )
+plot(generations, as.numeric(apply(fitness,1,sd)) , type = 'l')
