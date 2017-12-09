@@ -48,6 +48,16 @@ GAResults genetic_algorithm(int strategy, Individual * population,
     unsigned char exit_code = 0;
     Individual *T;
 
+    int n_perms = factorial(args.lambda);
+    unsigned int **permutations = (unsigned int **) malloc(n_perms *
+                                   sizeof(unsigned int *));
+    for(i = 0; i < n_perms; i++)
+        permutations[i] = (unsigned int *) malloc(args.lambda *
+                           sizeof(unsigned int));
+    Individual *childs = (Individual *) malloc(sizeof(Individual)
+                                               * n_perms);
+    initiate(childs, 0, n_perms, args.n_queens);
+
     while(n_gen <= args.n_generations || args.infinite_generations)
     {
         switch (strategy)
@@ -71,14 +81,9 @@ GAResults genetic_algorithm(int strategy, Individual * population,
                                                  args.fract_weight,
                                                  args.denom_power,
                                                  fit);
-                    child = heuristic_mutation(
-                                               ordered_crossover(parent1,
-                                                                 parent2,
-                                                                 ++id,
-                                                            args.n_queens),
-                                               args.n_queens,
-                                               args.lambda,
-                                               args.p_mutation);
+                    child = ordered_crossover(parent1, parent2, ++id,
+                                              args.n_queens),
+                    swapping_mutation(&child, args.n_queens, args.p_mutation);
                     nextpopulation[i] = child;
                 }
 
@@ -98,6 +103,47 @@ GAResults genetic_algorithm(int strategy, Individual * population,
 
             case 2:
                 // Mutation and crossover
+                reset_selection(population, args.n_population);
+                for (i = 0; i < n_deaths; i++)
+                {
+                    parent1 = roulette_selection(population,
+                                                 genetic_roulette,
+                                                 args.n_population,
+                                                 args.n_queens,
+                                                 args.fract_weight,
+                                                 args.denom_power,
+                                                 fit);
+                    parent2 = roulette_selection(population,
+                                                 genetic_roulette,
+                                                 args.n_population,
+                                                 args.n_queens,
+                                                 args.fract_weight,
+                                                 args.denom_power,
+                                                 fit);
+                    child = ordered_crossover(parent1, parent2, ++id,
+                                              args.n_queens),
+                    heuristic_mutation(&child, permutations, childs,
+                                       args.n_queens, args.lambda,
+                                       n_perms, args.p_mutation);
+                    nextpopulation[i] = child;
+                }
+
+                // Selection
+                reset_selection(population, args.n_population);
+                for (i = n_deaths; i < args.n_population; i++)
+                {
+                    survivor = roulette_selection(population,
+                                                  genetic_roulette,
+                                                  args.n_population,
+                                                  args.n_queens,
+                                                  args.fract_weight,
+                                                  args.denom_power, fit);
+                    nextpopulation[i] = survivor;
+                }
+                break;
+
+            case 3:
+                // Mutation and crossover
                 for (i = 0; i < n_deaths; i++)
                 {
                     reset_selection(population, args.n_population);
@@ -109,14 +155,11 @@ GAResults genetic_algorithm(int strategy, Individual * population,
                                                    args.n_population,
                                                    args.tournament_selections,
                                                    replace);
-                    child = heuristic_mutation(
-                                               ordered_crossover(parent1,
-                                                                 parent2,
-                                                                 ++id,
-                                                            args.n_queens),
-                                               args.n_queens,
-                                               args.lambda,
-                                               args.p_mutation);
+                    child = ordered_crossover(parent1, parent2, ++id,
+                                              args.n_queens),
+                    heuristic_mutation(&child, permutations, childs,
+                                       args.n_queens, args.lambda,
+                                       n_perms, args.p_mutation);
                     nextpopulation[i] = child;
                 }
 
@@ -133,26 +176,23 @@ GAResults genetic_algorithm(int strategy, Individual * population,
                 }
                 break;
 
-            case 3:
+            case 4:
                 // Mutation and crossover
                 for (i = 0; i < n_deaths; i++)
                 {
                     parent1 = tournament_selection(population,
                                                    args.n_population,
                                                    args.tournament_selections,
-                                                   replace);
+                                                   not_replace);
                     parent2 = tournament_selection(population,
                                                    args.n_population,
                                                    args.tournament_selections,
                                                    not_replace);
-                    child = heuristic_mutation(
-                                               ordered_crossover(parent1,
-                                                                 parent2,
-                                                                 ++id,
-                                                            args.n_queens),
-                                               args.n_queens,
-                                               args.lambda,
-                                               args.p_mutation);
+                    child = ordered_crossover(parent1, parent2, ++id,
+                                              args.n_queens),
+                    heuristic_mutation(&child, permutations, childs,
+                                       args.n_queens, args.lambda,
+                                       n_perms, args.p_mutation);
                     nextpopulation[i] = child;
                 }
 
@@ -208,5 +248,12 @@ GAResults genetic_algorithm(int strategy, Individual * population,
     // Wrap the results and return them
     GAResults results = {best, population, args.n_population, n_gen-1,
                          exit_code};
+
+    // Free memory
+    for (i = 0; i < n_perms; i++)
+        free(childs[i].genes.rows);
+    free(childs);
+    free(permutations);
+
     return results;
 }

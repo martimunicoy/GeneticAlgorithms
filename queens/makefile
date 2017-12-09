@@ -16,10 +16,10 @@ UNAME := $(shell uname)
 
 #define any compile-time flags
 ifeq ($(UNAME), Linux)
-	CFLAGS = -D LINUX
+	CFLAGS = -D LINUX -Ofast
 endif
 ifeq ($(UNAME), Darwin)
-	CFLAGS = -D OSX
+	CFLAGS = -D OSX -Ofast
 endif
 
 # define any directories containing header files other than /usr/include

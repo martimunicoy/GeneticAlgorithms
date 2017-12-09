@@ -268,6 +268,7 @@ Individual *find_best(Individual *subpopulation, int k_selections)
     int i, rand_index, repetitions = 0;
     Individual *best;
 
+
     sort_by_scorer(subpopulation, k_selections);
 
     for (i = 0;
@@ -337,7 +338,7 @@ Individual tournament_selection(Individual *population, int n_pop, int k_selecti
 
     for (k = 0;  k < k_selections;){
         random_position = (int) random_number(n_pop);
-        if (replacement)
+        if (!replacement)
         {
             if (!population[random_position].chosen){
                 population[random_position].chosen = true;
@@ -354,7 +355,7 @@ Individual tournament_selection(Individual *population, int n_pop, int k_selecti
 
     best_selected_individual = find_best(selected_individuals, k_selections);
 
-    free(selected_individuals);
+    //free(selected_individuals); #no es aquest
 
     return *best_selected_individual;
 }
@@ -403,7 +404,6 @@ Individual ordered_crossover(Individual parent1, Individual parent2, int id, int
         random1 = random2;
         random2 = tmp;
     }
-    //printf("Parent1: %d    Parent2: %d    Subset: (%d-%d)\n", parent1.id, parent2.id, random1, random2);
 
     // Copy rows from parent1 to child. Set rest of rows equal to 0.
     for (i = 0; i < n_queens; i++)
@@ -438,7 +438,39 @@ Individual ordered_crossover(Individual parent1, Individual parent2, int id, int
     return child;
 }
 
-Individual heuristic_mutation(Individual mutant, int n_queens, int lambda, float p_mut)
+void swapping_mutation(Individual *mutant, int n_queens, float p_mut)
+{
+    unsigned int index1, index2, temp;
+
+    float random = random_number(1);
+    index1 = arc4random_uniform(n_queens);
+    index2 = index1;
+
+    if (random < p_mut)
+    {
+        while (index1 == index2)
+            index2 = arc4random_uniform(n_queens);
+
+        temp = mutant->genes.rows[index1];
+        mutant->genes.rows[index1] = mutant->genes.rows[index2];
+        mutant->genes.rows[index2] = temp;
+    }
+}
+
+void copy_individual(Individual *original, Individual *copy, int n_queens)
+{
+    int i;
+    copy->id = original->id;
+    copy->chosen = original->chosen;
+    copy->scorer = sum_down(n_queens);
+    for (i = 0; i < n_queens; i++)
+        copy->genes.rows[i] = original->genes.rows[i];
+}
+
+// @BUG A AQUI SOTA!!!
+void heuristic_mutation(Individual *mutant, unsigned int **permutations,
+                        Individual *childs, int n_queens, int lambda,
+                        int n_perms, float p_mut)
 {
     /*
      Given an input individual 'mutant', a probability p_mut of mutation
@@ -452,56 +484,87 @@ Individual heuristic_mutation(Individual mutant, int n_queens, int lambda, float
         3. Evaluate all neighbors and select the best one as offspring.
      The best selected is returned.
     */
-
     float random = random_number(1);
-    int i, j, k, n_perms, cols_to_mutate[lambda], rows_to_mutate[lambda];
+    int i, j, k, cols_to_mutate[lambda], col;
+    unsigned int rows_to_mutate[lambda];
+    bool repeated;
 
     if(random < p_mut)
     {
         for (i = 0; i < lambda; i++)
         {
-            cols_to_mutate[i] = (int) (random_number(n_queens));
-            rows_to_mutate[i] = mutant.genes.rows[cols_to_mutate[i]];
-            for (j = 0; j < i; j++)
-                if (rows_to_mutate[i] == rows_to_mutate[j]) i--;
+            repeated = true;
+            k = 0;
+            while (repeated && k < 1000)
+            {
+                repeated = false;
+                k++;
+                cols_to_mutate[i] = arc4random_uniform(n_queens);
+                for (j = 0; j < i; j++)
+                    if (cols_to_mutate[i] == cols_to_mutate[j])
+                        repeated = true;
+            }
+            if (k == 1000)
+            {
+                printf("Error: Heuristic mutation was unable to find ");
+                printf("%d different columns to mutate. Check ", lambda);
+                printf("initial parameters.\n");
+                exit(1);
+            }
+            rows_to_mutate[i] = mutant->genes.rows[cols_to_mutate[i]];
         }
-
-        n_perms = factorial(lambda);
-        int **permutations = (int **) malloc(n_perms * sizeof(int *));
-        for(j = 0; j < n_perms; j++)
-            permutations[j] = (int *) malloc(lambda * sizeof(int));
+        /*
+        printf("cols: ");
+        for (i = 0; i < lambda; i++)
+            printf("%d ", cols_to_mutate[i]);
+        printf("\n");
+        printf("rows: ");
+        for (i = 0; i < lambda; i++)
+            printf("%d ", rows_to_mutate[i]);
+        printf("\n");
+        */
 
         int counter = 0;
         permute(permutations, rows_to_mutate, 0,lambda, &counter);
-
-        Individual *childs = (Individual *) malloc(sizeof(Individual) * n_perms);
-        bool mutation;
-        int m;
+        //printf("exit counter %d\n", counter);
+        //printf("Permutations:\n");
+        /*
         for (i = 0; i < n_perms; i++)
         {
-            childs[i] = mutant;
-            m = 0;
-            for (j = 0; j < n_queens; j++)
+            for (j = 0; j < lambda; j++)
+                printf("%d ", permutations[i][j]);
+            printf("\n");
+        }*/
+        //printf("End permutations\n");
+        for (i = 0; i < n_perms; i++)
+            copy_individual(mutant, &childs[i], n_queens);
+
+        for (i = 0; i < n_perms; i++)
+        {
+            for (j = 0; j < lambda; j++)
             {
-                mutation = false;
-                for (k = 0; k < lambda; k++)
-                    if (j == cols_to_mutate[k]) mutation = true;
-                if (mutation) {
-                    childs[i].genes.rows[j] = permutations[i][m];
-                    m++;
-                }
+                col = cols_to_mutate[j];
+                childs[i].genes.rows[col] = permutations[i][j];
             }
         }
+        /*
+        printf("original: ");
+        for (j = 0; j < n_queens; j++){
+            printf("%d ",mutant->genes.rows[j]);
+        }
+        printf("\n");
+        for (i = 0; i < n_perms; i++){
+            printf("child %d: ", i);
+            for (j = 0; j < n_queens; j++){
+                printf("%d ",childs[i].genes.rows[j]);
+            }
+            printf("\n");
+        }*/
+
+
         evaluate(childs, n_perms, n_queens);
-        mutant = *find_best(childs, n_perms);
-
-        // Free memory
-        for(j = 0; j < n_perms; j++)
-            free(permutations[j]);
-        free(permutations);
+        *mutant = *find_best(childs, n_perms);
     }
-
-    return mutant;
 }
 
 void view_population(Individual *population, int n_pop, int n_queens, int n_gen)

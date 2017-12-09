@@ -33,7 +33,7 @@ float random_number(float max)
     */
 
     float random;
-    random = (arc4random_uniform(UINT16_MAX))/ ((float)(UINT16_MAX)) * max;
+    random = (arc4random_uniform(UINT16_MAX)) / ((float)(UINT16_MAX)) * max;
     return random;
 }
 
@@ -90,14 +90,14 @@ int factorial(int m)
     else return 1;
 }
 
-void swap(int * vector, int i, int j)
+void swap(unsigned int * vector, int i, int j)
 {
     /*
      Given a vector and two positions of the vector, i and j,
      a swap operation between the vector components is performed:
          vector[i] <--> vector[j]
     */
-    int temp;
+    unsigned int temp;
     temp = vector[i];
     vector[i] = vector[j];
     vector[j] = temp;
@@ -114,8 +114,17 @@ void swap_populations(Individual **p1, Individual **p2)
     *p1 = *p2;
     *p2 = T;
 }
+/*
+void permute(unsigned int ** permutations, unsigned int * vector, int start, int end,
+             int *counter)
+    int i, j;
 
-void permute(int ** permutations, int * vector, int start, int end, int *counter)
+    for (i = 0; i < lambda; i++)
+    {
+
+    }*/
+void permute(unsigned int ** permutations, unsigned int * vector, int start, int end,
+             int *counter)
 {
     /*
      Given an input vector, start = 0, end = length of the vector, a matrix 'permutations'
@@ -128,9 +137,7 @@ void permute(int ** permutations, int * vector, int start, int end, int *counter
     if (start == end)
     {
         for (j = 0; j < end; j++)
-        {
             permutations[*counter][j] = vector[j];
-        }
         ++(*counter);
         return;
     }
@@ -198,7 +205,7 @@ void print_summary(Individual *population, Individual *best, int n_pop,
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\t\t      ");
-    printf("| Generation:              %6d |\n", n_gen);
+    printf("| Generation:           %9d |\n", n_gen);
     printf("\t\t      ");
     printf("| Mean score:               ");
     printf("%3d.%d |\n", (int) results.mean,
@@ -214,6 +221,58 @@ void print_summary(Individual *population, Individual *best, int n_pop,
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\n");
+}
+
+void write_solution(GAResults ga_results, int n_queens)
+{
+    FILE *file;
+    int i;
+    char file_fitness[] = "solution.txt";
+
+    file = fopen(file_fitness, "w");
+    if (file == NULL)
+    {
+        printf("Error opening file!\n");
+        exit(1);
+    }
+
+    fprintf(file, "Solution: ");
+    for (i = 0; i < n_queens-1; i++)
+        fprintf(file, "%d, ", ga_results.best->genes.rows[i]);
+
+    int row, col, index;
+
+    for (row = n_queens; row > 0; row--)
+    {
+        fprintf(file, "%3d ", row);
+        for(col = 0; col < n_queens; col++)
+        {
+            if (row == ga_results.best->genes.rows[col])
+                fprintf(file, "X ");
+            else
+                fprintf(file, ". ");
+        }
+        fprintf(file, "\n");
+    }
+
+    for (col = 0; col < n_queens; col++)
+    {
+        index = col;
+        while(index > 25) index -= 26;
+        fprintf(file, " %c", ALPHABET[index]);
+    }
+    fprintf(file, "\n");
+    if (n_queens > 26)
+    {
+        fprintf(file, "   ");
+        for (col = 0; col < n_queens; col++)
+            fprintf(file, " %d", (int) col/26+1);
+        fprintf(file, "\n");
+    }
+    fprintf(file, "\n");
+
+    fclose(file);
+
 }
 
 void print_results(GAResults ga_results, int n_queens)
@@ -235,7 +294,7 @@ void print_results(GAResults ga_results, int n_queens)
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\t\t      ");
-    printf("| Generations:             %6d |\n", ga_results.n_gen);
+    printf("| Generations:          %9d |\n", ga_results.n_gen);
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\t\t      ");
@@ -281,7 +340,34 @@ void print_results(GAResults ga_results, int n_queens)
         printf("\n");
     }
     else
-        express_genes(*ga_results.best, n_queens);
+    {
+        if (n_queens <= 38)
+            express_genes(*ga_results.best, n_queens);
+        else
+        {
+            printf(" Problem size is too big to be expressed in terminal. It");
+            printf(" will be written in\n file \'solution.txt\'\n");
+            write_solution(ga_results, n_queens);
+        }
+        int i;
+        printf("\n");
+        printf("========================================================");
+        printf("========================\n");
+        printf("\n - Solution:\n");
+        printf("\n");
+        printf(" (%4d, ", ga_results.best->genes.rows[0]);
+        for (i = 1; i < n_queens-1; i++)
+        {
+            if (i % 13 == 0)
+                printf("\n  ");
+            printf("%4d, ", ga_results.best->genes.rows[i]);
+        }
+        printf("%4d)\n", ga_results.best->genes.rows[n_queens-1]);
+        printf("\n");
+        printf("========================================================");
+        printf("========================\n");
+        printf("\n");
+    }
 }
 
 void print_problem_description(struct Args args)
@@ -460,10 +546,22 @@ void print_strategy_info(int strategy)
             printf("\t\t      ");
             printf("+---------------------------------+\n");
             printf("\t\t      ");
-            printf("| Mutation:             Heuristic |\n");
+            printf("| Mutation:              Swapping |\n");
             break;
 
         case 2:
+            printf("| Selection:             Roulette |\n");
+            printf("\t\t      ");
+            printf("+---------------------------------+\n");
+            printf("\t\t      ");
+            printf("| Crossover:              Ordered |\n");
+            printf("\t\t      ");
+            printf("+---------------------------------+\n");
+            printf("\t\t      ");
+            printf("| Mutation:             Heuristic |\n");
+            break;
+
+        case 3:
             printf("| Selection:                      |\n");
             printf("\t\t      ");
             printf("|     Tournament with replacement |\n");
@@ -477,7 +575,7 @@ void print_strategy_info(int strategy)
             printf("| Mutation:             Heuristic |\n");
             break;
 
-        case 3:
+        case 4:
             printf("| Selection:                      |\n");
             printf("\t\t      ");
             printf("|  Tournament without replacement |\n");

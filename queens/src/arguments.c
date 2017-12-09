@@ -42,66 +42,69 @@ struct Args args_initializer()
 
 struct Args check_arguments(struct Args arguments)
 {
+    printf("\n  - Checking arguments...\n");
     if (arguments.n_queens < 4 | arguments.n_queens > 1000)
     {
-        printf("\'n_queens\' out of range, using default value (%d)\n", N_QUEENS);
+        printf("    \'n_queens\' out of range, using default value (%d)\n", N_QUEENS);
         arguments.n_queens = N_QUEENS;
     }
-    if (arguments.n_population < 10 | arguments.n_population > 999999999)
+    if (arguments.n_population < 4 | arguments.n_population > 999999999)
     {
-        printf("\'n_population\' out of range, using default value (%d)\n", N_POPULATION);
+        printf("    \'n_population\' out of range, using default value (%d)\n", N_POPULATION);
         arguments.n_population = N_POPULATION;
     }
     if (arguments.n_generations < 1 | arguments.n_generations > 999999999)
     {
-        printf("\'n_generations\' out of range, using default value (%d)\n", N_GENERATIONS);
+        printf("    \'n_generations\' out of range, using default value (%d)\n", N_GENERATIONS);
         arguments.n_generations = N_GENERATIONS;
     }
     if (arguments.death_ratio < 0 | arguments.death_ratio > 0.5)
     {
-        printf("\'n_deaths\' out of range, using default value (%f)\n", DEATH_RATIO);
+        printf("    \'n_deaths\' out of range, using default value (%f)\n", DEATH_RATIO);
         arguments.death_ratio = DEATH_RATIO;
     }
     if (arguments.p_mutation < 0 | arguments.p_mutation > 1)
     {
-        printf("\'p_mutation\' out of range, using default value (%f)\n", P_MUTATION);
+        printf("    \'p_mutation\' out of range, using default value (%f)\n", P_MUTATION);
         arguments.p_mutation = P_MUTATION;
     }
     if (arguments.lambda < 0 | arguments.lambda > 5)
     {
-        printf("\'lambda\' out of range, using default value (%d)\n", LAMBDA);
+        printf("    \'lambda\' out of range, using default value (%d)\n", LAMBDA);
         arguments.lambda = LAMBDA;
     }
     if (arguments.max_fitness_points < 0 | arguments.max_fitness_points > 999999)
     {
-        printf("\'max_fitness_points\' out of range, using default value (%d)\n", MAX_FITNESS_POINTS);
+        printf("    \'max_fitness_points\' out of range, using default value (%d)\n", MAX_FITNESS_POINTS);
         arguments.max_fitness_points = MAX_FITNESS_POINTS;
     }
     if (arguments.summarize_freq < 0 | arguments.summarize_freq > 999999999)
     {
-        printf("\'summarize_freq\' out of range, using default value (%d)\n", SUMMARIZE_FREQ);
+        printf("    \'summarize_freq\' out of range, using default value (%d)\n", SUMMARIZE_FREQ);
         arguments.summarize_freq = SUMMARIZE_FREQ;
     }
     if (arguments.tournament_selections < 1 | arguments.tournament_selections > arguments.n_population)
     {
-        printf("\'tournament_selections\' out of range, using default value (%d)\n", TOURNAMENT_SELECTIONS);
+        printf("    \'tournament_selections\' out of range, using default value (%d)\n", TOURNAMENT_SELECTIONS);
         arguments.tournament_selections = TOURNAMENT_SELECTIONS;
     }
     if (arguments.fract_weight < 0 | arguments.fract_weight > 1000)
     {
-        printf("\'fract_weight\' out of range, using default value (%f)\n", FRACT_WEIGTH);
+        printf("    \'fract_weight\' out of range, using default value (%f)\n", FRACT_WEIGTH);
         arguments.fract_weight = FRACT_WEIGTH;
     }
     if (arguments.denom_power < 0 | arguments.denom_power > 10)
     {
-        printf("\'denom_power\' out of range, using default value (%f)\n", DENOM_POWER);
+        printf("    \'denom_power\' out of range, using default value (%f)\n", DENOM_POWER);
         arguments.denom_power = DENOM_POWER;
     }
-    if (arguments.strategy < 1 | arguments.strategy > 3)
+    if (arguments.strategy < 1 | arguments.strategy > 4)
     {
-        printf("\'strategy\' out of range, using default value (%d)\n", STRATEGY);
+        printf("    \'strategy\' out of range, using default value (%d)\n", STRATEGY);
         arguments.strategy = STRATEGY;
     }
+
+    printf("    Done.\n");
 
     return arguments;
 }
@@ -178,6 +181,7 @@ struct Args args_from_file(struct Args arguments, char file_dir[50])
         printf("Error while openening arguments input file %s\n", file_dir);
         exit(EXIT_FAILURE);
     }
+    printf("\n  - Reading information from file \'%s\'...\n", file_dir);
 
     while ((read = getline(&line, &len, f)) != -1)
     {
@@ -196,6 +200,8 @@ struct Args args_from_file(struct Args arguments, char file_dir[50])
     if (line)
         free(line);
 
+    printf("    Done.\n");
+
     return arguments;
 }
 
@@ -205,14 +211,21 @@ struct Args args_parser(int argc, char *argv[])
     char file_dir[50];
     struct Args arguments = args_initializer();
 
+    printf("================================================================");
+    printf("================\n");
+    printf("\n Collecting input information...\n");
+
     for (i = 1; i < argc; i++)
     {
         if (starts_with(*(argv + i), "-f"))
-            if (i + 2 <= argc){
+            if (i + 2 <= argc)
+            {
                 strcpy(file_dir, *(argv + i + 1));
                 arguments = args_from_file(arguments, file_dir);
             }
     }
+
+    printf("\n  - Reading command-line flags...\n");
 
     for (i = 1; i < argc; i++){
         for (j = 0; j < ARGS_NUM; j++)
@@ -244,7 +257,14 @@ struct Args args_parser(int argc, char *argv[])
         }
     }
 
+    printf("    Done.\n");
+
     arguments = check_arguments(arguments);
+
+    printf("\n Input data collected.\n");
+    printf("\n==============================================================");
+    printf("==================\n");
+
 
     return arguments;
 }

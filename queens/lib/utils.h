@@ -31,12 +31,13 @@ unsigned int absolute               (int value);
 /*****************************************************************************/
 int factorial                       (int m);
 /*****************************************************************************/
-void swap                           (int * vector, int i, int j);
+void swap                           (unsigned int * vector, int i, int j);
 /*****************************************************************************/
 void swap_populations               (Individual **p1, Individual **p2);
 /*****************************************************************************/
-void permute                        (int ** permutations, int * vector,
-                                     int start, int end, int *counter);
+void permute                        (unsigned int ** permutations,
+                                     unsigned int * vector, int start, int end,
+                                     int *counter);
 /*****************************************************************************/
 AnalysisResults population_analysis (Individual *population, int n_pop);
 /*****************************************************************************/
@@ -45,6 +46,8 @@ void exit_code_parser               (unsigned char exit_code,
 /*****************************************************************************/
 void print_summary                  (Individual *population, Individual *best,
                                      int n_pop, int n_gen);
+/*****************************************************************************/
+void write_results                  (GAResults ga_results, int n_queens);
 /*****************************************************************************/
 void print_results                  (GAResults ga_results, int n_queens);
 /*****************************************************************************/
