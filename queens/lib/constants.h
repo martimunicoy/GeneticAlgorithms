@@ -38,7 +38,7 @@
     extern  const float DENOM_POWER;
         // Set the strategy to apply -y
     extern  const int STRATEGY;
-        // Set the strategy to apply -v
+        // Set the sieve to apply -v
     extern  const int SIEVE;
 
 #endif

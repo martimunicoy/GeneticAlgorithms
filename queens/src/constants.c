@@ -61,5 +61,5 @@ const float FRACT_WEIGTH = 0.1;
 const float DENOM_POWER = 2;
     // Set the strategy to apply -y
 const int STRATEGY = 1;
-    // Set the strategy to apply -v
+    // Set the sieve to apply -v
 const int SIEVE = 2000;
