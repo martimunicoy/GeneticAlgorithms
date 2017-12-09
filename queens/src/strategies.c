@@ -245,17 +245,17 @@ GAResults genetic_algorithm(int strategy, Individual * population,
         // Sum up 1 generation
         n_gen++;
 
+        // Write fitness
+        if (args.write_fitness && n_gen <= args.max_fitness_points)
+            write_fitness(&file, file_fitness, population, args.n_population,
+                          n_gen);
+
         // Look out for a solution
         if (best->scorer == 0 && !args.force_to_continue)
         {
             exit_code = 1;
             break;
         }
-
-        // Write fitness
-        if (args.write_fitness && n_gen <= args.max_fitness_points)
-            write_fitness(&file, file_fitness, population, args.n_population,
-                          n_gen);
 
     // End of While loop
     }

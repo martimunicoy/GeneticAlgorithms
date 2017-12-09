@@ -14,7 +14,7 @@ Overleaf: https://www.overleaf.com/12684672zycygkcnmryh#/48375443/
 
 ## Ultra prioritaries per poder fer analisi de resultats
 
-* 1r: a les strategies crec que el WriteFitness hauria d'astar abans del if on fa un break, ja que si no, encas que faci el break llavors la fitness de la ultima generació no es printarà o qè? potser noentenc ben be aquest if look for a solution
+* (FET) 1r: a les strategies crec que el WriteFitness hauria d'astar abans del if on fa un break, ja que si no, encas que faci el break llavors la fitness de la ultima generació no es printarà o qè? potser noentenc ben be aquest if look for a solution
 
 ```
 // Sum up 1 generation
