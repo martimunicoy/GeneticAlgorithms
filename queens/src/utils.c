@@ -153,6 +153,15 @@ void permute(unsigned int ** permutations, unsigned int * vector, int start, int
     return;
 }
 
+bool compare(Individual *a, Individual*b, int n_queens)
+{
+    int i;
+    for (i = 0; i < n_queens; i++)
+        if (a->genes.rows[i] != b->genes.rows[i])
+            return false;
+    return true;
+}
+
 AnalysisResults population_analysis(Individual *population, int n_pop)
 {
     /*
@@ -185,6 +194,10 @@ void exit_code_parser(unsigned char exit_code, char *exit_message)
             break;
         case 1:
             strncpy(exit_message, "- Found at least one solution", 30);
+            break;
+        case 2:
+            strncpy(exit_message, "- Reached maximum sieve value", 30);
+            break;
     }
 }
 
@@ -223,13 +236,17 @@ void print_summary(Individual *population, Individual *best, int n_pop,
     printf("\n");
 }
 
-void write_solution(GAResults ga_results, int n_queens)
+void write_solution(GAResults ga_results, int n_queens, bool append)
 {
     FILE *file;
     int i;
     char file_fitness[] = "solution.txt";
 
-    file = fopen(file_fitness, "w");
+    if (append)
+        file = fopen(file_fitness, "a");
+    else
+        file = fopen(file_fitness, "w");
+
     if (file == NULL)
     {
         printf("Error opening file!\n");
@@ -285,6 +302,50 @@ void write_solution(GAResults ga_results, int n_queens)
     fprintf(file, "\n");
 
     fclose(file);
+
+}
+
+void print_results_all(GAResults ga_results, int n_queens)
+{
+    /*
+     @TODO
+    */
+
+    AnalysisResults results = population_analysis(ga_results.population,
+                                                  ga_results.n_pop);
+    char *exit_message = (char *) malloc(sizeof(char) * 30);
+    exit_code_parser(ga_results.exit_code, exit_message);
+
+    printf("\n");
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("|      FINAL GENETIC SUMMARY      |\n");
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Generations:          %9d |\n", ga_results.n_gen);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Exit message:                   |\n");
+    printf("\t\t      ");
+    printf("|  %s  |\n", exit_message);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\n");
+
+    free(exit_message);
+
+    printf("\n");
+    printf("+-----------------------------------------------------------");
+    printf("-------------------+\n");
+    printf("|                                    RESULTS                ");
+    printf("                   |\n");
+    printf("+-----------------------------------------------------------");
+    printf("-------------------+\n");
+    printf("\n");
+    printf(" The solutions will be expressed in file \'solution.txt\'\n");
 
 }
 
@@ -360,7 +421,7 @@ void print_results(GAResults ga_results, int n_queens)
         {
             printf(" Problem size is too big to be expressed in terminal. It");
             printf(" will be written in\n file \'solution.txt\'\n");
-            write_solution(ga_results, n_queens);
+            write_solution(ga_results, n_queens, false);
         }
         int i;
         printf("\n");
@@ -433,6 +494,62 @@ void print_license_header()
     printf("warranty of\n     MERCHANTABILITY or FITNESS FOR A PARTICULAR PU");
     printf("RPOSE.  See the\n     GNU General Public License for more detail");
     printf("s.\n\n");
+}
+
+void print_GA_constants_all(struct Args args)
+{
+    printf("\n");
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("|   GENETIC ALGORITHM CONSTANTS   |\n");
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Population size:      %9d |\n", args.n_population);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Generations:          %9d |\n", args.n_generations);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Death ratio:              %.3f |\n", args.death_ratio);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Mutation probability:     %.3f |\n", args.p_mutation);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Lambda:                      %2d |\n", args.lambda);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Tournament selections:       %2d |", args.tournament_selections);
+    printf("\n");
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Fraction weight:           ");
+    printf("%2d.%d |\n", (int) args.fract_weight,
+                         (int) (args.fract_weight * 10) -
+                         ((int) args.fract_weight) * 10);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Denominator power:         ");
+    printf("%2d.%d |\n", (int) args.denom_power,
+                         (int) (args.denom_power * 10) -
+                         ((int) args.denom_power) * 10);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Sieve:                %9d |\n", args.sieve);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\n");
+
 }
 
 void print_GA_constants(struct Args args)

@@ -2,12 +2,12 @@
 #define CONSTANTS
     #include <stdbool.h>
     #include "../lib/definitions.h"
-    
+
     // Constants global parameters
 
     extern const char ALPHABET[26];
-                      
-    extern const char ARGS[ARGS_NUM][3];                               
+
+    extern const char ARGS[ARGS_NUM][3];
         // Number of queens -q
     extern  const int N_QUEENS;
         // Population size -p
@@ -38,5 +38,7 @@
     extern  const float DENOM_POWER;
         // Set the strategy to apply -y
     extern  const int STRATEGY;
+        // Set the strategy to apply -v
+    extern  const int SIEVE;
 
 #endif
