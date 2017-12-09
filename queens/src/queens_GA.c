@@ -39,12 +39,22 @@ int main(int argc, char* argv[]){
     print_problem_description(args);
 
     // Create, initialize text files
-    FILE * file;
-    char file_fitness[] = "DataVisualization/Fitness.csv";
+    FILE * fitness_file, *genes_file;
+    char fitness_dir[] = "DataVisualization/Fitness.csv";
+    char genes_dir[] = "DataVisualization/Genes.csv";
     if (args.write_fitness)
     {
-        file = fopen(file_fitness, "w");
-        if (file == NULL)
+        fitness_file = fopen(fitness_dir, "w");
+        if (fitness_file == NULL)
+        {
+            printf("Error opening file!\n");
+            exit(1);
+        }
+    }
+    if (args.write_genes)
+    {
+        genes_file = fopen(genes_dir, "w");
+        if (genes_file == NULL)
         {
             printf("Error opening file!\n");
             exit(1);
@@ -73,10 +83,16 @@ int main(int argc, char* argv[]){
     initiate(population, id, args.n_population, args.n_queens);
     id = args.n_population;
     evaluate(population, args.n_population, args.n_queens);
-    //view_population(population, args.n_population, args.n_queens, 0);
 
+    // In case we want to write down fitness data
     if (args.write_fitness)
-        write_fitness(&file, file_fitness, population, args.n_population, 1);
+        write_fitness(&fitness_file, fitness_dir, population,
+                      args.n_population, 1);
+
+    // In case we want to write down genes data
+    if (args.write_genes)
+        write_population_genes(&genes_file, genes_dir, population,
+                               args.n_population, args.n_queens);
 
     // Get number of deaths per generation
     int n_deaths = (int) (args.n_population * args.death_ratio);
@@ -89,8 +105,9 @@ int main(int argc, char* argv[]){
     // Initiate Genetic Algorithm
     results = genetic_algorithm(args.strategy, population, nextpopulation,
                                 best, genetic_roulette, parent1, parent2,
-                                child, survivor, id, n_deaths, args, file,
-                                file_fitness);
+                                child, survivor, id, n_deaths, args,
+                                fitness_file, fitness_dir, genes_file,
+                                genes_dir);
 
     // Print results
     //results.best = &population[0];

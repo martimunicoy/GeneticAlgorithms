@@ -63,3 +63,7 @@ const float DENOM_POWER = 2;
 const int STRATEGY = 1;
     // Set the sieve to apply -v
 const int SIEVE = 2000;
+    // Write fitness data to file -n
+const bool WRITE_GENES = false;
+    // Maximum fitness points -a
+const int MAX_GENES_POINTS = 1000;

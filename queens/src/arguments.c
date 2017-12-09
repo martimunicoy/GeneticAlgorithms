@@ -35,7 +35,7 @@ struct Args args_initializer()
                              INFINITE_GENERATIONS, WRITE_FITNESS,
                              MAX_FITNESS_POINTS, SUMMARIZE_FREQ,
                              TOURNAMENT_SELECTIONS, FRACT_WEIGTH, DENOM_POWER,
-                             STRATEGY, SIEVE};
+                             STRATEGY, SIEVE, WRITE_GENES, MAX_GENES_POINTS};
 
     return arguments;
 }
@@ -108,6 +108,11 @@ struct Args check_arguments(struct Args arguments)
         printf("    \'sieve\' out of range, using default value (%d)\n", SIEVE);
         arguments.sieve = SIEVE;
     }
+    if (arguments.max_genes_points < 0 | arguments.max_genes_points > 999999)
+    {
+        printf("    \'max_genes_points\' out of range, using default value (%d)\n", MAX_GENES_POINTS);
+        arguments.max_genes_points = MAX_GENES_POINTS;
+    }
 
     printf("    Done.\n");
 
@@ -169,6 +174,10 @@ struct Args line_parser(char * subline1, char * subline2, struct Args arguments)
         arguments.strategy = atoi(subline2);
     else if (starts_with(subline1, "SIEVE"))
         arguments.sieve = atoi(subline2);
+    else if (starts_with(subline1, "WRITE_GENES"))
+        arguments.write_genes = atob(subline2);
+    else if (starts_with(subline1, "MAX_GENES_POINTS"))
+        arguments.max_genes_points = atoi(subline2);
 
     return arguments;
 }
@@ -242,6 +251,7 @@ struct Args args_parser(int argc, char *argv[])
                 if (j == 6) arguments.force_to_continue = true;
                 else if (j == 7) arguments.infinite_generations = true;
                 else if (j == 8) arguments.write_fitness = true;
+                else if (j == 16) arguments.write_genes = true;
                 else if (i + 2 <= argc)
                 {
                     if (j == 0) arguments.n_queens = atoi(*(argv + i + 1));
@@ -257,6 +267,7 @@ struct Args args_parser(int argc, char *argv[])
                     else if (j == 13) arguments.denom_power = atof(*(argv + i + 1));
                     else if (j == 14) arguments.strategy = atoi(*(argv + i + 1));
                     else if (j == 15) arguments.sieve = atoi(*(argv + i + 1));
+                    else if (j == 17) arguments.max_genes_points = atoi(*(argv + i + 1));
                 }
                 else
                     printf("Wrong command (%s), using default values.\n", *(argv + i));

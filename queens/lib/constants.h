@@ -40,5 +40,9 @@
     extern  const int STRATEGY;
         // Set the sieve to apply -v
     extern  const int SIEVE;
+        // Write fitness data to file -n
+    extern  const bool WRITE_GENES;
+        // Maximum fitness points -a
+    extern  const int MAX_GENES_POINTS;
 
 #endif

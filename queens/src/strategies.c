@@ -32,13 +32,14 @@
 /*****************************************************************************/
 // Functions
 /*****************************************************************************/
-GAResults genetic_algorithm(int strategy, Individual * population,
-                            Individual * nextpopulation, Individual * best,
-                            RouletteCompartments * genetic_roulette,
+GAResults genetic_algorithm(int strategy, Individual *population,
+                            Individual *nextpopulation, Individual *best,
+                            RouletteCompartments *genetic_roulette,
                             Individual *parent1, Individual *parent2,
                             Individual child, Individual *survivor, int id,
-                            int n_deaths, struct Args args, FILE * file,
-                            char * file_fitness)
+                            int n_deaths, struct Args args,
+                            FILE *fitness_file, char *fitness_dir,
+                            FILE *genes_file, char *genes_dir)
 {
     // Print GA information
     print_strategy_info(strategy);
@@ -247,8 +248,13 @@ GAResults genetic_algorithm(int strategy, Individual * population,
 
         // Write fitness
         if (args.write_fitness && n_gen <= args.max_fitness_points)
-            write_fitness(&file, file_fitness, population, args.n_population,
-                          n_gen);
+            write_fitness(&fitness_file, fitness_dir, population,
+                          args.n_population, n_gen);
+
+        // Write genes
+        if (args.write_genes && n_gen <= args.max_genes_points)
+            write_population_genes(&genes_file, genes_dir, population,
+                                   args.n_population, args.n_queens);
 
         // Look out for a solution
         if (best->scorer == 0 && !args.force_to_continue)

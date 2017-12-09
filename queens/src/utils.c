@@ -615,10 +615,12 @@ void print_configuration(struct Args args)
     char *bool_string1 = (char *) malloc(sizeof(char) * 6);
     char *bool_string2 = (char *) malloc(sizeof(char) * 6);
     char *bool_string3 = (char *) malloc(sizeof(char) * 6);
+    char *bool_string4 = (char *) malloc(sizeof(char) * 6);
 
     translate_bool(args.force_to_continue, bool_string1);
     translate_bool(args.infinite_generations, bool_string2);
     translate_bool(args.write_fitness, bool_string3);
+    translate_bool(args.write_genes, bool_string4);
 
     printf("\n");
     printf("\t\t      ");
@@ -636,7 +638,11 @@ void print_configuration(struct Args args)
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\t\t      ");
-    printf("| Write fitness:            %s |\n", bool_string1);
+    printf("| Write fitness:            %s |\n", bool_string3);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
+    printf("| Write genes:              %s |\n", bool_string4);
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\t\t      ");
@@ -647,13 +653,12 @@ void print_configuration(struct Args args)
     printf("| Maximum fitness points:  %6d |\n", args.max_fitness_points);
     printf("\t\t      ");
     printf("+---------------------------------+\n");
-
     printf("\n");
 
     free(bool_string1);
     free(bool_string2);
     free(bool_string3);
-
+    free(bool_string4);
 }
 
 void print_strategy_info(int strategy)

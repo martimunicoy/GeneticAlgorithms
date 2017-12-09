@@ -15,6 +15,8 @@ struct Args{
     float denom_power;
     int strategy;
     int sieve;
+    bool write_genes;
+    int max_genes_points;
 };
 
 //Function headers

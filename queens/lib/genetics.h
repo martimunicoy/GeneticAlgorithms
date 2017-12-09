@@ -86,3 +86,7 @@ void write_fitness                    (FILE ** file, char * filename,
                                        Individual *population, int n_pop,
                                        int generation);
 /*****************************************************************************/
+void write_population_genes           (FILE ** file, char * filename,
+                                       Individual * population, int n_pop,
+                                       int n_queens);
+/*****************************************************************************/
