@@ -14,6 +14,7 @@ struct Args{
     float fract_weight;
     float denom_power;
     int strategy;
+    int sieve;
 };
 
 //Function headers

@@ -35,7 +35,7 @@ struct Args args_initializer()
                              INFINITE_GENERATIONS, WRITE_FITNESS,
                              MAX_FITNESS_POINTS, SUMMARIZE_FREQ,
                              TOURNAMENT_SELECTIONS, FRACT_WEIGTH, DENOM_POWER,
-                             STRATEGY};
+                             STRATEGY, SIEVE};
 
     return arguments;
 }
@@ -48,7 +48,7 @@ struct Args check_arguments(struct Args arguments)
         printf("    \'n_queens\' out of range, using default value (%d)\n", N_QUEENS);
         arguments.n_queens = N_QUEENS;
     }
-    if (arguments.n_population < 4 | arguments.n_population > 999999999)
+    if (arguments.n_population < 10 | arguments.n_population > 999999999)
     {
         printf("    \'n_population\' out of range, using default value (%d)\n", N_POPULATION);
         arguments.n_population = N_POPULATION;
@@ -93,7 +93,7 @@ struct Args check_arguments(struct Args arguments)
         printf("    \'fract_weight\' out of range, using default value (%f)\n", FRACT_WEIGTH);
         arguments.fract_weight = FRACT_WEIGTH;
     }
-    if (arguments.denom_power < 0 | arguments.denom_power > 10)
+    if (arguments.denom_power < 0 | arguments.denom_power > 15)
     {
         printf("    \'denom_power\' out of range, using default value (%f)\n", DENOM_POWER);
         arguments.denom_power = DENOM_POWER;
@@ -102,6 +102,11 @@ struct Args check_arguments(struct Args arguments)
     {
         printf("    \'strategy\' out of range, using default value (%d)\n", STRATEGY);
         arguments.strategy = STRATEGY;
+    }
+    if (arguments.sieve < 100 | arguments.sieve > 999999999)
+    {
+        printf("    \'sieve\' out of range, using default value (%d)\n", SIEVE);
+        arguments.sieve = SIEVE;
     }
 
     printf("    Done.\n");
@@ -162,6 +167,8 @@ struct Args line_parser(char * subline1, char * subline2, struct Args arguments)
         arguments.denom_power = atof(subline2);
     else if (starts_with(subline1, "STRATEGY"))
         arguments.strategy = atoi(subline2);
+    else if (starts_with(subline1, "SIEVE"))
+        arguments.sieve = atoi(subline2);
 
     return arguments;
 }
@@ -249,6 +256,7 @@ struct Args args_parser(int argc, char *argv[])
                     else if (j == 12) arguments.fract_weight = atof(*(argv + i + 1));
                     else if (j == 13) arguments.denom_power = atof(*(argv + i + 1));
                     else if (j == 14) arguments.strategy = atoi(*(argv + i + 1));
+                    else if (j == 15) arguments.sieve = atoi(*(argv + i + 1));
                 }
                 else
                     printf("Wrong command (%s), using default values.\n", *(argv + i));

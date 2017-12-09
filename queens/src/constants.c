@@ -27,7 +27,7 @@ const char ALPHABET[26] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
     // List of arguments
 const char ARGS[ARGS_NUM][3] = {"-q", "-p", "-g", "-d", "-m", "-l", "-c",
                                     "-i", "-r", "-x", "-s", "-t", "-w", "-e",
-                                    "-y", "-f"};
+                                    "-y", "-v", "-f"};
 
 // Constants for default parameters
 
@@ -61,3 +61,5 @@ const float FRACT_WEIGTH = 0.1;
 const float DENOM_POWER = 2;
     // Set the strategy to apply -y
 const int STRATEGY = 1;
+    // Set the sieve to apply -v
+const int SIEVE = 2000;
