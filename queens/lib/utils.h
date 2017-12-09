@@ -8,6 +8,7 @@ typedef struct
     int n_pop;               /*Population size*/
     int n_gen;               /*The number of generations that were performed*/
     unsigned char exit_code; /*Exit code to know the reason why GA finished*/
+    int minutes;             /*GA running time in minuts*/
 } GAResults;
 /*****************************************************************************/
 typedef struct
@@ -48,7 +49,7 @@ void exit_code_parser               (unsigned char exit_code,
                                      char *exit_message);
 /*****************************************************************************/
 void print_summary                  (Individual *population, Individual *best,
-                                     int n_pop, int n_gen);
+                                     int n_pop, int n_gen, int minutes);
 /*****************************************************************************/
 void write_solution                  (GAResults ga_results, int n_queens,
                                      bool append);

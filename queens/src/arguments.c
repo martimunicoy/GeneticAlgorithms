@@ -272,6 +272,7 @@ struct Args args_parser(int argc, char *argv[])
     printf("\n Input data collected.\n");
     printf("\n==============================================================");
     printf("==================\n");
+    printf("\n\n");
 
 
     return arguments;

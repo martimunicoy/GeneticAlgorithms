@@ -35,6 +35,9 @@ int main(int argc, char* argv[]){
     // Parse arguments
     struct Args args = args_parser(argc, argv);
 
+    // Print problem description
+    print_problem_description(args);
+
     // Create, initialize text files
     FILE * file;
     char file_fitness[] = "DataVisualization/Fitness.csv";

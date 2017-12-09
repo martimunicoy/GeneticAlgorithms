@@ -48,9 +48,11 @@ int main(int argc, char* argv[]){
     }
 
     // Initialize variables
+    int minutes;
     int id = 1;
     Individual * best, * population, * nextpopulation;
     Individual parent1, parent2, child, survivor;
+    struct timeval start, end;
 
     // Save memory space for population and genetic roulette
     Individual *P = (Individual *) malloc(sizeof(Individual) *
@@ -112,6 +114,9 @@ int main(int argc, char* argv[]){
     Individual *childs = (Individual *) malloc(sizeof(Individual)
                                                * n_perms);
     initiate(childs, 0, n_perms, args.n_queens);
+
+    // Start counter
+    gettimeofday(&start, NULL);
 
     while (n_gen <= args.n_generations || args.infinite_generations)
     {
@@ -205,7 +210,12 @@ int main(int argc, char* argv[]){
         // Print summary
         if (args.summarize_freq != 0)
             if ((n_gen-1) % args.summarize_freq == 0)
-                print_summary(population, best, args.n_population, n_gen-1);
+            {
+                gettimeofday(&end, NULL);
+                minutes = (int) (end.tv_sec  - start.tv_sec) / 60;
+                print_summary(population, best, args.n_population, n_gen-1,
+                              minutes);
+            }
 
         // Sum up 1 generation
         n_gen++;
@@ -224,6 +234,12 @@ int main(int argc, char* argv[]){
 
     // End of While loop
     }
+
+    // Stop counter
+    gettimeofday(&end, NULL);
+
+    // Calculate GA running time in minutes
+    minutes = (int) (end.tv_sec  - start.tv_sec) / 60;
 
     // Wrap the results and return them
     GAResults results = {best, population, args.n_population, n_gen-1,

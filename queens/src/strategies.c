@@ -40,14 +40,18 @@ GAResults genetic_algorithm(int strategy, Individual * population,
                             int n_deaths, struct Args args, FILE * file,
                             char * file_fitness)
 {
+    // Print GA information
     print_strategy_info(strategy);
     print_GA_starts();
 
-    int i;
+    // Initiate variables
+    int i, minutes;
     int n_gen = 1;
     unsigned char exit_code = 0;
     Individual *T;
+    struct timeval start, end;
 
+    // Load Heuristic Mutation tools
     int n_perms = factorial(args.lambda);
     unsigned int **permutations = (unsigned int **) malloc(n_perms *
                                    sizeof(unsigned int *));
@@ -58,6 +62,10 @@ GAResults genetic_algorithm(int strategy, Individual * population,
                                                * n_perms);
     initiate(childs, 0, n_perms, args.n_queens);
 
+    // Start counter
+    gettimeofday(&start, NULL);
+
+    // Start GA loop
     while(n_gen <= args.n_generations || args.infinite_generations)
     {
         switch (strategy)
@@ -225,7 +233,12 @@ GAResults genetic_algorithm(int strategy, Individual * population,
         // Print summary
         if (args.summarize_freq != 0)
             if ((n_gen-1) % args.summarize_freq == 0)
-                print_summary(population, best, args.n_population, n_gen-1);
+            {
+                gettimeofday(&end, NULL);
+                minutes = (int) (end.tv_sec  - start.tv_sec) / 60;
+                print_summary(population, best, args.n_population, n_gen-1,
+                              minutes);
+            }
 
         // Sum up 1 generation
         n_gen++;
@@ -245,9 +258,15 @@ GAResults genetic_algorithm(int strategy, Individual * population,
     // End of While loop
     }
 
+    // Stop counter
+    gettimeofday(&end, NULL);
+
+    // Calculate GA running time in minutes
+    minutes = (int) (end.tv_sec  - start.tv_sec) / 60;
+
     // Wrap the results and return them
     GAResults results = {best, population, args.n_population, n_gen-1,
-                         exit_code};
+                         exit_code, minutes};
 
     // Free memory
     for (i = 0; i < n_perms; i++)

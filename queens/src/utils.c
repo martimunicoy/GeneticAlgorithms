@@ -202,7 +202,7 @@ void exit_code_parser(unsigned char exit_code, char *exit_message)
 }
 
 void print_summary(Individual *population, Individual *best, int n_pop,
-                   int n_gen)
+                   int n_gen, int minutes)
 {
     /*
      @TODO
@@ -231,6 +231,8 @@ void print_summary(Individual *population, Individual *best, int n_pop,
                          ((int) results.st_deviation) * 10);
     printf("\t\t      ");
     printf("| Best score:              %6d |\n", best->scorer);
+    printf("\t\t      ");
+    printf("| Running time (min):   %9d |\n", minutes);
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\n");
@@ -390,6 +392,10 @@ void print_results(GAResults ga_results, int n_queens)
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\t\t      ");
+    printf("| Running time (min):   %9d |\n", ga_results.minutes);
+    printf("\t\t      ");
+    printf("+---------------------------------+\n");
+    printf("\t\t      ");
     printf("| Exit message:                   |\n");
     printf("\t\t      ");
     printf("|  %s  |\n", exit_message);
@@ -455,7 +461,7 @@ void print_problem_description(struct Args args)
 
     printf("\n");
     printf("This algorithm will try to find a way to place %d", args.n_queens);
-    printf(" chess Queens in a %dx%d board\nby", args.n_queens, args.n_queens);
+    printf(" chess Queens in a %dx%d\nboard by", args.n_queens, args.n_queens);
     printf(" applying a Genetic Algorithm\n");
     printf("\n");
 }
