@@ -12,6 +12,11 @@ For each assignment a report must be written including:
 
 Overleaf: https://www.overleaf.com/12684672zycygkcnmryh#/48375443/
 
+## Ultra prioritaries per poder demà fer analisi de resultats
+
+* Per estudiar convergència: Afegir al summary quin percentatge de la població a convergit a l'òptim (el best individual)? (fent la norma euclidiana de sempre per exemple) i retornar el percentage de la població que ho ha fet? (95% segons [3])
+
+* Afegir el write_genes que recuperaré de la branca analysys_stuff per que en un arxiu escrigui els gens dels individus de la població cada certes iteracions com la write_fitness. Això per cluster analysis.
 
 ## Prioritaries
 
@@ -53,7 +58,7 @@ es repeteix en totes, i quan vulguem canviar alguna cosa referent a quant imprim
 
 * BUG mig chorra sobre el writefitness: mhe adonat que les fitness de l'última població quan troba l'òptim i para, no és afegida al .csv (crec que posant el write_fitness just abans del if aquell que fa un exit ho solucionaria)
 
-* Afegir al summary quin percentatge de la població a convergit a l'òptim? (fent la norma euclidiana de sempre per exemple) i retornar el percentage de la població que ho ha fet? (95% segons [3])
+
 
 ## Sobre la marxa
 
