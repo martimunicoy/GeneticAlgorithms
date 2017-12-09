@@ -17,6 +17,8 @@ struct Args{
     int sieve;
     bool write_genes;
     int max_genes_points;
+    char fitness_dir[100];
+    char genes_dir[100];
 };
 
 //Function headers

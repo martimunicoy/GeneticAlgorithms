@@ -37,6 +37,9 @@ struct Args args_initializer()
                              TOURNAMENT_SELECTIONS, FRACT_WEIGTH, DENOM_POWER,
                              STRATEGY, SIEVE, WRITE_GENES, MAX_GENES_POINTS};
 
+    strcpy(arguments.fitness_dir, FITNESS_DIR);
+    strcpy(arguments.genes_dir, GENES_DIR);
+
     return arguments;
 }
 
