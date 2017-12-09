@@ -35,8 +35,8 @@
 GAResults genetic_algorithm(int strategy, Individual * population,
                             Individual * nextpopulation, Individual * best,
                             RouletteCompartments * genetic_roulette,
-                            Individual parent1, Individual parent2,
-                            Individual child, Individual survivor, int id,
+                            Individual *parent1, Individual *parent2,
+                            Individual child, Individual *survivor, int id,
                             int n_deaths, struct Args args, FILE * file,
                             char * file_fitness)
 {
@@ -105,7 +105,7 @@ GAResults genetic_algorithm(int strategy, Individual * population,
                                                   args.n_queens,
                                                   args.fract_weight,
                                                   args.denom_power, fit);
-                    nextpopulation[i] = survivor;
+                    nextpopulation[i] = *survivor;
                 }
                 break;
 
@@ -130,9 +130,11 @@ GAResults genetic_algorithm(int strategy, Individual * population,
                                                  fit);
                     child = ordered_crossover(parent1, parent2, ++id,
                                               args.n_queens),
+
                     heuristic_mutation(&child, permutations, childs,
                                        args.n_queens, args.lambda,
                                        n_perms, args.p_mutation);
+
                     nextpopulation[i] = child;
                 }
 
@@ -146,7 +148,7 @@ GAResults genetic_algorithm(int strategy, Individual * population,
                                                   args.n_queens,
                                                   args.fract_weight,
                                                   args.denom_power, fit);
-                    nextpopulation[i] = survivor;
+                    nextpopulation[i] = *survivor;
                 }
                 break;
 
@@ -180,7 +182,7 @@ GAResults genetic_algorithm(int strategy, Individual * population,
                                                    args.n_population,
                                                    args.tournament_selections,
                                                    replace);
-                    nextpopulation[i] = survivor;
+                    nextpopulation[i] = *survivor;
                 }
                 break;
 
@@ -212,7 +214,7 @@ GAResults genetic_algorithm(int strategy, Individual * population,
                                                    args.n_population,
                                                    args.tournament_selections,
                                                    not_replace);
-                    nextpopulation[i] = survivor;
+                    nextpopulation[i] = *survivor;
                 }
                 break;
 
@@ -269,9 +271,6 @@ GAResults genetic_algorithm(int strategy, Individual * population,
                          exit_code, minutes};
 
     // Free memory
-    for (i = 0; i < n_perms; i++)
-        free(childs[i].genes.rows);
-    free(childs);
     free(permutations);
 
     return results;

@@ -55,18 +55,18 @@ float initiate_roulette               (Individual *population,
 /*****************************************************************************/
 Individual *find_best                 (Individual *population, int n_pop);
 /*****************************************************************************/
-Individual roulette_selection         (Individual *population,
+Individual *roulette_selection        (Individual *population,
                                        RouletteCompartments *genetic_roulette,
                                        int n_pop, int n_queens, float weight,
                                        float power, bool fitness);
 /*****************************************************************************/
-Individual tournament_selection       (Individual *population, int n_pop,
+Individual *tournament_selection      (Individual *population, int n_pop,
                                        int k_selections, bool replacement);
 /*****************************************************************************/
 void reset_selection                  (Individual *population, int n_pop);
 /*****************************************************************************/
-Individual ordered_crossover          (Individual parent1, Individual parent2,
-                                       int id, int n_queens);
+Individual ordered_crossover         (Individual *parent1, Individual *parent2,
+                                      int id, int n_queens);
 /*****************************************************************************/
 void swapping_mutation                (Individual *mutant, int n_queens,
                                        float p_mut);

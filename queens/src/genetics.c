@@ -287,7 +287,7 @@ Individual *find_best(Individual *subpopulation, int k_selections)
     return best;
 }
 
-Individual roulette_selection(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, float weight, float power, bool fitness)
+Individual *roulette_selection(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, float weight, float power, bool fitness)
 {
     /*
      Given a population of n_pop individuals, initiates a roulette and returns the selected individual
@@ -318,10 +318,10 @@ Individual roulette_selection(Individual *population, RouletteCompartments *gene
 
     //view_selection(genetic_roulette, n_pop, random, choice);
 
-    return *genetic_roulette[choice].individual;
+    return genetic_roulette[choice].individual;
 }
 
-Individual tournament_selection(Individual *population, int n_pop, int k_selections, bool replacement)
+Individual *tournament_selection(Individual *population, int n_pop, int k_selections, bool replacement)
 {
     /*
       Selects k_selections individuals at random from a population and returns the fittest one
@@ -357,7 +357,7 @@ Individual tournament_selection(Individual *population, int n_pop, int k_selecti
 
     //free(selected_individuals); #no es aquest
 
-    return *best_selected_individual;
+    return best_selected_individual;
 }
 
 void reset_selection(Individual *population, int n_pop)
@@ -373,7 +373,8 @@ void reset_selection(Individual *population, int n_pop)
         population[i].chosen = false;
 }
 
-Individual ordered_crossover(Individual parent1, Individual parent2, int id, int n_queens)
+Individual ordered_crossover(Individual *parent1, Individual *parent2, int id,
+                             int n_queens)
 {
     /*
      Givne two parents, parent1 and parent2, this function performs the classical OX corssover
@@ -408,7 +409,7 @@ Individual ordered_crossover(Individual parent1, Individual parent2, int id, int
     // Copy rows from parent1 to child. Set rest of rows equal to 0.
     for (i = 0; i < n_queens; i++)
     {
-        if (i >= random1 && i <= random2) genes.rows[i] = parent1.genes.rows[i];
+        if (i >= random1 && i <= random2) genes.rows[i] = parent1->genes.rows[i];
         else genes.rows[i] = 0;
     }
 
@@ -417,7 +418,7 @@ Individual ordered_crossover(Individual parent1, Individual parent2, int id, int
     {
         if (i < random1 || i > random2){
             for (; j < n_queens; j++){
-                row = parent2.genes.rows[j];
+                row = parent2->genes.rows[j];
                 missing = true;
                 for (k = 0; k < n_queens; k++){
                     if (genes.rows[k] == row)
@@ -513,29 +514,10 @@ void heuristic_mutation(Individual *mutant, unsigned int **permutations,
             }
             rows_to_mutate[i] = mutant->genes.rows[cols_to_mutate[i]];
         }
-        /*
-        printf("cols: ");
-        for (i = 0; i < lambda; i++)
-            printf("%d ", cols_to_mutate[i]);
-        printf("\n");
-        printf("rows: ");
-        for (i = 0; i < lambda; i++)
-            printf("%d ", rows_to_mutate[i]);
-        printf("\n");
-        */
 
         int counter = 0;
         permute(permutations, rows_to_mutate, 0,lambda, &counter);
-        //printf("exit counter %d\n", counter);
-        //printf("Permutations:\n");
-        /*
-        for (i = 0; i < n_perms; i++)
-        {
-            for (j = 0; j < lambda; j++)
-                printf("%d ", permutations[i][j]);
-            printf("\n");
-        }*/
-        //printf("End permutations\n");
+
         for (i = 0; i < n_perms; i++)
             copy_individual(mutant, &childs[i], n_queens);
 
@@ -547,20 +529,6 @@ void heuristic_mutation(Individual *mutant, unsigned int **permutations,
                 childs[i].genes.rows[col] = permutations[i][j];
             }
         }
-        /*
-        printf("original: ");
-        for (j = 0; j < n_queens; j++){
-            printf("%d ",mutant->genes.rows[j]);
-        }
-        printf("\n");
-        for (i = 0; i < n_perms; i++){
-            printf("child %d: ", i);
-            for (j = 0; j < n_queens; j++){
-                printf("%d ",childs[i].genes.rows[j]);
-            }
-            printf("\n");
-        }*/
-
 
         evaluate(childs, n_perms, n_queens);
         *mutant = *find_best(childs, n_perms);

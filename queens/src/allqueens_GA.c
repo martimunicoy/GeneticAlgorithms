@@ -50,8 +50,8 @@ int main(int argc, char* argv[]){
     // Initialize variables
     int minutes;
     int id = 1;
-    Individual * best, * population, * nextpopulation;
-    Individual parent1, parent2, child, survivor;
+    Individual *best, *population, *nextpopulation;
+    Individual *parent1, *parent2, child, *survivor;
     struct timeval start, end;
 
     // Save memory space for population and genetic roulette
@@ -153,7 +153,7 @@ int main(int argc, char* argv[]){
                                           args.n_queens,
                                           args.fract_weight,
                                           args.denom_power, fit);
-            nextpopulation[i] = survivor;
+            nextpopulation[i] = *survivor;
         }
         // Swap populations
         swap_populations(&population, &nextpopulation);

@@ -54,7 +54,7 @@ int main(int argc, char* argv[]){
     // Initialize variables
     int id = 1;
     Individual * best, * population, * nextpopulation;
-    Individual parent1, parent2, child, survivor;
+    Individual *parent1, *parent2, *survivor, child;
     GAResults results;
 
     // Save memory space for population and genetic roulette
@@ -98,9 +98,6 @@ int main(int argc, char* argv[]){
     print_results(results, args.n_queens);
 
     // Free memory
-    int i;
-    for (i = 0; i < args.n_population; i++)
-        free(P[i].genes.rows);
     free(P);
     free(Q);
     free(genetic_roulette);
