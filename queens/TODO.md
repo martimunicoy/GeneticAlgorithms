@@ -20,6 +20,9 @@ Overleaf: https://www.overleaf.com/12684672zycygkcnmryh#/48375443/
 
 ## Prioritaries
 
+* Potser convé definir unes constants MAX_VARIABLE, MIN_VARIABLE (una per cada variable)
+i que s'usi a la llibreria arguments per controlar quin es el rang de valors permès.
+
 * Unknown bug that causes a segmentation fault error while writting the results through express_genes() function.
 
 * (FET) Millora de la funció **find_best**: si hi ha individus amb la mateixa scorer crec que sempre es quedarà amb el primer que troba (per la desigualtat estricte; i es quedaria amb l'últim que trobés si posesim desigualtat no estricta, crec). Llavors la idea de millorar-ho era d'entre els que tenen la mateixa scorer triar un at random. Així sense pensar massa crec que és bastant útil al principi, però al final si molts individus són iguals potser ja no tant. (tanmateix, si la implementació no es gaire costosa computacionalment llavors no passaria res)
