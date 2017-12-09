@@ -1,13 +1,38 @@
+#LIBRARIES 
+library("data.table")
+library("dplyr")
+
+EXAMPLE = 0
+
+#READ INPUT FILE
+setwd("C:/Users/Daniel/Dropbox/GitHub/Genetic-Algorithm/queens/DataVisualization/inputs");
+INPUT_FILENAME = paste("args",EXAMPLE,".in", sep = "")
+ARGS <- read.table(INPUT_FILENAME, sep =  " ", header = F, nrows = 10)
+
+VAL <- ARGS$V2
+VAR <- as.character(ARGS$V1)
+ARGS <- data.frame(VAR, VAL)
+
+
+#INITIALISE CONSTANT VARIABLES
+
+N = ARGS[ARGS == "N_QUEENS",2]
+WORST_FITNESS = N*(N+1)/2
+N_POPULATION = ARGS[ARGS == "N_POPULATION",2]
+N_GENERATIONS = ARGS[ARGS == "N_GENERATIONS",2]
+N_DEATHS = ARGS[ARGS == "N_DEATHS",2]
+P_MUTATION = ARGS[ARGS == "P_MUTATION",2]
+LAMBDA = ARGS[ARGS == "LAMBDA",2]
+TOURNAMENT_SELECTIONS = ARGS[ARGS == "TOURNAMENT_SELECTIONS",2]
+FRAC_WEIGTH = ARGS[ARGS == "FRAC_WEIGTH",2]
+DENOM_POWER = ARGS[ARGS == "DENOM_POWER",2]
+STRATEGY = ARGS[ARGS == "STRATEGY",2]
+
+#FITNESS
 setwd("C:/Users/Daniel/Dropbox/GitHub/Genetic-Algorithm/queens/DataVisualization");
 
 filename = "Fitness_sample.csv"
 #filename = "InitialRoad.txt"
-
-#INPUT PARAMETERS 
-
-N = 8
-WORST_FITNESS = N*(N+1)/2
-
 data <- read.table(filename, sep =  ",", header = F)
 #datat <- t(data)
 
