@@ -12,11 +12,39 @@ For each assignment a report must be written including:
 
 Overleaf: https://www.overleaf.com/12684672zycygkcnmryh#/48375443/
 
-## Ultra prioritaries per poder demà fer analisi de resultats
+## Ultra prioritaries per poder fer analisi de resultats
 
-* Per estudiar convergència: Afegir al summary quin percentatge de la població a convergit a l'òptim (el best individual)? (fent la norma euclidiana de sempre per exemple) i retornar el percentage de la població que ho ha fet? (95% segons [3])
+* 1r: a les strategies crec que el WriteFitness hauria d'astar abans del if on fa un break, ja que si no, encas que faci el break llavors la fitness de la ultima generació no es printarà o qè? potser noentenc ben be aquest if look for a solution
 
-* Afegir el write_genes que recuperaré de la branca analysys_stuff per que en un arxiu escrigui els gens dels individus de la població cada certes iteracions com la write_fitness. Això per cluster analysis.
+```
+// Sum up 1 generation
+        n_gen++;
+
+        // Look out for a solution
+        if (best->scorer == 0 && !args.force_to_continue)
+        {
+            exit_code = 1;
+            break;
+        }
+
+        // Write fitness
+        if (args.write_fitness && n_gen <= args.max_fitness_points)
+            write_fitness(&file, file_fitness, population, args.n_population,
+                          n_gen);
+```
+
+* 2n: const FILE_FITNESS (que també podem posar als args.in per poder decidir el nom del fitxer, així podre associar el fitxer Fitness1.csv amb args1.in, per exemple). Més que nom del fixter contindria la direció sencera per exemple: DataVisualization/subfolderquebvulgui/nomarxiu)
+
+* 3r.1) Afegir el write_genes que podem recuperar de la branca analysys_stuff per que en un arxiu escrigui els gens dels individus de la població cada certes iteracions com la write_fitness (ho he mirat i es LO MATEIX que el write fitness). SERIA COM DUPLICAR COSES: WRITE_FITNESS seria WRITE_GENES, MAX_FITNESS_POINTS seria MAX_GENES_POINTS.
+
+* 3r.2) L'anterior aniria acompanyat amb un FILE_GENES per poder decidir el nom del arxiu (de fet la direció sensera DataVisualization/subfolderquebvulgui/nomarxiu) on posar els genes de les poblacions
+
+
+* Amb els punts anteriors ja podriem fer estudis més facilment tenint controlats els arxius
+
+* (això per exempel jo podria implementar funcions a R així que fero al C seria secundari, suposo) Per estudiar convergència: Afegir al summary quin percentatge de la població a convergit a l'òptim (el best individual)? (fent la norma euclidiana de sempre per exemple) i retornar el percentage de la població que ho ha fet? (95% segons [3])
+
+
 
 ## Prioritaries
 
