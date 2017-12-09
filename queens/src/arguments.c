@@ -122,7 +122,7 @@ struct Args check_arguments(struct Args arguments)
     return arguments;
 }
 
-bool atob(char * subline)
+bool atob(char *subline)
 {
     if (strncmp(subline, "true", 4) == 0)
         return true;
@@ -138,9 +138,15 @@ bool atob(char * subline)
         return false;
     else
     {
-        printf("Error while parsing %s from the input file.\n", subline);
+        printf("    Error while parsing %s from the input file.\n", subline);
         exit(EXIT_FAILURE);
     }
+}
+
+char *string_parser(char *subline)
+{
+    subline[strlen(subline)-1] = '\0';
+    return subline;
 }
 
 struct Args line_parser(char * subline1, char * subline2, struct Args arguments)
@@ -182,9 +188,9 @@ struct Args line_parser(char * subline1, char * subline2, struct Args arguments)
     else if (starts_with(subline1, "MAX_GENES_POINTS"))
         arguments.max_genes_points = atoi(subline2);
     else if (starts_with(subline1, "FITNESS_DIR"))
-        strcpy(arguments.fitness_dir, subline2);
+        strcpy(arguments.fitness_dir, string_parser(subline2));
     else if (starts_with(subline1, "GENES_DIR"))
-        strcpy(arguments.genes_dir, subline2);
+        strcpy(arguments.genes_dir, string_parser(subline2));
 
     return arguments;
 }
@@ -201,7 +207,7 @@ struct Args args_from_file(struct Args arguments, char file_dir[50])
 
     if (f == NULL)
     {
-        printf("Error while openening arguments input file %s\n", file_dir);
+        printf("    Error while openening arguments input file %s\n", file_dir);
         exit(EXIT_FAILURE);
     }
     printf("\n  - Reading information from file \'%s\'...\n", file_dir);
@@ -214,7 +220,7 @@ struct Args args_from_file(struct Args arguments, char file_dir[50])
             arguments = line_parser(subline1, subline2, arguments);
         else
         {
-            printf("Wrong input line: %s\n", line);
+            printf("    Wrong input line: %s\n", line);
             exit(EXIT_FAILURE);
         }
     }
@@ -262,24 +268,40 @@ struct Args args_parser(int argc, char *argv[])
                 else if (i + 2 <= argc)
                 {
                     if (j == 0) arguments.n_queens = atoi(*(argv + i + 1));
-                    else if (j == 1) arguments.n_population = atoi(*(argv + i + 1));
-                    else if (j == 2) arguments.n_generations = atoi(*(argv + i + 1));
-                    else if (j == 3) arguments.death_ratio = atof(*(argv + i + 1));
-                    else if (j == 4) arguments.p_mutation = atof(*(argv + i + 1));
-                    else if (j == 5) arguments.lambda = atoi(*(argv + i + 1));
-                    else if (j == 9) arguments.max_fitness_points = atoi(*(argv + i + 1));
-                    else if (j == 10) arguments.summarize_freq = atoi(*(argv + i + 1));
-                    else if (j == 11) arguments.tournament_selections = atoi(*(argv + i + 1));
-                    else if (j == 12) arguments.fract_weight = atof(*(argv + i + 1));
-                    else if (j == 13) arguments.denom_power = atof(*(argv + i + 1));
-                    else if (j == 14) arguments.strategy = atoi(*(argv + i + 1));
-                    else if (j == 15) arguments.sieve = atoi(*(argv + i + 1));
-                    else if (j == 17) arguments.max_genes_points = atoi(*(argv + i + 1));
-                    else if (j == 18) strcpy(arguments.fitness_dir, *(argv + i + 1));
-                    else if (j == 19) strcpy(arguments.genes_dir, *(argv + i + 1));
+                    else if (j == 1)
+                        arguments.n_population = atoi(*(argv + i + 1));
+                    else if (j == 2)
+                        arguments.n_generations = atoi(*(argv + i + 1));
+                    else if (j == 3)
+                        arguments.death_ratio = atof(*(argv + i + 1));
+                    else if (j == 4)
+                        arguments.p_mutation = atof(*(argv + i + 1));
+                    else if (j == 5)
+                        arguments.lambda = atoi(*(argv + i + 1));
+                    else if (j == 9)
+                        arguments.max_fitness_points = atoi(*(argv + i + 1));
+                    else if (j == 10)
+                        arguments.summarize_freq = atoi(*(argv + i + 1));
+                    else if (j == 11)
+                        arguments.tournament_selections =
+                                                         atoi(*(argv + i + 1));
+                    else if (j == 12)
+                        arguments.fract_weight = atof(*(argv + i + 1));
+                    else if (j == 13)
+                        arguments.denom_power = atof(*(argv + i + 1));
+                    else if (j == 14)
+                        arguments.strategy = atoi(*(argv + i + 1));
+                    else if (j == 15)
+                        arguments.sieve = atoi(*(argv + i + 1));
+                    else if (j == 17)
+                        arguments.max_genes_points = atoi(*(argv + i + 1));
+                    else if (j == 18)
+                        strcpy(arguments.fitness_dir, *(argv + i + 1));
+                    else if (j == 19)
+                        strcpy(arguments.genes_dir, *(argv + i + 1));
                 }
                 else
-                    printf("Wrong command (%s), using default values.\n", *(argv + i));
+                    printf("    Wrong command (%s), using default values.\n", *(argv + i));
                 break;
             }
         }
