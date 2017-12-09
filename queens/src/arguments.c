@@ -37,6 +37,9 @@ struct Args args_initializer()
                              TOURNAMENT_SELECTIONS, FRACT_WEIGTH, DENOM_POWER,
                              STRATEGY, SIEVE, WRITE_GENES, MAX_GENES_POINTS};
 
+    strcpy(arguments.fitness_dir, FITNESS_DIR);
+    strcpy(arguments.genes_dir, GENES_DIR);
+
     return arguments;
 }
 
@@ -178,6 +181,10 @@ struct Args line_parser(char * subline1, char * subline2, struct Args arguments)
         arguments.write_genes = atob(subline2);
     else if (starts_with(subline1, "MAX_GENES_POINTS"))
         arguments.max_genes_points = atoi(subline2);
+    else if (starts_with(subline1, "FITNESS_DIR"))
+        strcpy(arguments.fitness_dir, subline2);
+    else if (starts_with(subline1, "GENES_DIR"))
+        strcpy(arguments.genes_dir, subline2);
 
     return arguments;
 }
@@ -268,6 +275,8 @@ struct Args args_parser(int argc, char *argv[])
                     else if (j == 14) arguments.strategy = atoi(*(argv + i + 1));
                     else if (j == 15) arguments.sieve = atoi(*(argv + i + 1));
                     else if (j == 17) arguments.max_genes_points = atoi(*(argv + i + 1));
+                    else if (j == 18) strcpy(arguments.fitness_dir, *(argv + i + 1));
+                    else if (j == 19) strcpy(arguments.genes_dir, *(argv + i + 1));
                 }
                 else
                     printf("Wrong command (%s), using default values.\n", *(argv + i));

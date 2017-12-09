@@ -26,8 +26,8 @@ const char ALPHABET[26] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
                                'U', 'V', 'W', 'X', 'Y', 'Z'};
     // List of arguments
 const char ARGS[ARGS_NUM][3] = {"-q", "-p", "-g", "-d", "-m", "-l", "-c",
-                                    "-i", "-r", "-x", "-s", "-t", "-w", "-e",
-                                    "-y", "-v", "-f"};
+                                "-i", "-r", "-x", "-s", "-t", "-w", "-e",
+                                "-y", "-v", "-n", "-a", "-b", "-k", "-f"};
 
 // Constants for default parameters
 
@@ -67,3 +67,7 @@ const int SIEVE = 2000;
 const bool WRITE_GENES = false;
     // Maximum fitness points -a
 const int MAX_GENES_POINTS = 1000;
+    // Fitness file directory
+const char FITNESS_DIR[100] = "DataVisualization/Fitness.csv";
+    // Genes file directory
+const char GENES_DIR[100] = "DataVisualization/Genes.csv";

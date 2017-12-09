@@ -32,17 +32,16 @@
 /*****************************************************************************/
 // Functions
 /*****************************************************************************/
-GAResults genetic_algorithm(int strategy, Individual *population,
-                            Individual *nextpopulation, Individual *best,
+GAResults genetic_algorithm(Individual *population, Individual *nextpopulation,
+                            Individual *best,
                             RouletteCompartments *genetic_roulette,
                             Individual *parent1, Individual *parent2,
                             Individual child, Individual *survivor, int id,
-                            int n_deaths, struct Args args,
-                            FILE *fitness_file, char *fitness_dir,
-                            FILE *genes_file, char *genes_dir)
+                            int n_deaths, struct Args args, FILE *fitness_file,
+                            FILE *genes_file)
 {
     // Print GA information
-    print_strategy_info(strategy);
+    print_strategy_info(args.strategy);
     print_GA_starts();
 
     // Initiate variables
@@ -69,7 +68,7 @@ GAResults genetic_algorithm(int strategy, Individual *population,
     // Start GA loop
     while(n_gen <= args.n_generations || args.infinite_generations)
     {
-        switch (strategy)
+        switch (args.strategy)
         {
             case 1:
                 // Mutation and crossover
@@ -220,7 +219,7 @@ GAResults genetic_algorithm(int strategy, Individual *population,
                 break;
 
             default:
-                printf("Strategy %d does not exist.\n", strategy);
+                printf("Strategy %d does not exist.\n", args.strategy);
                     exit(EXIT_FAILURE);
         }
 
@@ -248,12 +247,12 @@ GAResults genetic_algorithm(int strategy, Individual *population,
 
         // Write fitness
         if (args.write_fitness && n_gen <= args.max_fitness_points)
-            write_fitness(&fitness_file, fitness_dir, population,
+            write_fitness(&fitness_file, args.fitness_dir, population,
                           args.n_population, n_gen);
 
         // Write genes
         if (args.write_genes && n_gen <= args.max_genes_points)
-            write_population_genes(&genes_file, genes_dir, population,
+            write_population_genes(&genes_file, args.genes_dir, population,
                                    args.n_population, args.n_queens);
 
         // Look out for a solution

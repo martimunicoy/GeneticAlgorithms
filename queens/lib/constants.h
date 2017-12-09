@@ -44,5 +44,9 @@
     extern  const bool WRITE_GENES;
         // Maximum fitness points -a
     extern  const int MAX_GENES_POINTS;
+    // Fitness file directory
+    extern const char FITNESS_DIR[100];
+    // Genes file directory
+    extern const char GENES_DIR[100];
 
 #endif
