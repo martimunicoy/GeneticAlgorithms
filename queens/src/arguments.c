@@ -48,7 +48,7 @@ struct Args check_arguments(struct Args arguments)
         printf("    \'n_queens\' out of range, using default value (%d)\n", N_QUEENS);
         arguments.n_queens = N_QUEENS;
     }
-    if (arguments.n_population < 4 | arguments.n_population > 999999999)
+    if (arguments.n_population < 10 | arguments.n_population > 999999999)
     {
         printf("    \'n_population\' out of range, using default value (%d)\n", N_POPULATION);
         arguments.n_population = N_POPULATION;
@@ -93,7 +93,7 @@ struct Args check_arguments(struct Args arguments)
         printf("    \'fract_weight\' out of range, using default value (%f)\n", FRACT_WEIGTH);
         arguments.fract_weight = FRACT_WEIGTH;
     }
-    if (arguments.denom_power < 0 | arguments.denom_power > 10)
+    if (arguments.denom_power < 0 | arguments.denom_power > 15)
     {
         printf("    \'denom_power\' out of range, using default value (%f)\n", DENOM_POWER);
         arguments.denom_power = DENOM_POWER;

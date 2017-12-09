@@ -236,10 +236,6 @@ void write_solution(GAResults ga_results, int n_queens)
         exit(1);
     }
 
-    fprintf(file, "Solution: ");
-    for (i = 0; i < n_queens-1; i++)
-        fprintf(file, "%d, ", ga_results.best->genes.rows[i]);
-
     int row, col, index;
 
     for (row = n_queens; row > 0; row--)
@@ -254,7 +250,7 @@ void write_solution(GAResults ga_results, int n_queens)
         }
         fprintf(file, "\n");
     }
-
+    fprintf(file, "   ");
     for (col = 0; col < n_queens; col++)
     {
         index = col;
@@ -269,6 +265,23 @@ void write_solution(GAResults ga_results, int n_queens)
             fprintf(file, " %d", (int) col/26+1);
         fprintf(file, "\n");
     }
+    fprintf(file, "\n");
+
+    fprintf(file, "========================================================");
+    fprintf(file, "========================\n");
+    fprintf(file, "\n - Solution:\n");
+    fprintf(file, "\n");
+    fprintf(file, " (%4d, ", ga_results.best->genes.rows[0]);
+    for (i = 1; i < n_queens-1; i++)
+    {
+        if (i % 13 == 0)
+            fprintf(file, "\n  ");
+        fprintf(file, "%4d, ", ga_results.best->genes.rows[i]);
+    }
+    fprintf(file, "%4d)\n", ga_results.best->genes.rows[n_queens-1]);
+    fprintf(file, "\n");
+    fprintf(file, "========================================================");
+    fprintf(file, "========================\n");
     fprintf(file, "\n");
 
     fclose(file);
