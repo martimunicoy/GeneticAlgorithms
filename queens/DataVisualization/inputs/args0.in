@@ -15,5 +15,5 @@ SUMMARIZE_FREQ 5
 MAX_FITNESS_POINTS 50000
 WRITE_GENES true
 MAX_GENES_POINTS 20
-FITNESS_DIR DataVisualization/Fitness0
-GENES_DIR DataVisualization/Genes0
+FITNESS_DIR DataVisualization/outputs/Fitness0.csv
+GENES_DIR DataVisualization/outputs/Genes0.csv

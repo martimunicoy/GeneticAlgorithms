@@ -19,7 +19,7 @@ ARGS <- data.frame(VAR, VAL)
 N = ARGS[ARGS == "N_QUEENS",2]
 WORST_FITNESS = N*(N+1)/2
 N_POPULATION = ARGS[ARGS == "N_POPULATION",2]
-N_GENERATIONS = ARGS[ARGS == "N_GENERATIONS",2]
+N_GENERATIONS = ARGS[ARGS == "N_GENERATIONS",2]+1
 N_DEATHS = ARGS[ARGS == "N_DEATHS",2]
 P_MUTATION = ARGS[ARGS == "P_MUTATION",2]
 LAMBDA = ARGS[ARGS == "LAMBDA",2]
@@ -31,9 +31,9 @@ STRATEGY = ARGS[ARGS == "STRATEGY",2]
 #FITNESS
 setwd("C:/Users/Daniel/Dropbox/GitHub/Genetic-Algorithm/queens/DataVisualization");
 
-filename = "Fitness_sample.csv"
-#filename = "InitialRoad.txt"
-data <- read.table(filename, sep =  ",", header = F)
+FITNESS_FILENAME = "Fitness_sample.csv"
+#= paste("Fitness",EXAMPLE,".csv", sep = "")
+data <- read.table(FITNESS_FILENAME, sep =  ",", header = F)
 #datat <- t(data)
 
 
@@ -47,37 +47,34 @@ lw = 2;
 max_fitness = max(fitness)
 
 par(mfrow = c(1,1))
-plot(generations, rowMeans(fitness), lwd=lw, type = 'l', ylim = c(0,max_fitness), main = "Average v.s. best fitness", ylab = "Fitness", xlab = "Generation")
+#png("legend.png", width = 415, height = 289)
+
+par(xpd = T, mar = par()$mar + c(0,0,0,5))
+plot(generations, rowMeans(fitness), lwd=lw, type = 'l', ylim = c(0,max_fitness), main = "Fitness evolution", ylab = "Fitness", xlab = "Generation")
 lines(generations, fitness_opt, col = color_opt, lwd = lw)
-abline(h = 0, col = color_ideal, lwd = lw)
-legend("topright", c("Average fitness","Minimum fitness", "Ideal fitness"), col = c(color_avg,color_opt,color_ideal),lwd=lw, bty ='n', cex = 1, seg.len = 0.5)
+lines(c(1, N_GENERATIONS), c(0,0), col = color_ideal, lwd = lw)
 
+C0 <- paste("Strategy = ", STRATEGY, sep = "")
+C1 <- paste("N = ", N, sep="")
+C2 <- paste("n_pop = ", N_POPULATION, sep="")
+C3 <- paste("n_gen = ", N_GENERATIONS, sep="")
+C4 <- paste("death_ratio = ", N_DEATHS, sep="")
+C5 <- paste("p_m = ", P_MUTATION, sep="")
+C6 <- paste("lambda = ", LAMBDA, sep="")
+C7 <- paste("K = ", TOURNAMENT_SELECTIONS, sep="")
+C8 <- paste("W = ", FRAC_WEIGTH, sep="")
+C9 <- paste("E = ", DENOM_POWER, sep="")
 
+legend(N_GENERATIONS, max_fitness,
+       c(C0,C1, C2,C3,C4,C5, C6,C7,C8,C9),
+       cex = 0.8,
+       bty = 'n')
+legend("topright", c("Average fitness","Minimum fitness", "Ideal fitness"), col = c(color_avg,color_opt,color_ideal),lwd=lw, bty ='n', cex = 0.8, seg.len = 0.5)
 
-# Random data to plot:
-A <- data.frame(x=rnorm(100, 20, 2), y=rnorm(100, 20, 2))
-B <- data.frame(x=rnorm(100, 21, 1), y=rnorm(100, 21, 1))
+par(mar=c(5, 4, 4, 2) + 0.1)
+#dev.off()
 
-# Add extra space to right of plot area; change clipping to figure
-par(mar=c(5.1, 4.1, 4.1, 8.1), xpd=TRUE)
-
-# Plot both groups
-plot(y ~ x, A, ylim=range(c(A$y, B$y)), xlim=range(c(A$x, B$x)), pch=1,
-     main="Scatter plot of two groups")
-points(y ~ x, B, pch=3)
-
-# Add legend to top right, outside plot region
-legend("topright", bty = 'n' , inset=c(-0.2,0), legend=c("A","B"), pch=c(1,3), title="Group")
-
-
-
-
-
-
-
-
-
-
+##PLOT 2 
 
 length(fitness)
 last_fitness = t(fitness[length(fitness)]) 
