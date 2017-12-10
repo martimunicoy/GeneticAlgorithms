@@ -18,6 +18,7 @@
  *                                                                           *
  *****************************************************************************/
 
+// Include Libraries
 #include "queens_GA.h"
 #include "genetics.h"
 #include "constants.h"
@@ -25,7 +26,7 @@
 #include "utils.h"
 #include "definitions.h"
 
-//Function bodies
+// Function bodies
 float random_number(float max)
 {
     /*
@@ -114,23 +115,16 @@ void swap_populations(Individual **p1, Individual **p2)
     *p1 = *p2;
     *p2 = T;
 }
-/*
-void permute(unsigned int ** permutations, unsigned int * vector, int start, int end,
-             int *counter)
-    int i, j;
 
-    for (i = 0; i < lambda; i++)
-    {
-
-    }*/
-void permute(unsigned int ** permutations, unsigned int * vector, int start, int end,
-             int *counter)
+void permute(unsigned int ** permutations, unsigned int * vector, int start,
+             int end, int *counter)
 {
     /*
-     Given an input vector, start = 0, end = length of the vector, a matrix 'permutations'
-     and a pointer to integer 'counter' (outside of the scope of this function), successive calls
-     to this function and the swap function, recurssively fills the rows of the matrix 'permutations'
-     with all the possible (end!) permutations of the input 'vector'.
+     Given an input vector, start = 0, end = length of the vector, a matrix
+     'permutations' and a pointer to integer 'counter' (outside of the scope of
+     this function), successive calls to this function and the swap function,
+     recurssively fills the rows of the matrix 'permutations' with all the
+     possible (end!) permutations of the input 'vector'.
     */
 
     int i, j;
@@ -202,12 +196,11 @@ void exit_code_parser(unsigned char exit_code, char *exit_message)
 }
 
 void print_summary(Individual *population, Individual *best, int n_pop,
-                   int n_gen, int minutes)
+                   int n_gen, int seconds)
 {
     /*
      @TODO
     */
-
     AnalysisResults results = population_analysis(population, n_pop);
 
     printf("\n");
@@ -220,8 +213,8 @@ void print_summary(Individual *population, Individual *best, int n_pop,
     printf("\t\t      ");
     printf("| Generation:           %9d |\n", n_gen);
     printf("\t\t      ");
-    printf("| Mean score:               ");
-    printf("%3d.%d |\n", (int) results.mean,
+    printf("| Mean score:              ");
+    printf("%4d.%d |\n", (int) results.mean,
                          (int) (results.mean * 10) -
                          ((int) results.mean) * 10);
     printf("\t\t      ");
@@ -232,7 +225,13 @@ void print_summary(Individual *population, Individual *best, int n_pop,
     printf("\t\t      ");
     printf("| Best score:              %6d |\n", best->scorer);
     printf("\t\t      ");
-    printf("| Running time (min):   %9d |\n", minutes);
+    if (seconds > 999)
+    {
+        int minutes = (int) seconds / 60;
+        printf("| Running time (min):   %9d |\n", minutes);
+    }
+    else
+        printf("| Running time (s):     %9d |\n", seconds);
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\n");
@@ -374,8 +373,8 @@ void print_results(GAResults ga_results, int n_queens)
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\t\t      ");
-    printf("| Mean score:               ");
-    printf("%3d.%d |\n", (int) results.mean,
+    printf("| Mean score:              ");
+    printf("%4d.%d |\n", (int) results.mean,
                          (int) (results.mean * 10) -
                          ((int) results.mean) * 10);
     printf("\t\t      ");
@@ -392,7 +391,13 @@ void print_results(GAResults ga_results, int n_queens)
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\t\t      ");
-    printf("| Running time (min):   %9d |\n", ga_results.minutes);
+    if (ga_results.seconds > 999)
+    {
+        int minutes = (int) ga_results.seconds / 60;
+        printf("| Running time (min):   %9d |\n", minutes);
+    }
+    else
+        printf("| Running time (s):     %9d |\n", ga_results.seconds);
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\t\t      ");
@@ -729,6 +734,39 @@ void print_strategy_info(int strategy)
             printf("\t\t      ");
             printf("| Mutation:             Heuristic |\n");
             break;
+
+        case 5:
+            printf("| Selection, stage 1:             |\n");
+            printf("\t\t      ");
+            printf("|                        Roulette |\n");
+            printf("\t\t      ");
+            printf("| Selection, stage 2:             |\n");
+            printf("\t\t      ");
+            printf("|  Tournament without replacement |\n");
+            printf("\t\t      ");
+            printf("+---------------------------------+\n");
+            printf("\t\t      ");
+            printf("| Crossover:              Ordered |\n");
+            printf("\t\t      ");
+            printf("+---------------------------------+\n");
+            printf("\t\t      ");
+            printf("| Mutation:             Heuristic |\n");
+            break;
+
+        case 6:
+            printf("| Selection:                      |\n");
+            printf("\t\t      ");
+            printf("|     Tournament with replacement |\n");
+            printf("\t\t      ");
+            printf("+---------------------------------+\n");
+            printf("\t\t      ");
+            printf("| Crossover:              Ordered |\n");
+            printf("\t\t      ");
+            printf("+---------------------------------+\n");
+            printf("\t\t      ");
+            printf("| Mutation:              Swapping |\n");
+            break;
+
     }
     printf("\t\t      ");
     printf("+---------------------------------+\n");

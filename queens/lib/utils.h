@@ -8,7 +8,7 @@ typedef struct
     int n_pop;               /*Population size*/
     int n_gen;               /*The number of generations that were performed*/
     unsigned char exit_code; /*Exit code to know the reason why GA finished*/
-    int minutes;             /*GA running time in minuts*/
+    int seconds;             /*GA running time in seconds*/
 } GAResults;
 /*****************************************************************************/
 typedef struct

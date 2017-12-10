@@ -26,6 +26,7 @@
 #include "arguments.h"
 #include "utils.h"
 
+// Function bodies
 int main(int argc, char* argv[]){
     // Print welcome
     print_program_name();
@@ -167,7 +168,8 @@ int main(int argc, char* argv[]){
                 repeated = false;
                 for (j = 0; j < solutions_num; j++)
                 {
-                    repeated = compare(&population[i], &solutions[j], args.n_queens);
+                    repeated = compare(&population[i], &solutions[j],
+                                       args.n_queens);
                     if (repeated)
                         break;
                 }

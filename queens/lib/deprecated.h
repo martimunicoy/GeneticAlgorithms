@@ -1,3 +1,7 @@
+/*****************************************************************************/
+// Old functions and implementations (DEPRECATED)
+/*****************************************************************************/
+
 // Include Libraries
 #include <stdio.h>
 #include <stdlib.h>

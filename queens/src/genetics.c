@@ -18,6 +18,7 @@
  *                                                                           *
  *****************************************************************************/
 
+// Include Libraries
 #include "queens_GA.h"
 #include "constants.h"
 #include "genetics.h"
@@ -25,7 +26,7 @@
 #include "utils.h"
 #include "definitions.h"
 
-//Function bodies
+// Function bodies
 Genes initiate_genes(int n_queens)
 {
      /*
@@ -120,12 +121,14 @@ void express_genes(Individual individual, int n_queens)
     printf("\n");
 }
 
-bool diagonal(unsigned int column1, unsigned int row1, unsigned int column2, unsigned int row2)
+bool diagonal(unsigned int column1, unsigned int row1, unsigned int column2,
+              unsigned int row2)
 {
     /*
-    Given the position (col, row) of two queens, returns whether they meet in a diagonal or not.
-    It works since we work with a squared chessboard and the diagonals have slope = 1. Thus,
-    Two queens meet if and only if they form the hipotenuse of a rectangle triangle with equal catetus:
+    Given the position (col, row) of two queens, returns whether they meet in a
+    diagonal or not. It works since we work with a squared chessboard and the
+    diagonals have slope = 1. Thus, two queens meet if and only if they form
+    the hipotenuse of a rectangle triangle with equal catetus:
     */
 
     unsigned int diff1, diff2;
@@ -140,61 +143,53 @@ void evaluate(Individual *population, int n_pop, int n_queens)
 {
     /*
      Given a input population of size n_pop initialises the scorer (fitness)
-     of each individual. The default scorer is 1+...+n_queens = sum_down(n_queens)
-     since it is the case where all queens are situated in a main diagonal and each
-     one meets with all the others.
+     of each individual. The default scorer is:
 
-     If the individual scorer is equal to the default scorer, then it is counted the
-     number of (unique) pairs of queens that meet and uptdate the scorer of that individual.
+                    1 + ... + n_queens = sum_down(n_queens)
+
+     since it is the case where all queens are situated in a main diagonal and
+     each one meets with all the others.
+
+     If the individual scorer is equal to the default scorer, then it is
+     counted the number of (unique) pairs of queens that meet and uptdate the
+     scorer of that individual.
 
      The smallest the scorer of an individual it gets, the better it is.
     */
 
-    /*
-     @Improvements:
-
-     - I would do an additional function to perform the loop in j and k
-     that, given a the an individual, returns the number of pairs of queens that meet in a diagonal.
-     Use the notation like diagonal_meets(Individual individual){ col1,row1,col2,row2; }
-     then do scorer += diagonal_meets(Population[i]);
-
-     - Not allow that an individual has repeated columns in different rows, so that
-     in this function the scorer+= sum_down() is not needed
-    */
-
     int i, j, k, row;
     unsigned int scorer;
-    unsigned int initial_scorer = sum_down(n_queens);
     for(i = 0; i < n_pop; ++i)
     {
-        if(population[i].scorer != initial_scorer)
-            continue;
-        else
+        scorer = 0;
+        for(j = 0; j < n_queens; j++)
         {
-            scorer = 0;
-            for(j = 0; j < n_queens; j++)
-            {
-                row = population[i].genes.rows[j];
-                //start from j+1 to not compare to itself and not to repeat a pair of individuals
-                for(k = j + 1; k < n_queens; k++)
-                    if(diagonal(row, j+1, population[i].genes.rows[k], k+1))
-                        ++scorer;
-            }
-            population[i].scorer = scorer;
+            row = population[i].genes.rows[j];
+            // start from j+1 to not compare to itself and not to repeat a
+            // pair of individuals
+            for(k = j + 1; k < n_queens; k++)
+                if(diagonal(row, j+1, population[i].genes.rows[k], k+1))
+                    ++scorer;
         }
+        population[i].scorer = scorer;
+
     }
 }
 
 RouletteCompartments *malloc_roulette(int n_pop)
 {
     /*
-     Reserves memory for a RouletteCompartments struct (a wheel roulette) and returns it
+     Reserves memory for a RouletteCompartments struct (a wheel roulette) and
+     returns it.
     */
-    RouletteCompartments *genetic_roulette = (RouletteCompartments *) malloc(sizeof(RouletteCompartments) * n_pop);
+    RouletteCompartments *genetic_roulette = (RouletteCompartments *)
+                                  malloc(sizeof(RouletteCompartments) * n_pop);
     return genetic_roulette;
 }
 
-float initiate_roulette(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, float weight, float power, bool fitness)
+float initiate_roulette(Individual *population,
+                        RouletteCompartments *genetic_roulette, int n_pop,
+                        int n_queens, float weight, float power, bool fitness)
 {
     /*
      @TODO
@@ -223,7 +218,8 @@ float initiate_roulette(Individual *population, RouletteCompartments *genetic_ro
             competitor = &population[i];
             if(competitor->chosen)
                 continue;
-            sum += 1 / pow(sum_down(n_queens) - competitor->scorer + weight, power);
+            sum += 1 / pow(sum_down(n_queens) - competitor->scorer + weight,
+                           power);
             genetic_roulette[i].delimiter = sum;
             genetic_roulette[i].individual = competitor;
         }
@@ -234,12 +230,7 @@ float initiate_roulette(Individual *population, RouletteCompartments *genetic_ro
 void sort_by_scorer(Individual *subpopulation, int k_selections)
 {
     /*
-    Improvements:
-       - Do the algorithm for a N dimensional array (general)
-       - This algorithm is o(n^2), use a more efficient one.
-       - I think there is no need to copy the input array,
-         instead do a void type function which modifies the input array
-         since it is passed by reference (vale fals, he vist per a què s'utilitzava).
+    @TODO
     */
     int i, j;
     Individual t;
@@ -261,8 +252,6 @@ Individual *find_best(Individual *subpopulation, int k_selections)
     /*
      Given a population of n_pop individuals, finds the FIRST with
      the best scorer and returns it.
-
-     @IMPROVE: choose a random individual among all 'best' individuals
     */
 
     int i, rand_index, repetitions = 0;
@@ -272,7 +261,8 @@ Individual *find_best(Individual *subpopulation, int k_selections)
     sort_by_scorer(subpopulation, k_selections);
 
     for (i = 0;
-         subpopulation[i].scorer == subpopulation[i+1].scorer && i < k_selections;
+         subpopulation[i].scorer ==
+         subpopulation[i+1].scorer && i < k_selections;
          i++)
         repetitions++;
 
@@ -287,20 +277,22 @@ Individual *find_best(Individual *subpopulation, int k_selections)
     return best;
 }
 
-Individual *roulette_selection(Individual *population, RouletteCompartments *genetic_roulette, int n_pop, int n_queens, float weight, float power, bool fitness)
+Individual *roulette_selection(Individual *population,
+                               RouletteCompartments *genetic_roulette,
+                               int n_pop, int n_queens, float weight,
+                               float power, bool fitness)
 {
     /*
-     Given a population of n_pop individuals, initiates a roulette and returns the selected individual
-
-     genetic_roulette: an empty RouletteCompartments object, with memory already reserved.
-     @weight:
-     @power:
-     @fitness:
+     Given a population of n_pop individuals, initiates a roulette and returns
+     the selected individual
+     genetic_roulette: an empty RouletteCompartments object, with memory
+     already reserved.
     */
 
     float max_delimiter, random;
 
-    max_delimiter = initiate_roulette(population, genetic_roulette, n_pop, n_queens, weight, power, fitness);
+    max_delimiter = initiate_roulette(population, genetic_roulette, n_pop,
+                                      n_queens, weight, power, fitness);
     random = random_number(max_delimiter);
 
     int choice = 0;
@@ -316,48 +308,80 @@ Individual *roulette_selection(Individual *population, RouletteCompartments *gen
 
     genetic_roulette[choice].individual->chosen = true;
 
-    //view_selection(genetic_roulette, n_pop, random, choice);
-
     return genetic_roulette[choice].individual;
 }
 
-Individual *tournament_selection(Individual *population, int n_pop, int k_selections, bool replacement)
+Individual *tournament_selection(Individual *population, int n_pop,
+                                 int k_selections, bool replacement)
 {
     /*
-      Selects k_selections individuals at random from a population and returns the fittest one
-
-      @IMPROVE: add the possibility do choose if the selections are with replacement or not
-      (i.e., if we mark an individual as chosen or not?)
+      Selects k_selections individuals at random from a population and returns
+      the fittest one
     */
 
-    int k;
+    int i, j, k;
     int random_position;
-    Individual *selected_individuals = (Individual *) malloc(sizeof(Individual)
-                                                             * k_selections);
-    Individual *best_selected_individual;
+    int selected_individuals[k_selections];
+    bool repeated;
 
-    for (k = 0;  k < k_selections;){
-        random_position = (int) random_number(n_pop);
-        if (!replacement)
+    if (k_selections > n_pop)
+    {
+        printf("Error: Tournament selection was unable to make ");
+        printf("%d different columns to mutate.\nChoose either", k_selections);
+        printf("a lower \'k_selections\' value or increase the population si");
+        printf("ze.\n");
+        exit(1);
+    }
+
+    k = 0;
+    for (i = 0;  i < k_selections;)
+    {
+        random_position = arc4random_uniform(n_pop);
+        if (replacement)
         {
-            if (!population[random_position].chosen){
-                population[random_position].chosen = true;
-                selected_individuals[k] = population[random_position];
-                k++;
-            }
+            selected_individuals[i] = random_position;
+            i++;
         }
         else
         {
-            selected_individuals[k] = population[random_position];
-            k++;
+            repeated = false;
+            for (j = 0; j < i; j++)
+            {
+                if (random_position == selected_individuals[j])
+                    repeated = true;
+            }
+            if (!repeated)
+            {
+                k = 0;
+                selected_individuals[i] = random_position;
+                i++;
+            }
+            else
+                k++;
+        }
+        if (k > 1000000)
+        {
+            printf("Error: Tournament selection was unable to make ");
+            printf("%d different columns to mutate.\nChoose ", k_selections);
+            printf("either a lower \'k_selections\' value or increase the ");
+            printf("population size.\n");
+            exit(1);
         }
     }
 
-    best_selected_individual = find_best(selected_individuals, k_selections);
+    int best = selected_individuals[0];
+    unsigned int scorer = population[selected_individuals[0]].scorer;
 
-    //free(selected_individuals); #no es aquest
+    for (i = 1;  i < k_selections; i++)
+    {
+        if (population[selected_individuals[i]].scorer < scorer)
+        {
+            best = selected_individuals[i];
+            scorer = population[selected_individuals[i]].scorer;
+        }
+    }
 
-    return best_selected_individual;
+    return &population[best];
 }
 
 void reset_selection(Individual *population, int n_pop)
@@ -377,8 +401,9 @@ Individual ordered_crossover(Individual *parent1, Individual *parent2, int id,
                              int n_queens)
 {
     /*
-     Givne two parents, parent1 and parent2, this function performs the classical OX corssover
-     algorithm to obtain only ONE child by means of the genes of both parents.
+     Given two parents, parent1 and parent2, this function performs the
+     classical OX crossover algorithm to obtain only ONE child by means of the
+     genes of both parents.
 
      Procedure: OX
         1. Select a substring from the genes.rows of a parent at random.
@@ -388,8 +413,8 @@ Individual ordered_crossover(Individual *parent1, Individual *parent2, int id,
         parent. The resulted sequence of gene.rows after the deletion,
         contains the rows that the proto-child needs.
         4. Place the rows that the proto-child needs into the unfixed positions
-        of the proto-child.genes.rows from left to right according to the order of the sequence
-        to produce an offspring.
+        of the proto-child.genes.rows from left to right according to the order
+        of the sequence to produce an offspring.
     */
 
     int i, j = 0, k, tmp;
@@ -409,8 +434,10 @@ Individual ordered_crossover(Individual *parent1, Individual *parent2, int id,
     // Copy rows from parent1 to child. Set rest of rows equal to 0.
     for (i = 0; i < n_queens; i++)
     {
-        if (i >= random1 && i <= random2) genes.rows[i] = parent1->genes.rows[i];
-        else genes.rows[i] = 0;
+        if (i >= random1 && i <= random2)
+            genes.rows[i] = parent1->genes.rows[i];
+        else
+            genes.rows[i] = 0;
     }
 
     // Ordered copy of the rows from parent2 to child.
@@ -468,10 +495,8 @@ void copy_individual(Individual *original, Individual *copy, int n_queens)
         copy->genes.rows[i] = original->genes.rows[i];
 }
 
-// @BUG A AQUI SOTA!!!
 void heuristic_mutation(Individual *mutant, unsigned int **permutations,
-                        Individual *childs, int n_queens, int lambda,
-                        int n_perms, float p_mut)
+                        int n_queens, int lambda, int n_perms, float p_mut)
 {
     /*
      Given an input individual 'mutant', a probability p_mut of mutation
@@ -518,23 +543,51 @@ void heuristic_mutation(Individual *mutant, unsigned int **permutations,
         int counter = 0;
         permute(permutations, rows_to_mutate, 0,lambda, &counter);
 
-        for (i = 0; i < n_perms; i++)
-            copy_individual(mutant, &childs[i], n_queens);
+        int cols[n_queens], best;
+        unsigned int scorer, best_scorer = 0;
 
         for (i = 0; i < n_perms; i++)
         {
+            for (j = 0; j < n_queens; j++)
+                cols[j] = mutant->genes.rows[j];
+
             for (j = 0; j < lambda; j++)
             {
                 col = cols_to_mutate[j];
-                childs[i].genes.rows[col] = permutations[i][j];
+                cols[col] = permutations[i][j];
+            }
+
+            scorer = 0;
+            for(j = 0; j < n_queens; j++)
+                for(k = j + 1; k < n_queens; k++)
+                    if(diagonal(cols[j], j+1, cols[k], k+1))
+                        ++scorer;
+
+            if (i == 0 | scorer < best_scorer)
+            {
+                best_scorer = scorer;
+                best = i;
             }
         }
 
-        *mutant = *find_best(childs, n_perms);
+        // Get best rows
+        for (j = 0; j < n_queens; j++)
+            cols[j] = mutant->genes.rows[j];
+
+        for (j = 0; j < lambda; j++)
+        {
+            col = cols_to_mutate[j];
+            cols[col] = permutations[best][j];
+        }
+
+        // Apply them to mutant
+        for (j = 0; j < n_queens; j++)
+            mutant->genes.rows[j] = cols[j];
     }
 }
 
-void view_population(Individual *population, int n_pop, int n_queens, int n_gen)
+void view_population(Individual *population, int n_pop, int n_queens,
+                     int n_gen)
 {
     /*
      Given a population of n_pop individuals and its generation,
@@ -553,16 +606,18 @@ void view_population(Individual *population, int n_pop, int n_queens, int n_gen)
     }
 }
 
-void write_fitness(FILE ** file, char * filename, Individual * population, int n_pop, int generation)
+void write_fitness(FILE ** file, char * filename, Individual * population,
+                   int n_pop, int generation)
 {
     /*
      Given a pointer to file and a file name, appends into a file the scorer
-     of each individual of the input population, one by one and separated by commas.
-     In the first position it is printed the generation of the input population.
+     of each individual of the input population, one by one and separated by
+     commas. In the first position it is printed the generation of the input
+     population.
 
-     By calling this function after sucessive generations of individuals are created,
-     we can obtain a file whose rows are the fitnesses of the corresponding individuals
-     for each generation.
+     By calling this function after sucessive generations of individuals are
+     created, we can obtain a file whose rows are the fitnesses of the
+     corresponding individuals for each generation.
     */
 
     *file = fopen(filename, "a");

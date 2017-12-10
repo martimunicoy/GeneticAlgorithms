@@ -76,8 +76,8 @@ void copy_individual                  (Individual *original, Individual *copy,
 /*****************************************************************************/
 void heuristic_mutation               (Individual *mutant,
                                        unsigned int **permutations,
-                                       Individual *childs, int n_queens,
-                                       int lambda, int n_perms, float p_mut);
+                                       int n_queens, int lambda, int n_perms,
+                                       float p_mut);
 /*****************************************************************************/
 void view_population                  (Individual *population, int n_pop,
                                        int n_queens, int n_gen);
