@@ -267,9 +267,7 @@ GAResults genetic_algorithm(Individual *population, Individual *nextpopulation,
                     child = ordered_crossover(parent1, parent2, ++id,
                                               args.n_queens);
 
-                    heuristic_mutation(&child, permutations,
-                                       args.n_queens, args.lambda,
-                                       n_perms, args.p_mutation);
+                    swapping_mutation(&child, args.n_queens, args.p_mutation);
 
                     nextpopulation[i] = child;
                 }

@@ -785,7 +785,7 @@ void print_strategy_info(int strategy)
             printf("\t\t      ");
             printf("+---------------------------------+\n");
             printf("\t\t      ");
-            printf("| Mutation:              Swapping |\n");
+            printf("| Mutation:                  Swap |\n");
             break;
 
         case 2:
@@ -857,7 +857,7 @@ void print_strategy_info(int strategy)
             printf("\t\t      ");
             printf("+---------------------------------+\n");
             printf("\t\t      ");
-            printf("| Mutation:              Swapping |\n");
+            printf("| Mutation:                  Swap |\n");
             break;
 
     }
