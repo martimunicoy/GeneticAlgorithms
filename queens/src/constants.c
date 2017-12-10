@@ -24,50 +24,70 @@
 const char ALPHABET[26] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
                                'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
                                'U', 'V', 'W', 'X', 'Y', 'Z'};
-    // List of arguments
+// List of flags
 const char ARGS[ARGS_NUM][3] = {"-q", "-p", "-g", "-d", "-m", "-l", "-c",
                                 "-i", "-r", "-x", "-s", "-t", "-w", "-e",
                                 "-y", "-v", "-n", "-a", "-b", "-k", "-f"};
 
 // Constants for default parameters
 
-    // Number of queens -q
+// Number of queens -q
 const int N_QUEENS = 8;
-    // Population size -p
+
+// Population size -p
 const int N_POPULATION = 10;
-    // Number of generations -g
+
+// Number of generations -g
 const int N_GENERATIONS = 1000;
-    // Death ratio per generation -d
+
+// Death ratio per generation -d
 const float DEATH_RATIO = 0.3;
-    // Probability of mutation -m
+
+// Probability of mutation -m
 const float P_MUTATION = 0.2;
-    // Number of genes to mutate -l
+
+// Number of genes to mutate -l
 const int LAMBDA = 3;
-    // Force the algorithm to continue after finding a solution -c
+
+// Force the algorithm to continue after finding a solution -c
 const bool FORCE_TO_CONTINUE = false;
-    // Infinite number of generations -i
+
+// Infinite number of generations -i
 const bool INFINITE_GENERATIONS = false;
-    // Write fitness data to file -r
+
+// Write fitness data to file -r
 const bool WRITE_FITNESS = false;
-    // Maximum fitness points -x
+
+// Maximum fitness points -x
 const int MAX_FITNESS_POINTS = 1000;
-    // Frequency to summarize -s
+
+// Frequency to summarize -s
 const int SUMMARIZE_FREQ = 100;
-    // Number of selections in the tournament_selection function -t
+
+// Number of selections in the tournament_selection function -t
 const int TOURNAMENT_SELECTIONS = 3;
-    // The higher, the more exploratory -w
+
+// The higher, the more exploratory -w
 const float FRACT_WEIGTH = 0.1;
-    // The higher, the more exploitatory -e
+
+// The higher, the more exploitatory -e
 const float DENOM_POWER = 2;
-    // Set the strategy to apply -y
+
+// Set the strategy to apply -y
 const int STRATEGY = 1;
-    // Set the sieve to apply -v
+
+// Set the sieve to apply -v
 const int SIEVE = 2000;
-    // Write fitness data to file -n
+
+// Write fitness data to file -n
 const bool WRITE_GENES = false;
-    // Maximum fitness points -a
+
+// Maximum fitness points -a
 const int MAX_GENES_POINTS = 1000;
-    // Fitness file directory
+
+// Fitness file directory -b
 const char FITNESS_DIR[100] = "DataVisualization/Fitness.csv";
-    // Genes file directory
+
+// Genes file directory -k
 const char GENES_DIR[100] = "DataVisualization/Genes.csv";
+

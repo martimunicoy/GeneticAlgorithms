@@ -18,6 +18,7 @@
  *                                                                           *
  *****************************************************************************/
 
+// Include Libraries
 #include "queens_GA.h"
 #include "genetics.h"
 #include "constants.h"
@@ -25,7 +26,7 @@
 #include "utils.h"
 #include "definitions.h"
 
-//Function bodies
+// Function bodies
 float random_number(float max)
 {
     /*
@@ -202,12 +203,11 @@ void exit_code_parser(unsigned char exit_code, char *exit_message)
 }
 
 void print_summary(Individual *population, Individual *best, int n_pop,
-                   int n_gen, int minutes)
+                   int n_gen, int seconds)
 {
     /*
      @TODO
     */
-
     AnalysisResults results = population_analysis(population, n_pop);
 
     printf("\n");
@@ -220,8 +220,8 @@ void print_summary(Individual *population, Individual *best, int n_pop,
     printf("\t\t      ");
     printf("| Generation:           %9d |\n", n_gen);
     printf("\t\t      ");
-    printf("| Mean score:               ");
-    printf("%3d.%d |\n", (int) results.mean,
+    printf("| Mean score:              ");
+    printf("%4d.%d |\n", (int) results.mean,
                          (int) (results.mean * 10) -
                          ((int) results.mean) * 10);
     printf("\t\t      ");
@@ -232,7 +232,13 @@ void print_summary(Individual *population, Individual *best, int n_pop,
     printf("\t\t      ");
     printf("| Best score:              %6d |\n", best->scorer);
     printf("\t\t      ");
-    printf("| Running time (min):   %9d |\n", minutes);
+    if (seconds > 999)
+    {
+        int minutes = (int) seconds / 60;
+        printf("| Running time (min):   %9d |\n", minutes);
+    }
+    else
+        printf("| Running time (s):     %9d |\n", seconds);
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\n");
@@ -374,8 +380,8 @@ void print_results(GAResults ga_results, int n_queens)
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\t\t      ");
-    printf("| Mean score:               ");
-    printf("%3d.%d |\n", (int) results.mean,
+    printf("| Mean score:              ");
+    printf("%4d.%d |\n", (int) results.mean,
                          (int) (results.mean * 10) -
                          ((int) results.mean) * 10);
     printf("\t\t      ");
@@ -392,7 +398,13 @@ void print_results(GAResults ga_results, int n_queens)
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\t\t      ");
-    printf("| Running time (min):   %9d |\n", ga_results.minutes);
+    if (ga_results.seconds > 999)
+    {
+        int minutes = (int) ga_results.seconds / 60;
+        printf("| Running time (min):   %9d |\n", minutes);
+    }
+    else
+        printf("| Running time (s):     %9d |\n", ga_results.seconds);
     printf("\t\t      ");
     printf("+---------------------------------+\n");
     printf("\t\t      ");

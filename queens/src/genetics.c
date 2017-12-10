@@ -18,6 +18,7 @@
  *                                                                           *
  *****************************************************************************/
 
+// Include Libraries
 #include "queens_GA.h"
 #include "constants.h"
 #include "genetics.h"
@@ -25,7 +26,7 @@
 #include "utils.h"
 #include "definitions.h"
 
-//Function bodies
+// Function bodies
 Genes initiate_genes(int n_queens)
 {
      /*
@@ -261,8 +262,6 @@ Individual *find_best(Individual *subpopulation, int k_selections)
     /*
      Given a population of n_pop individuals, finds the FIRST with
      the best scorer and returns it.
-
-     @IMPROVE: choose a random individual among all 'best' individuals
     */
 
     int i, rand_index, repetitions = 0;
@@ -330,34 +329,69 @@ Individual *tournament_selection(Individual *population, int n_pop, int k_select
       (i.e., if we mark an individual as chosen or not?)
     */
 
-    int k;
+    int i, j, k;
     int random_position;
-    Individual *selected_individuals = (Individual *) malloc(sizeof(Individual)
-                                                             * k_selections);
-    Individual *best_selected_individual;
+    int selected_individuals[k_selections];
+    bool repeated;
 
-    for (k = 0;  k < k_selections;){
-        random_position = (int) random_number(n_pop);
-        if (!replacement)
+    if (k_selections > n_pop)
+    {
+        printf("Error: Tournament selection was unable to make ");
+        printf("%d different columns to mutate.\nChoose either", k_selections);
+        printf("a lower \'k_selections\' value or increase the population si");
+        printf("ze.\n");
+        exit(1);
+    }
+
+    k = 0;
+    for (i = 0;  i < k_selections;)
+    {
+        random_position = arc4random_uniform(n_pop);
+        if (replacement)
         {
-            if (!population[random_position].chosen){
-                population[random_position].chosen = true;
-                selected_individuals[k] = population[random_position];
-                k++;
-            }
+            selected_individuals[i] = random_position;
+            i++;
         }
         else
         {
-            selected_individuals[k] = population[random_position];
-            k++;
+            repeated = false;
+            for (j = 0; j < i; j++)
+            {
+                if (random_position == selected_individuals[j])
+                    repeated = true;
+            }
+            if (!repeated)
+            {
+                k = 0;
+                selected_individuals[i] = random_position;
+                i++;
+            }
+            else
+                k++;
+        }
+        if (k > 1000000)
+        {
+            printf("Error: Tournament selection was unable to make ");
+            printf("%d different columns to mutate.\nChoose ", k_selections);
+            printf("either a lower \'k_selections\' value or increase the ");
+            printf("population size.\n");
+            exit(1);
         }
     }
 
-    best_selected_individual = find_best(selected_individuals, k_selections);
+    int best = selected_individuals[0];
+    unsigned int scorer = population[selected_individuals[0]].scorer;
 
-    //free(selected_individuals); #no es aquest
+    for (i = 1;  i < k_selections; i++)
+    {
+        if (population[selected_individuals[i]].scorer < scorer)
+        {
+            best = selected_individuals[i];
+            scorer = population[selected_individuals[i]].scorer;
+        }
+    }
 
-    return best_selected_individual;
+    return &population[best];
 }
 
 void reset_selection(Individual *population, int n_pop)
@@ -468,7 +502,6 @@ void copy_individual(Individual *original, Individual *copy, int n_queens)
         copy->genes.rows[i] = original->genes.rows[i];
 }
 
-// @BUG A AQUI SOTA!!!
 void heuristic_mutation(Individual *mutant, unsigned int **permutations,
                         Individual *childs, int n_queens, int lambda,
                         int n_perms, float p_mut)

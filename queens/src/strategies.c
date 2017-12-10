@@ -18,9 +18,7 @@
  *                                                                           *
  *****************************************************************************/
 
-/*****************************************************************************/
-// Includes
-/*****************************************************************************/
+// Include Libraries
 #include "queens_GA.h"
 #include "constants.h"
 #include "genetics.h"
@@ -29,9 +27,7 @@
 #include "strategies.h"
 #include "definitions.h"
 
-/*****************************************************************************/
-// Functions
-/*****************************************************************************/
+// Function bodies
 GAResults genetic_algorithm(Individual *population, Individual *nextpopulation,
                             Individual *best,
                             RouletteCompartments *genetic_roulette,
@@ -45,7 +41,7 @@ GAResults genetic_algorithm(Individual *population, Individual *nextpopulation,
     print_GA_starts();
 
     // Initiate variables
-    int i, minutes;
+    int i, seconds;
     int n_gen = 1;
     unsigned char exit_code = 0;
     Individual *T;
@@ -153,6 +149,7 @@ GAResults genetic_algorithm(Individual *population, Individual *nextpopulation,
                 break;
 
             case 3:
+                //view_population(population, args.n_population, args.n_queens, n_gen);
                 // Mutation and crossover
                 for (i = 0; i < n_deaths; i++)
                 {
@@ -167,9 +164,7 @@ GAResults genetic_algorithm(Individual *population, Individual *nextpopulation,
                                                    replace);
                     child = ordered_crossover(parent1, parent2, ++id,
                                               args.n_queens),
-                    heuristic_mutation(&child, permutations, childs,
-                                       args.n_queens, args.lambda,
-                                       n_perms, args.p_mutation);
+                    swapping_mutation(&child, args.n_queens, args.p_mutation);
                     nextpopulation[i] = child;
                 }
 
@@ -237,9 +232,9 @@ GAResults genetic_algorithm(Individual *population, Individual *nextpopulation,
             if ((n_gen-1) % args.summarize_freq == 0)
             {
                 gettimeofday(&end, NULL);
-                minutes = (int) (end.tv_sec  - start.tv_sec) / 60;
+                seconds = (int) (end.tv_sec  - start.tv_sec);
                 print_summary(population, best, args.n_population, n_gen-1,
-                              minutes);
+                              seconds);
             }
 
         // Sum up 1 generation
@@ -268,12 +263,12 @@ GAResults genetic_algorithm(Individual *population, Individual *nextpopulation,
     // Stop counter
     gettimeofday(&end, NULL);
 
-    // Calculate GA running time in minutes
-    minutes = (int) (end.tv_sec  - start.tv_sec) / 60;
+    // Calculate GA running time in seconds
+    seconds = (int) (end.tv_sec  - start.tv_sec) / 60;
 
     // Wrap the results and return them
     GAResults results = {best, population, args.n_population, n_gen-1,
-                         exit_code, minutes};
+                         exit_code, seconds};
 
     // Free memory
     free(permutations);
