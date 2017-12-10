@@ -27,6 +27,7 @@
 #include "utils.h"
 #include "strategies.h"
 
+// Function bodies
 int main(int argc, char* argv[]){
     // Print welcome
     print_program_name();
@@ -66,9 +67,12 @@ int main(int argc, char* argv[]){
     GAResults results;
 
     // Save memory space for population and genetic roulette
-    Individual *P = (Individual *) malloc(sizeof(Individual) * args.n_population);
-    Individual *Q = (Individual *) malloc(sizeof(Individual) * args.n_population);
-    RouletteCompartments *genetic_roulette = malloc_roulette(args.n_population);
+    Individual *P = (Individual *) malloc(sizeof(Individual) *
+                                          args.n_population);
+    Individual *Q = (Individual *) malloc(sizeof(Individual) *
+                                          args.n_population);
+    RouletteCompartments *genetic_roulette = malloc_roulette(
+                                                            args.n_population);
 
     // Set population pointers
     population = P;

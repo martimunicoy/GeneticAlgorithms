@@ -25,6 +25,7 @@
 #include "utils.h"
 #include "constants.h"
 
+// Function bodies
 int main(){
     // Constants
     // Number of queens (DON'T CHANGE! (YET))

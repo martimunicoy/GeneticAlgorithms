@@ -22,15 +22,17 @@
 #include "definitions.h"
 
 const char ALPHABET[26] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J',
-                               'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
-                               'U', 'V', 'W', 'X', 'Y', 'Z'};
+                           'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T',
+                           'U', 'V', 'W', 'X', 'Y', 'Z'};
+
 // List of flags
 const char ARGS[ARGS_NUM][3] = {"-q", "-p", "-g", "-d", "-m", "-l", "-c",
                                 "-i", "-r", "-x", "-s", "-t", "-w", "-e",
                                 "-y", "-v", "-n", "-a", "-b", "-k", "-f"};
 
+/*****************************************************************************/
 // Constants for default parameters
-
+/*****************************************************************************/
 // Number of queens -q
 const int N_QUEENS = 8;
 
@@ -90,4 +92,4 @@ const char FITNESS_DIR[100] = "DataVisualization/Fitness.csv";
 
 // Genes file directory -k
 const char GENES_DIR[100] = "DataVisualization/Genes.csv";
-
+/*****************************************************************************/

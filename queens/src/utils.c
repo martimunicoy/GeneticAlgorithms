@@ -115,23 +115,16 @@ void swap_populations(Individual **p1, Individual **p2)
     *p1 = *p2;
     *p2 = T;
 }
-/*
-void permute(unsigned int ** permutations, unsigned int * vector, int start, int end,
-             int *counter)
-    int i, j;
 
-    for (i = 0; i < lambda; i++)
-    {
-
-    }*/
-void permute(unsigned int ** permutations, unsigned int * vector, int start, int end,
-             int *counter)
+void permute(unsigned int ** permutations, unsigned int * vector, int start,
+             int end, int *counter)
 {
     /*
-     Given an input vector, start = 0, end = length of the vector, a matrix 'permutations'
-     and a pointer to integer 'counter' (outside of the scope of this function), successive calls
-     to this function and the swap function, recurssively fills the rows of the matrix 'permutations'
-     with all the possible (end!) permutations of the input 'vector'.
+     Given an input vector, start = 0, end = length of the vector, a matrix
+     'permutations' and a pointer to integer 'counter' (outside of the scope of
+     this function), successive calls to this function and the swap function,
+     recurssively fills the rows of the matrix 'permutations' with all the
+     possible (end!) permutations of the input 'vector'.
     */
 
     int i, j;
