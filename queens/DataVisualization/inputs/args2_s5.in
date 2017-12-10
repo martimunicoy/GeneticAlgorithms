@@ -7,7 +7,7 @@ LAMBDA 5
 TOURNAMENT_SELECTIONS 5
 FRACT_WEIGTH 0.1
 DENOM_POWER 4
-STRATEGY 1
+STRATEGY 5
 FORCE_TO_CONTINUE true
 INFINITE_GENERATIONS false
 WRITE_FITNESS true
@@ -15,5 +15,5 @@ SUMMARIZE_FREQ 5
 MAX_FITNESS_POINTS 50000
 WRITE_GENES true
 MAX_GENES_POINTS 50000
-FITNESS_DIR DataVisualization/outputs/Fitness2_s1.csv
-GENES_DIR DataVisualization/outputs/Genes2_s1.csv
+FITNESS_DIR DataVisualization/outputs/Fitness2_s5.csv
+GENES_DIR DataVisualization/outputs/Genes2_s5.csv
