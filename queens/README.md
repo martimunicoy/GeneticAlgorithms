@@ -131,12 +131,34 @@ If a solution is found, the final output should look like this
 
 
 ## References
-* [1] 8 queens problem, general information. https://en.wikipedia.org/wiki/Eight_queens_puzzle .
-* [2] Essentials of Metaheuristics, A Set of Undergraduate Lecture Notes, Sean Luke, Department of Computer Science, George Mason University.
-* [3] An Overview of Genetic Algorithms: Part 1, Fundamentals, David Beasley, David R. Bull, Ralph R. Martin.
-* [4] A list of genetic operations (crossover and mutation) (http://mat.uab.cat/~alseda/MasterOpt/GeneticOperations.pdf). Author ?????
-* [5] Solving n-Queen problem using global parallel genetic algorithm (extended abstract), Marko Božikovic, Marin Golub, Leo Budin. EUROCON 2003 Ljubljana, Slovenia.
-* [6] Parent selection methods: https://www.tutorialspoint.com/genetic_algorithms/genetic_algorithms_parent_selection.htm.
+
+* [1] Genetic-Algorithms GitHub repository, Martí Municoy & Daniel Salgado, https://github.com/
+martimunicoy/GeneticAlgorithms.
+* [2] Natural selection. (2017, December 3). In Wikipedia, The Free Encyclopedia. Retrieved 17:49,
+December 8, 2017, from https://en.wikipedia.org/w/index.php?title=Natural_selection&
+oldid=813495959.
+* [3] 8 queens problem, general information. https://en.wikipedia.org/wiki/Eight_queens_
+puzzle.
+* [4] Fitness proportionate selection. (2017, September 20). In Wikipedia, The Free Encyclopedia.
+Retrieved 00:23, December 9, 2017, from https://en.wikipedia.org/w/index.php?title=
+Fitness_proportionate_selection&oldid=801637463.
+* [5] Essentials of Metaheuristics (chapter 3), A Set of Undergraduate Lecture Notes, Sean Luke,
+Department of Computer Science, George Mason University.
+* [6] An Overview of Genetic Algorithms: Part 1, Fundamentals, David Beasley, David R. Bull,
+Ralph R. Martin.
+* [7] A list of genetic operations (crossover and mutation) http://mat.uab.cat/~alseda/MasterOpt/
+GeneticOperations.pdf.
+* [8] Solving n-Queen problem using global parallel genetic algorithm (extended abstract), Marko
+Božikovic, Marin Golub, Leo Budin. EUROCON 2003 Ljubljana, Slovenia.
+* [9] Parent selection methods, https://www.tutorialspoint.com/genetic_algorithms/genetic_
+algorithms_parent_selection.htm
+* [10] Mutation methods, https://www.tutorialspoint.com/genetic_algorithms/genetic_
+algorithms_mutation.htm.
+* [11] Swap mutation Figure, http://www.wardsystems.com/manuals/genehunter/mutation_of_
+enumerated_chromosomes.htm.
+* [12] The number for different solutions of the N-queens problem, https://math.stackexchange.
+com/questions/1872444/how-many-solutions-are-there-to-an-n-by-n-queens-problem,
+http://oeis.org/A000170.
 
 
 ## License
