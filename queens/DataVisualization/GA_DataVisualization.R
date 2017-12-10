@@ -3,11 +3,11 @@
 #library("dplyr")
 
 EXAMPLE = 1
-
+STRATEGY = 1
 #READ INPUT FILE
 setwd("C:/Users/Daniel/Dropbox/GitHub/Genetic-Algorithm/queens/DataVisualization/inputs");
 #setwd("/home/dsalgador/Dropbox/GitHub/Genetic-Algorithm/queens/DataVisualization/inputs")
-INPUT_FILENAME = paste("args",EXAMPLE,".in", sep = "")
+INPUT_FILENAME = paste("args",EXAMPLE, "_s", STRATEGY ,".in", sep = "")
 ARGS <- read.table(INPUT_FILENAME, sep =  " ", header = F, nrows = 10)
 
 VAL <- ARGS$V2
@@ -32,7 +32,8 @@ STRATEGY = ARGS[ARGS == "STRATEGY",2]
 #FITNESS
 setwd("C:/Users/Daniel/Dropbox/GitHub/Genetic-Algorithm/queens/DataVisualization/outputs");
 #setwd("/home/dsalgador/Dropbox/GitHub/Genetic-Algorithm/queens/DataVisualization/outputs")
-FITNESS_FILENAME = paste("Fitness",EXAMPLE,".csv", sep = "")
+FITNESS_FILENAME = paste("Fitness",EXAMPLE,
+                          "_s", STRATEGY ,".csv", sep = "")
 #FITNESS_FILENAME = "Fitness_sample.csv"
 data <- read.table(FITNESS_FILENAME, sep =  ",", header = F)
 #datat <- t(data)
@@ -49,10 +50,13 @@ color_ideal = "green"
 lw = 2;
 max_fitness = max(fitness)
 
-nameplot1 = paste("fitness",EXAMPLE, ".png", sep="")
+nameplot1 = paste("fitness",EXAMPLE,
+                  "_s", STRATEGY , ".png", sep="")
 #par(mfrow = c(1,1))
 
 png(nameplot1, width = 415, height = 289)
+#png(nameplot1, width = 415*2, height = 289*2)
+
 par(xpd = T, mar = par()$mar + c(0,0,0,5))
 plot(generations, rowMeans(fitness), lwd=lw, type = 'l', ylim = c(0,max_fitness), main = "Fitness evolution", ylab = "Fitness", xlab = "Generation")
 lines(generations, fitness_opt, col = color_opt, lwd = lw)
@@ -81,14 +85,16 @@ dev.off()
 #############
 ##HISTOGRAM PLOT OF THE LAST GENERATION FITNESS 
 #############
-nameplot2 = paste("lastfitnesshist",EXAMPLE, ".png", sep="")
-#png(nameplot2, width = 415, height = 289)
-length(fitness)
-last_fitness = t(fitness[length(fitness)]) 
+nameplot2 = paste("lastfitnesshist",EXAMPLE ,
+                  "_s", STRATEGY , ".png", sep="")
+png(nameplot2, width = 415, height = 289)
+
+
+last_fitness = t(fitness[N_GENERATIONS,]) 
 max_last_fitness = max(last_fitness)
 
-hist(last_fitness, breaks = WORST_FITNESS, xlim = c(0,max_last_fitness), xlab ="Fitness" ,main = "Histogram of the last generation fitnesses")
-#dev.off()
+hist(last_fitness, freq= TRUE, breaks = WORST_FITNESS, xlim = c(0,max_last_fitness), xlab ="Fitness" ,main = "Histogram of the last generation fitnesses")
+dev.off()
 
 
 # plot(density(last_fitness))
