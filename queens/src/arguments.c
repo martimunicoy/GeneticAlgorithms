@@ -116,7 +116,7 @@ struct Args check_arguments(struct Args arguments)
         printf(" (%f)\n", DENOM_POWER);
         arguments.denom_power = DENOM_POWER;
     }
-    if (arguments.strategy < 1 | arguments.strategy > 4)
+    if (arguments.strategy < 1 | arguments.strategy > 6)
     {
         printf("    \'strategy\' out of range, using default value");
         printf(" (%d)\n", STRATEGY);

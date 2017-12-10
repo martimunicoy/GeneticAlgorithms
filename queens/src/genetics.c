@@ -159,25 +159,20 @@ void evaluate(Individual *population, int n_pop, int n_queens)
 
     int i, j, k, row;
     unsigned int scorer;
-    unsigned int initial_scorer = sum_down(n_queens);
     for(i = 0; i < n_pop; ++i)
     {
-        if(population[i].scorer != initial_scorer)
-            continue;
-        else
+        scorer = 0;
+        for(j = 0; j < n_queens; j++)
         {
-            scorer = 0;
-            for(j = 0; j < n_queens; j++)
-            {
-                row = population[i].genes.rows[j];
-                // start from j+1 to not compare to itself and not to repeat a
-                // pair of individuals
-                for(k = j + 1; k < n_queens; k++)
-                    if(diagonal(row, j+1, population[i].genes.rows[k], k+1))
-                        ++scorer;
-            }
-            population[i].scorer = scorer;
+            row = population[i].genes.rows[j];
+            // start from j+1 to not compare to itself and not to repeat a
+            // pair of individuals
+            for(k = j + 1; k < n_queens; k++)
+                if(diagonal(row, j+1, population[i].genes.rows[k], k+1))
+                    ++scorer;
         }
+        population[i].scorer = scorer;
+
     }
 }
 
@@ -501,8 +496,7 @@ void copy_individual(Individual *original, Individual *copy, int n_queens)
 }
 
 void heuristic_mutation(Individual *mutant, unsigned int **permutations,
-                        Individual *childs, int n_queens, int lambda,
-                        int n_perms, float p_mut)
+                        int n_queens, int lambda, int n_perms, float p_mut)
 {
     /*
      Given an input individual 'mutant', a probability p_mut of mutation
@@ -549,19 +543,46 @@ void heuristic_mutation(Individual *mutant, unsigned int **permutations,
         int counter = 0;
         permute(permutations, rows_to_mutate, 0,lambda, &counter);
 
-        for (i = 0; i < n_perms; i++)
-            copy_individual(mutant, &childs[i], n_queens);
+        int cols[n_queens], best;
+        unsigned int scorer, best_scorer = 0;
 
         for (i = 0; i < n_perms; i++)
         {
+            for (j = 0; j < n_queens; j++)
+                cols[j] = mutant->genes.rows[j];
+
             for (j = 0; j < lambda; j++)
             {
                 col = cols_to_mutate[j];
-                childs[i].genes.rows[col] = permutations[i][j];
+                cols[col] = permutations[i][j];
+            }
+
+            scorer = 0;
+            for(j = 0; j < n_queens; j++)
+                for(k = j + 1; k < n_queens; k++)
+                    if(diagonal(cols[j], j+1, cols[k], k+1))
+                        ++scorer;
+
+            if (i == 0 | scorer < best_scorer)
+            {
+                best_scorer = scorer;
+                best = i;
             }
         }
 
-        *mutant = *find_best(childs, n_perms);
+        // Get best rows
+        for (j = 0; j < n_queens; j++)
+            cols[j] = mutant->genes.rows[j];
+
+        for (j = 0; j < lambda; j++)
+        {
+            col = cols_to_mutate[j];
+            cols[col] = permutations[best][j];
+        }
+
+        // Apply them to mutant
+        for (j = 0; j < n_queens; j++)
+            mutant->genes.rows[j] = cols[j];
     }
 }
 

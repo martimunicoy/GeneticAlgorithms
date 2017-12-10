@@ -734,6 +734,39 @@ void print_strategy_info(int strategy)
             printf("\t\t      ");
             printf("| Mutation:             Heuristic |\n");
             break;
+
+        case 5:
+            printf("| Selection, stage 1:             |\n");
+            printf("\t\t      ");
+            printf("|                        Roulette |\n");
+            printf("\t\t      ");
+            printf("| Selection, stage 2:             |\n");
+            printf("\t\t      ");
+            printf("|  Tournament without replacement |\n");
+            printf("\t\t      ");
+            printf("+---------------------------------+\n");
+            printf("\t\t      ");
+            printf("| Crossover:              Ordered |\n");
+            printf("\t\t      ");
+            printf("+---------------------------------+\n");
+            printf("\t\t      ");
+            printf("| Mutation:             Heuristic |\n");
+            break;
+
+        case 6:
+            printf("| Selection:                      |\n");
+            printf("\t\t      ");
+            printf("|     Tournament with replacement |\n");
+            printf("\t\t      ");
+            printf("+---------------------------------+\n");
+            printf("\t\t      ");
+            printf("| Crossover:              Ordered |\n");
+            printf("\t\t      ");
+            printf("+---------------------------------+\n");
+            printf("\t\t      ");
+            printf("| Mutation:              Swapping |\n");
+            break;
+
     }
     printf("\t\t      ");
     printf("+---------------------------------+\n");
