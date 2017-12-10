@@ -35,6 +35,9 @@ int main(int argc, char* argv[]){
     // Parse arguments
     struct Args args = args_parser(argc, argv);
 
+    // Print problem description
+    print_problem_description_all(args);
+
     // Create, initialize text files
     FILE * file;
     char file_fitness[] = "DataVisualization/Fitness.csv";
@@ -49,7 +52,7 @@ int main(int argc, char* argv[]){
     }
 
     // Initialize variables
-    int minutes;
+    int seconds;
     int id = 1;
     Individual *best, *population, *nextpopulation;
     Individual *parent1, *parent2, child, *survivor;
@@ -97,7 +100,7 @@ int main(int argc, char* argv[]){
     print_configuration(args);
 
     // Initiate Genetic Algorithm
-    print_strategy_info(args.strategy);
+    print_strategy_info(1);
     print_GA_starts();
 
     int i, j, k;
@@ -198,6 +201,7 @@ int main(int argc, char* argv[]){
                 }
                 else
                 {
+                    // Penalize repeated individuals
                     population[i].scorer = sum_down(args.n_queens);
                     sieve++;
                 }
@@ -214,9 +218,9 @@ int main(int argc, char* argv[]){
             if ((n_gen-1) % args.summarize_freq == 0)
             {
                 gettimeofday(&end, NULL);
-                minutes = (int) (end.tv_sec  - start.tv_sec) / 60;
-                print_summary(population, best, args.n_population, n_gen-1,
-                              minutes);
+                seconds = (int) (end.tv_sec  - start.tv_sec);
+                print_summary_all(population, args.n_population, n_gen-1,
+                                  seconds, solutions_num);
             }
 
         // Sum up 1 generation
@@ -239,13 +243,11 @@ int main(int argc, char* argv[]){
 
     // Stop counter
     gettimeofday(&end, NULL);
-
-    // Calculate GA running time in minutes
-    minutes = (int) (end.tv_sec  - start.tv_sec) / 60;
+    seconds = (int) (end.tv_sec  - start.tv_sec);
 
     // Wrap the results and return them
     GAResults results = {best, population, args.n_population, n_gen-1,
-                         exit_code};
+                         exit_code, seconds};
 
     // Print results
     print_GA_completed();

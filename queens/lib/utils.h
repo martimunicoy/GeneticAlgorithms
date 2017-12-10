@@ -48,6 +48,10 @@ AnalysisResults population_analysis (Individual *population, int n_pop);
 void exit_code_parser               (unsigned char exit_code,
                                      char *exit_message);
 /*****************************************************************************/
+void print_summary_all              (Individual *population, int n_pop,
+                                     int n_gen, int minutes,
+                                     int solutions_num);
+/*****************************************************************************/
 void print_summary                  (Individual *population, Individual *best,
                                      int n_pop, int n_gen, int minutes);
 /*****************************************************************************/
@@ -57,6 +61,8 @@ void write_solution                  (GAResults ga_results, int n_queens,
 void print_results_all              (GAResults ga_results, int n_queens);
 /*****************************************************************************/
 void print_results                  (GAResults ga_results, int n_queens);
+/*****************************************************************************/
+void print_problem_description_all  (struct Args args);
 /*****************************************************************************/
 void print_problem_description      (struct Args args);
 /*****************************************************************************/
