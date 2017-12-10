@@ -238,6 +238,18 @@ GAResults genetic_algorithm(Individual *population, Individual *nextpopulation,
                                        n_perms, args.p_mutation);
 
                     nextpopulation[i] = child;
+
+                // Selection
+                for (i = n_deaths; i < args.n_population; i++)
+                {
+                    survivor = tournament_selection(population,
+                                                   args.n_population,
+                                                   args.tournament_selections,
+                                                   not_replace);
+                    nextpopulation[i] = *survivor;
+                }
+                break;
+
                 }
 
             case 6:
@@ -270,17 +282,6 @@ GAResults genetic_algorithm(Individual *population, Individual *nextpopulation,
                                                    args.n_population,
                                                    args.tournament_selections,
                                                    replace);
-                    nextpopulation[i] = *survivor;
-                }
-                break;
-
-                // Selection
-                for (i = n_deaths; i < args.n_population; i++)
-                {
-                    survivor = tournament_selection(population,
-                                                   args.n_population,
-                                                   args.tournament_selections,
-                                                   not_replace);
                     nextpopulation[i] = *survivor;
                 }
                 break;
@@ -336,7 +337,7 @@ GAResults genetic_algorithm(Individual *population, Individual *nextpopulation,
     gettimeofday(&end, NULL);
 
     // Calculate GA running time in seconds
-    seconds = (int) (end.tv_sec  - start.tv_sec) / 60;
+    seconds = (int) (end.tv_sec  - start.tv_sec);
 
     // Wrap the results and return them
     GAResults results = {best, population, args.n_population, n_gen-1,
