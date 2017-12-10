@@ -83,10 +83,6 @@ Feel free to play with it by tunning the Genetic Algorithm with the command-line
 
 Have fun!
 
-## Flags
-A list of all the available flags is found below with a brief description of their use.
-
-
 ## Test running reading parameters from a file
 
 Our implementation also alows us to read parameters from a file during execution time.
