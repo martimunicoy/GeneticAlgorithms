@@ -1,11 +1,12 @@
 #LIBRARIES 
-library("data.table")
-library("dplyr")
+#library("data.table")
+#library("dplyr")
 
-EXAMPLE = 0
+EXAMPLE = 1
 
 #READ INPUT FILE
 setwd("C:/Users/Daniel/Dropbox/GitHub/Genetic-Algorithm/queens/DataVisualization/inputs");
+#setwd("/home/dsalgador/Dropbox/GitHub/Genetic-Algorithm/queens/DataVisualization/inputs")
 INPUT_FILENAME = paste("args",EXAMPLE,".in", sep = "")
 ARGS <- read.table(INPUT_FILENAME, sep =  " ", header = F, nrows = 10)
 
@@ -24,18 +25,20 @@ N_DEATHS = ARGS[ARGS == "N_DEATHS",2]
 P_MUTATION = ARGS[ARGS == "P_MUTATION",2]
 LAMBDA = ARGS[ARGS == "LAMBDA",2]
 TOURNAMENT_SELECTIONS = ARGS[ARGS == "TOURNAMENT_SELECTIONS",2]
-FRAC_WEIGTH = ARGS[ARGS == "FRAC_WEIGTH",2]
+FRAC_WEIGTH = ARGS[ARGS == "FRACT_WEIGTH",2]
 DENOM_POWER = ARGS[ARGS == "DENOM_POWER",2]
 STRATEGY = ARGS[ARGS == "STRATEGY",2]
 
 #FITNESS
-setwd("C:/Users/Daniel/Dropbox/GitHub/Genetic-Algorithm/queens/DataVisualization");
-
-FITNESS_FILENAME = "Fitness_sample.csv"
-#= paste("Fitness",EXAMPLE,".csv", sep = "")
+setwd("C:/Users/Daniel/Dropbox/GitHub/Genetic-Algorithm/queens/DataVisualization/outputs");
+#setwd("/home/dsalgador/Dropbox/GitHub/Genetic-Algorithm/queens/DataVisualization/outputs")
+FITNESS_FILENAME = paste("Fitness",EXAMPLE,".csv", sep = "")
+#FITNESS_FILENAME = "Fitness_sample.csv"
 data <- read.table(FITNESS_FILENAME, sep =  ",", header = F)
 #datat <- t(data)
 
+
+##PLOTS FOR THE FITNESS
 
 generations <- data[,1]
 fitness <- data[ , 2:dim(data)[2]]
@@ -46,9 +49,10 @@ color_ideal = "green"
 lw = 2;
 max_fitness = max(fitness)
 
-par(mfrow = c(1,1))
-#png("legend.png", width = 415, height = 289)
+nameplot1 = paste("fitness",EXAMPLE, ".png", sep="")
+#par(mfrow = c(1,1))
 
+png(nameplot1, width = 415, height = 289)
 par(xpd = T, mar = par()$mar + c(0,0,0,5))
 plot(generations, rowMeans(fitness), lwd=lw, type = 'l', ylim = c(0,max_fitness), main = "Fitness evolution", ylab = "Fitness", xlab = "Generation")
 lines(generations, fitness_opt, col = color_opt, lwd = lw)
@@ -72,23 +76,24 @@ legend(N_GENERATIONS, max_fitness,
 legend("topright", c("Average fitness","Minimum fitness", "Ideal fitness"), col = c(color_avg,color_opt,color_ideal),lwd=lw, bty ='n', cex = 0.8, seg.len = 0.5)
 
 par(mar=c(5, 4, 4, 2) + 0.1)
-#dev.off()
+dev.off()
 
-##PLOT 2 
-
+#############
+##HISTOGRAM PLOT OF THE LAST GENERATION FITNESS 
+#############
+nameplot2 = paste("lastfitnesshist",EXAMPLE, ".png", sep="")
+#png(nameplot2, width = 415, height = 289)
 length(fitness)
 last_fitness = t(fitness[length(fitness)]) 
 max_last_fitness = max(last_fitness)
 
 hist(last_fitness, breaks = WORST_FITNESS, xlim = c(0,max_last_fitness), xlab ="Fitness" ,main = "Histogram of the last generation fitnesses")
+#dev.off()
 
 
-
-plot(density(last_fitness))
-abline(v = 0)
-var(as.numeric(last_fitness) )
-
-
-plot(generations, as.numeric(apply(fitness,1,sd)) , type = 'l')
+# plot(density(last_fitness))
+# abline(v = 0)
+# var(as.numeric(last_fitness) )
+# plot(generations, as.numeric(apply(fitness,1,sd)) , type = 'l')
 
 
