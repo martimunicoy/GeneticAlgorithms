@@ -62,6 +62,8 @@ void print_results_all              (GAResults ga_results, int n_queens);
 /*****************************************************************************/
 void print_results                  (GAResults ga_results, int n_queens);
 /*****************************************************************************/
+void print_problem_description_rand(struct Args args);
+/*****************************************************************************/
 void print_problem_description_all  (struct Args args);
 /*****************************************************************************/
 void print_problem_description      (struct Args args);

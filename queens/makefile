@@ -27,8 +27,8 @@ endif
 
 # define the C source files
 _SRCS1 = queens_GA.c genetics.c strategies.c utils.c arguments.c constants.c
-_SRCS2 = queens_rand.c genetics.c utils.c constants.c
-_SRCS3 = allqueens_GA.c genetics.c strategies.c utils.c arguments.c constants.c
+_SRCS2 = queens_rand.c genetics.c utils.c constants.c arguments.c
+_SRCS3 = allqueens_GA.c genetics.c utils.c arguments.c constants.c
 
 # place them into the right repository folder
 SDIR = src

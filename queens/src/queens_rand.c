@@ -19,34 +19,43 @@
  *****************************************************************************/
 
 // Include Libraries
+#include "definitions.h"
 #include "queens_GA.h"
+#include "constants.h"
 #include "genetics.h"
 #include "arguments.h"
 #include "utils.h"
-#include "constants.h"
 
 // Function bodies
-int main(){
-    // Constants
-    // Number of queens (DON'T CHANGE! (YET))
-    const int N_QUEENS = 8;
+int main(int argc, char* argv[]){
+    // Print welcome
+    print_program_name();
+    print_license_header();
+
+    // Parse arguments
+    struct Args args = args_parser(argc, argv);
+
+    // Print problem description
+    print_problem_description_rand(args);
+
     // Initialize variables
     int id = 1;
 
     // Initialize population
     Individual queens_combination;
-    initiate(&queens_combination, id, 1, N_QUEENS);
+    initiate(&queens_combination, id, 1, args.n_queens);
 
     // First evaluation of the population
-    evaluate(&queens_combination, 1, N_QUEENS);
+    evaluate(&queens_combination, 1, args.n_queens);
 
     // Iterate until finding a solution
     int i;
     while(queens_combination.scorer != 0){
         // Each new generation has got brand new individuals with random genes
-        initiate(&queens_combination, ++id, 1, N_QUEENS);
-        evaluate(&queens_combination, 1, N_QUEENS);
+        initiate(&queens_combination, ++id, 1, args.n_queens);
+        evaluate(&queens_combination, 1, args.n_queens);
     }
-    printf("Found individual %d\n", queens_combination.id);
-    express_genes(queens_combination, N_QUEENS);
+    printf("Found solution after %d random iterations:\n", queens_combination.id);
+    printf("\n");
+    express_genes(queens_combination, args.n_queens);
 }

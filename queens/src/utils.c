@@ -507,6 +507,31 @@ void print_results(GAResults ga_results, int n_queens)
     }
 }
 
+void print_problem_description_rand(struct Args args)
+{
+    printf("+---------------------------------------------------------------");
+    printf("---------------+\n");
+    printf("|                             PROBLEM DESCRIPTION               ");
+    printf("               |\n");
+    printf("+---------------------------------------------------------------");
+    printf("---------------+\n");
+
+    printf("\n");
+    printf("This algorithm will try to find a way to place %d", args.n_queens);
+    printf(" chess Queens in a %dx%d\nboard by", args.n_queens, args.n_queens);
+    printf(" exploring random Queen combinations on it.\n");
+    printf("\n");
+    if (args.n_queens > 16)
+    {
+        printf("Warning! A high number of Queens was selected! This random e");
+        printf("xploration can take\na long time. If you want to exit, press");
+        printf(" \'control\' + \'C\' to finish the job.\n");
+        printf("\n");
+    }
+    printf("Exploring...\n");
+    printf("\n");
+}
+
 void print_problem_description_all(struct Args args)
 {
     printf("+---------------------------------------------------------------");
