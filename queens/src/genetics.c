@@ -159,6 +159,7 @@ void evaluate(Individual *population, int n_pop, int n_queens)
 
     int i, j, k, row;
     unsigned int scorer;
+    unsigned int initial_scorer = sum_down(n_queens);
     for(i = 0; i < n_pop; ++i)
     {
         if(population[i].scorer != initial_scorer)
