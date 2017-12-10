@@ -2,7 +2,7 @@
 #library("data.table")
 #library("dplyr")
 
-EXAMPLE = 3
+EXAMPLE = 6
 STRATEGY = 6
 #READ INPUT FILE
 setwd("C:/Users/Daniel/Dropbox/GitHub/Genetic-Algorithm/queens/DataVisualization/inputs");
