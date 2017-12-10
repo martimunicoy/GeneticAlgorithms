@@ -84,7 +84,7 @@ const int SIEVE = 100000;
 // Write fitness data to file -n
 const bool WRITE_GENES = false;
 
-// Maximum fitness points -a
+// Maximum genes points -a
 const int MAX_GENES_POINTS = 1000;
 
 // Fitness file directory -b
