@@ -161,18 +161,22 @@ void evaluate(Individual *population, int n_pop, int n_queens)
     unsigned int scorer;
     for(i = 0; i < n_pop; ++i)
     {
-        scorer = 0;
-        for(j = 0; j < n_queens; j++)
+        if(population[i].scorer != initial_scorer)
+            continue;
+        else
         {
-            row = population[i].genes.rows[j];
-            // start from j+1 to not compare to itself and not to repeat a
-            // pair of individuals
-            for(k = j + 1; k < n_queens; k++)
-                if(diagonal(row, j+1, population[i].genes.rows[k], k+1))
-                    ++scorer;
+            scorer = 0;
+            for(j = 0; j < n_queens; j++)
+            {
+                row = population[i].genes.rows[j];
+                // start from j+1 to not compare to itself and not to repeat a
+                // pair of individuals
+                for(k = j + 1; k < n_queens; k++)
+                    if(diagonal(row, j+1, population[i].genes.rows[k], k+1))
+                        ++scorer;
+            }
+            population[i].scorer = scorer;
         }
-        population[i].scorer = scorer;
-
     }
 }
 
